@@ -23,10 +23,10 @@ void __fastcall TAboutForm::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TAboutForm::MailLabelClick(TObject *Sender)
+void __fastcall TAboutForm::RepositoryLabelClick(TObject *Sender)
 {
-    char url[256] = "mailto:";
-    strcat(url, dynamic_cast<TLabel *>(Sender)->Caption.c_str());
+    char url[256];
+    strcpy(url, RepositoryLabel->Caption.c_str());
     ShellExecute(NULL, NULL, url, NULL, NULL, 0);
 }
 //---------------------------------------------------------------------------

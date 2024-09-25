@@ -25,14 +25,13 @@ __published:	// IDE-managed Components
     TLabel *Label5;
     TLabel *Label6;
     TLabel *Label7;
-    TLabel *MailLabel1;
-    TLabel *MailLabel2;
+    TLabel *RepositoryLabel;
     TPanel *Panel1;
     TLabel *MemCaptionLabel;
     TButton *OKButton;
     TLabel *MemLabel;
     void __fastcall FormShow(TObject *Sender);
-    void __fastcall MailLabelClick(TObject *Sender);
+    void __fastcall RepositoryLabelClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
     __fastcall TAboutForm(TComponent* Owner);

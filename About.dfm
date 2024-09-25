@@ -448,39 +448,24 @@ object AboutForm: TAboutForm
   object Label7: TLabel
     Left = 56
     Top = 192
-    Width = 326
+    Width = 325
     Height = 13
-    Caption = #1042#1089#1077' '#1079#1072#1084#1077#1095#1072#1085#1080#1103' '#1080' '#1087#1088#1077#1076#1083#1086#1078#1077#1085#1080#1103' '#1087#1088#1086#1089#1100#1073#1072' '#1085#1072#1087#1088#1072#1074#1083#1103#1090#1100' '#1087#1086' '#1072#1076#1088#1077#1089#1072#1084
+    Caption = #1054#1090#1095#1077#1090#1099' '#1086#1073' '#1086#1096#1080#1073#1082#1072#1093' '#1087#1088#1086#1089#1100#1073#1072' '#1086#1090#1087#1088#1072#1074#1083#1103#1090#1100' '#1074' '#1088#1077#1087#1086#1079#1080#1090#1086#1088#1080#1081' '#1087#1088#1086#1077#1082#1090#1072
   end
-  object MailLabel1: TLabel
+  object RepositoryLabel: TLabel
     Left = 72
     Top = 216
-    Width = 91
+    Width = 216
     Height = 16
     Cursor = crHandPoint
-    Caption = 'toiffel@inbox.ru'
+    Caption = 'https://github.com/kodemeister/X584'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = [fsUnderline]
     ParentFont = False
-    OnClick = MailLabelClick
-  end
-  object MailLabel2: TLabel
-    Left = 72
-    Top = 232
-    Width = 75
-    Height = 16
-    Cursor = crHandPoint
-    Caption = 'rryu@mail.ru'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'MS Sans Serif'
-    Font.Style = [fsUnderline]
-    ParentFont = False
-    OnClick = MailLabelClick
+    OnClick = RepositoryLabelClick
   end
   object MemCaptionLabel: TLabel
     Left = 56
