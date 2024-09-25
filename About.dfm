@@ -422,9 +422,9 @@ object AboutForm: TAboutForm
   object Label5: TLabel
     Left = 72
     Top = 152
-    Width = 278
+    Width = 273
     Height = 13
-    Caption = #1040#1088#1090#1091#1088' "'#1050#1072#1080#1085'" '#1050#1072#1089#1080#1084#1086#1074'                      '#1075#1088'. '#1042'-313'
+    Caption = #1040#1088#1090#1091#1088' '#1050#1072#1089#1080#1084#1086#1074'                                '#1075#1088'. '#1042'-313'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -435,9 +435,9 @@ object AboutForm: TAboutForm
   object Label6: TLabel
     Left = 72
     Top = 168
-    Width = 287
+    Width = 284
     Height = 13
-    Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086' aka Vital Credo      '#1075#1088'. '#1048#1042'-313'
+    Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086'                            '#1075#1088'. '#1048#1042'-313'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
