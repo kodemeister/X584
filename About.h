@@ -24,12 +24,14 @@ __published:	// IDE-managed Components
     TImage *WinXPImage;
     TLabel *Label5;
     TLabel *Label6;
-    TLabel *Label7;
+    TLabel *Label9;
     TLabel *RepositoryLabel;
     TPanel *Panel1;
     TLabel *MemCaptionLabel;
     TButton *OKButton;
     TLabel *MemLabel;
+    TLabel *Label7;
+    TLabel *Label8;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall RepositoryLabelClick(TObject *Sender);
 private:	// User declarations
