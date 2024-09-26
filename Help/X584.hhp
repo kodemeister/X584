@@ -1,0 +1,38 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=X584.chm
+Contents file=Table of Contents.hhc
+Default topic=index.htm
+Display compile progress=No
+Language=0x419 Русский (Россия)
+Title=Справка X584
+
+
+[FILES]
+index.htm
+K584\index.htm
+K584\ugo.htm
+K584\scheme.htm
+K584\pin_description.htm
+K584\microcommands.htm
+K584\position.htm
+K584\increment.htm
+Program\index.htm
+Program\buttons.htm
+Program\microcommands.htm
+Program\buses.htm
+Program\registers.htm
+Program\carryin.htm
+Program\outputs.htm
+Program\codeedit.htm
+Program\state_panel.htm
+Program\statusbar.htm
+Program\filter.htm
+Program\description.htm
+Program\keyboard.htm
+Using\index.htm
+Using\commands.htm
+gnugpl.htm
+
+[INFOTYPES]
+
