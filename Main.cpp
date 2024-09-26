@@ -13,6 +13,7 @@
 #pragma resource "*.dfm"
 TX584Form *X584Form;
 //---------------------------------------------------------------------------
+#define NONAME_X584 "Безымянный.x584"
 __fastcall TX584Form::TX584Form(TComponent* Owner)
     : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), SelCount(0), ClipboardSize(0)
 {
@@ -22,7 +23,6 @@ __fastcall TX584Form::TX584Form(TComponent* Owner)
 #define PRJSTR1 "Проект Микропрограммы Процессора К-584"
 #define PRJSTR2 "Код РОН П Л/Аоп.           Коментарии"
 #define X584 0x34383558
-#define NONAME_X584 "Безымянный.x584"
 
 //Таблица перекодировки для совместимости с предыдущим эмулятором
 unsigned ReCode[54] = {
@@ -100,10 +100,11 @@ void TX584Form::LoadFile(AnsiString FileName)
         }
         SetModifyFlag(false);
         ResetItemClick(this);
-        Caption = AnsiString("X584 - ") + ExtractFileName(OpenDialog->FileName);
+        OpenDialog->FileName = FileName;
+        Caption = AnsiString("X584 - ") + ExtractFileName(FileName);
     }
     catch (EConvertError &e) {
-        MessageBox(Handle, ("Неверный формат файла " + OpenDialog->FileName).c_str(),
+        MessageBox(Handle, ("Неверный формат файла " + FileName).c_str(),
             "Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
     catch (Exception &e) {
@@ -132,6 +133,7 @@ void TX584Form::SaveFile(AnsiString FileName)
             Stream->Write(str.c_str(), len);
         }
         SetModifyFlag(false);
+        OpenDialog->FileName = FileName;
     }
     catch (Exception &e) {
         MessageBox(Handle, ("Ошибка сохранения файла " + FileName).c_str(),
@@ -475,6 +477,9 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
     NewItemClick(this);
     //создаем дерево микроинструкций
     BuildTree(OpFilter, ResFilter);
+    if (ParamCount() > 0) {
+        LoadFile(ParamStr(1));
+    }
 }
 //---------------------------------------------------------------------------
 
