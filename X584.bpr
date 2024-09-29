@@ -10,7 +10,7 @@
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) Main.dfm Input.dfm About.dfm"/>
+    <RESDEPEN value="$(RESFILES) Sources\Main.dfm Sources\Input.dfm Sources\About.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="bcb2kaxserver.lib rtl.lib vcl.lib"/>
     <SPARELIBS value="vcl.lib rtl.lib bcb2kaxserver.lib"/>
@@ -21,7 +21,7 @@
       inetdbbde.bpi inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi 
       bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi 
       indy.bpi bcb2kaxserver.bpi"/>
-    <PATHCPP value=".;"/>
+    <PATHCPP value=".;Sources;Sources;Sources;Sources;Sources"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -31,14 +31,14 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="X584.cpp"/>
-    <INCLUDEPATH value="..;..\..;K584\K584;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..;..\..;K584\K584;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="Sources;..;..\..;K584\K584;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="Sources;..;..\..;K584\K584;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I.. -I..\.. -IK584\K584 -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix 
-      cpp -D_DEBUG -boa"/>
+    <IDLCFLAGS value="-ISources -I.. -I..\.. -IK584\K584 -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-N2Build -N0Build -$YD -$W -$O- -$A8 -v -JPHNE -M"/>
@@ -56,11 +56,11 @@
   <FILELIST>
       <FILE FILENAME="X584.res" FORMNAME="" UNITNAME="X584.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="X584.cpp" FORMNAME="" UNITNAME="X584" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Main.cpp" FORMNAME="X584Form" UNITNAME="Main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="K584core.cpp" FORMNAME="" UNITNAME="K584core" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Input.cpp" FORMNAME="InputForm" UNITNAME="Input" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="About.cpp" FORMNAME="AboutForm" UNITNAME="About" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="FileExport.cpp" FORMNAME="" UNITNAME="FileExport" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Sources\Main.cpp" FORMNAME="X584Form" UNITNAME="Main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Sources\K584core.cpp" FORMNAME="" UNITNAME="K584core" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Sources\Input.cpp" FORMNAME="InputForm" UNITNAME="Input" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Sources\About.cpp" FORMNAME="AboutForm" UNITNAME="About" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Sources\FileExport.cpp" FORMNAME="" UNITNAME="FileExport" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

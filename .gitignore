@@ -1,8 +1,9 @@
-/*.~cpp
-/*.~ddp
-/*.~dfm
-/*.~h
+/Sources/*.~cpp
+/Sources/*.~ddp
+/Sources/*.~dfm
+/Sources/*.~h
 
 /X584.dsk
 /X584.~bpr
+/X584.~cpp
 /X584.~dsk

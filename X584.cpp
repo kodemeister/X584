@@ -22,9 +22,9 @@
 #include <vcl.h>
 #pragma hdrstop
 //---------------------------------------------------------------------------
-USEFORM("Main.cpp", X584Form);
-USEFORM("Input.cpp", InputForm);
-USEFORM("About.cpp", AboutForm);
+USEFORM("Sources\Main.cpp", X584Form);
+USEFORM("Sources\Input.cpp", InputForm);
+USEFORM("Sources\About.cpp", AboutForm);
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

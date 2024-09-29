@@ -1,9 +1,10 @@
-/*.cpp         text eol=crlf working-tree-encoding=cp1251
-/*.h           text eol=crlf working-tree-encoding=cp1251
-/*.dfm         text eol=crlf
+/Sources/*.cpp text eol=crlf working-tree-encoding=cp1251
+/Sources/*.h   text eol=crlf working-tree-encoding=cp1251
+/Sources/*.dfm text eol=crlf
 
 /Help/**/*.htm text eol=crlf working-tree-encoding=cp1251
 /Help/X584.hhc text eol=crlf working-tree-encoding=cp1251
 /Help/X584.hhp text eol=crlf working-tree-encoding=cp1251
 
 /X584.bpr      text eol=crlf
+/X584.cpp      text eol=crlf working-tree-encoding=cp1251
