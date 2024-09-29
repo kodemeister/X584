@@ -3,8 +3,9 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.06.00"/>
-    <PROJECT value="X584.exe"/>
-    <OBJFILES value="X584.obj Main.obj K584core.obj Input.obj About.obj FileExport.obj"/>
+    <PROJECT value="Build\X584.exe"/>
+    <OBJFILES value="Build\X584.obj Build\Main.obj Build\K584core.obj Build\Input.obj 
+      Build\About.obj Build\FileExport.obj"/>
     <RESFILES value="X584.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -40,10 +41,10 @@
       cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
-    <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <PFLAGS value="-N2Build -N0Build -$YD -$W -$O- -$A8 -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-IBuild -D&quot;&quot; -aa -Tpe -x -Gn -v"/>
     <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
@@ -92,13 +93,29 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[Excluded Packages]
-C:\Program Files\Borland\CBuilder6\Projects\Bpl\dclrx6.bpl=RX Library Controls and Tools
-C:\PROGRA~1\Borland\CBUILD~1\Projects\Bpl\rxctl6.bpl=RX Library Controls and Tools Package
-C:\Program Files\Borland\CBuilder6\Projects\Bpl\dclrxbd6.bpl=RX Library BDE Database Components
-C:\PROGRA~1\Borland\CBUILD~1\Projects\Bpl\rxbde6.bpl=RX Library BDE Components Package
-C:\PROGRA~1\Borland\CBUILD~1\Projects\Bpl\rxdb6.bpl=RX Library DB Components Package
-C:\Program Files\Borland\CBuilder6\Projects\Bpl\dclrxdb6.bpl=RX Library Database Components
+[HistoryLists\hlIncludePath]
+Count=1
+Item0=..;..\..;K584\K584;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=1
+Item0=..;..\..;K584\K584;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=Build
+
+[HistoryLists\hlFinalOutputDir]
+Count=1
+Item0=Build
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
