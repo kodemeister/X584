@@ -1,11 +1,8 @@
-*.~cpp
-*.~ddp
-*.~dfm
-*.~h
-*.obj
-*.~dsk
-*.~bpr
-*.tds
+/*.~cpp
+/*.~ddp
+/*.~dfm
+/*.~h
 
-*.exe
-*.dsk
+/X584.dsk
+/X584.~bpr
+/X584.~dsk
