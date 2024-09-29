@@ -1,1 +1,0 @@
-del *.~cpp *.~ddp *.~dfm *.~h *.obj *.~dsk *.~bpr *.tds
