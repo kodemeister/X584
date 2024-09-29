@@ -27,6 +27,6 @@ void __fastcall TAboutForm::RepositoryLabelClick(TObject *Sender)
 {
     char url[256];
     strcpy(url, RepositoryLabel->Caption.c_str());
-    ShellExecute(NULL, NULL, url, NULL, NULL, 0);
+    ShellExecute(NULL, NULL, url, NULL, NULL, SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
