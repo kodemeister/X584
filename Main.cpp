@@ -1188,7 +1188,7 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
 
 void __fastcall TX584Form::HelpItemClick(TObject *Sender)
 {
-    ShellExecute(NULL, NULL, "X584.doc", NULL, NULL, 0);
+    ShellExecute(NULL, NULL, "X584.chm", NULL, NULL, 0);
 }
 //---------------------------------------------------------------------------
 
