@@ -798,7 +798,7 @@ object X584Form: TX584Form
       ImageIndex = 12
       ParentShowHint = False
       ShowHint = True
-      OnClick = PasteItemClick
+      OnClick = BreakItemClick
     end
     object ResetToolButton: TToolButton
       Left = 336
@@ -808,7 +808,7 @@ object X584Form: TX584Form
       ImageIndex = 13
       ParentShowHint = False
       ShowHint = True
-      OnClick = BreakItemClick
+      OnClick = ResetItemClick
     end
     object Separator4: TToolButton
       Left = 360
