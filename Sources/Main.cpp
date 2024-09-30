@@ -1207,7 +1207,8 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
 
 void __fastcall TX584Form::HelpItemClick(TObject *Sender)
 {
-    ShellExecute(NULL, NULL, "X584.chm", NULL, NULL, SW_SHOWNORMAL);
+    AnsiString HelpFilePath = ExtractFilePath(Application->ExeName) + "X584.chm";
+    ShellExecute(NULL, NULL, HelpFilePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 
