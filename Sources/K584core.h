@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2024 X584 developers
  *
  * This file is part of X584.
@@ -59,7 +59,7 @@ enum {OP_WR, OP_XWR, OP_REG, OP_IN, OP_OUT, OP_CARRY, OP_WRXWR, OP_ONE};
 //Неподдерживаемые микроинструкции
 #define NOP         154
 #define NOP2        186
-#define NOP_TEXT    "<ПУСТО>"
+#define NOP_TEXT    L"<ПУСТО>"
 
 //Атрибуты микроинструкции
 #define ATTR_BREAKPOINT 0x8000
@@ -72,9 +72,9 @@ struct InstrDesc
     int         OpCount;        //количество операндов
     int         Operands[4];    //список операндов
     int         Result;         //результат операции (приемник)
-    char        BitField[10];   //формат микроинструкции
+    wchar_t     BitField[10];   //формат микроинструкции
     bool        OutWR;          //флаг выдачи WR на шину адресов
-    char        Help[128];      //справка по микроинструкции    
+    wchar_t     Help[128];      //справка по микроинструкции
     unsigned    BitValue;       //значащие биты микроинструкции
     unsigned    BitMask;        //маска значащих битов
 };
@@ -89,7 +89,7 @@ private:
     int BitsCount;                  // разрядность (кратна 4, 32 бита максимум)
     unsigned BitMask;               // маска значащих битов
     unsigned BufDA, BufXWR;         // буферные регистры шины адреса и регистра XWR
-    void FormatOp(unsigned Op, char *A, char *B, char *Str);
+    void FormatOp(unsigned Op, wchar_t *A, wchar_t *B, wchar_t *Str);
     unsigned Adc(unsigned op1, unsigned op2, unsigned Carry, unsigned &OutFlags);
     unsigned ExecuteOp(unsigned Op, unsigned A, unsigned B, unsigned InFlags, unsigned &OutFlags);
     void Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags);
@@ -97,7 +97,7 @@ public:
     unsigned Reg[8];                // РОНы
     unsigned WR, XWR;               // рабочий регистр и расширитель
     K584(int _BitsCount);
-    bool Format(unsigned MI, char *Str, bool FormatALU = true, bool FormatReg = true, bool ShowCarry = true);
+    bool Format(unsigned MI, wchar_t *Str, bool FormatALU = true, bool FormatReg = true, bool ShowCarry = true);
     bool FindOperand(int Index, int Type, unsigned MI);
     bool Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigned InFlags, unsigned &OutFlags);
 };

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2024 X584 developers
  *
  * This file is part of X584.

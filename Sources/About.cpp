@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2024 X584 developers
  *
  * This file is part of X584.
@@ -38,14 +38,14 @@ void __fastcall TAboutForm::FormShow(TObject *Sender)
 {
     MEMORYSTATUS ms;
     GlobalMemoryStatus(&ms);
-    MemLabel->Caption = IntToStr(ms.dwTotalPhys / 1024) + " КБ";
+    MemLabel->Caption = UIntToStr(static_cast<size_t>(ms.dwTotalPhys) / 1024) + L" КБ";
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TAboutForm::RepositoryLabelClick(TObject *Sender)
 {
-    char url[256];
-    strcpy(url, RepositoryLabel->Caption.c_str());
-    ShellExecute(NULL, NULL, url, NULL, NULL, SW_SHOWNORMAL);
+    wchar_t url[256];
+    wcscpy(url, RepositoryLabel->Caption.c_str());
+    ShellExecuteW(NULL, NULL, url, NULL, NULL, SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------

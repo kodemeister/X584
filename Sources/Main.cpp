@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2024 X584 developers
  *
  * This file is part of X584.
@@ -32,15 +32,15 @@
 #pragma resource "*.dfm"
 TX584Form *X584Form;
 //---------------------------------------------------------------------------
-#define NONAME_X584 "Безымянный.x584"
+#define NONAME_X584 L"Безымянный.x584"
 __fastcall TX584Form::TX584Form(TComponent* Owner)
     : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), SelCount(0), ClipboardSize(0)
 {
 }
 //---------------------------------------------------------------------------
 
-#define PRJSTR1 "Проект Микропрограммы Процессора К-584"
-#define PRJSTR2 "Код РОН П Л/Аоп.           Коментарии"
+#define PRJSTR1 L"Проект Микропрограммы Процессора К-584"
+#define PRJSTR2 L"Код РОН П Л/Аоп.           Коментарии"
 #define X584 0x34383558
 
 //Таблица перекодировки для совместимости с предыдущим эмулятором
@@ -52,19 +52,19 @@ unsigned ReCode[54] = {
     21, 19, 26, 26, 2, 7, 16                                                    //ШИНвых
 };
 
-void TX584Form::LoadFile(AnsiString FileName)
+void TX584Form::LoadFile(UnicodeString FileName)
 {
     TFileStream *Stream;
     try {
         Stream = new TFileStream(FileName, fmOpenRead);
-        AnsiString ext = AnsiUpperCase(ExtractFileExt(FileName));
-        char buf[256];
-        if (ext == ".X584") {
+        UnicodeString ext = UpperCase(ExtractFileExt(FileName));
+        wchar_t buf[256];
+        if (ext == L".X584") {
             //родной формат
             unsigned Sign;
             Stream->Read(&Sign, 4);
             if (Sign != X584)
-                throw EConvertError("");
+                throw EConvertError(L"");
             for (int i = 0; i < MAX_ADDR; i++) {
                 //загружаем код микроинструкции
                 Stream->Read(&Code[i], 2);
@@ -73,22 +73,23 @@ void TX584Form::LoadFile(AnsiString FileName)
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
                 //загружаем комментарий
                 unsigned char len;
+                char comment[256];
                 Stream->Read(&len, 1);
-                Stream->Read(buf, len);
-                buf[len] = 0;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = buf;
+                Stream->Read(comment, len);
+                comment[len] = 0;
+                CodeListView->Items->Item[i]->SubItems->Strings[2] = AnsiStringT<1251>(comment);
             }
         } else {
             //текстовый формат *.Prj
             TStringList *List = new TStringList();
-            List->LoadFromStream(Stream);
+            List->LoadFromStream(Stream, TEncoding::GetEncoding(1251));
             //проверяем заголовок
             if (List->Count < 2 || List->Strings[0] != PRJSTR1 || List->Strings[1] != PRJSTR2)
-                throw EConvertError("");
+                throw EConvertError(L"");
             //читаем все оставшиеся строки
             for (int i = 0; i < List->Count - 2; i++) {
                 //читаем поля микроинструкции
-                AnsiString str = List->Strings[i + 2];
+                UnicodeString str = List->Strings[i + 2];
                 unsigned code = StrToInt(str.SubString(1, 3)),
                          reg = StrToInt(str.SubString(5, 3)),
                          carry = StrToInt(str.SubString(9, 1)),
@@ -113,28 +114,28 @@ void TX584Form::LoadFile(AnsiString FileName)
             for (int i = List->Count - 2; i < MAX_ADDR; i++) {
                 Code[i] = NOP;
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
+                CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
             }
             delete List;
         }
         SetModifyFlag(false);
         ResetItemClick(this);
         OpenDialog->FileName = FileName;
-        Caption = AnsiString("X584 - ") + ExtractFileName(FileName);
+        Caption = UnicodeString(L"X584 - ") + ExtractFileName(FileName);
     }
     catch (EConvertError &e) {
-        MessageBox(Handle, ("Неверный формат файла " + FileName).c_str(),
-            "Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
+        MessageBoxW(Handle, (L"Неверный формат файла " + FileName).c_str(),
+            L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
     catch (Exception &e) {
-        MessageBox(Handle, ("Ошибка открытия файла " + FileName).c_str(),
-            "Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
+        MessageBoxW(Handle, (L"Ошибка открытия файла " + FileName).c_str(),
+            L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
     delete Stream;
 }
 //---------------------------------------------------------------------------
 
-void TX584Form::SaveFile(AnsiString FileName)
+void TX584Form::SaveFile(UnicodeString FileName)
 {
     TFileStream *Stream;
     try  {
@@ -146,7 +147,7 @@ void TX584Form::SaveFile(AnsiString FileName)
             //сохраняем инструкцию
             Stream->Write(&Code[i], 2);
             //сохраняем комментарий
-            AnsiString str = CodeListView->Items->Item[i]->SubItems->Strings[2];
+            AnsiStringT<1251> str = CodeListView->Items->Item[i]->SubItems->Strings[2];
             unsigned char len = str.Length();
             Stream->Write(&len, 1);
             Stream->Write(str.c_str(), len);
@@ -155,8 +156,8 @@ void TX584Form::SaveFile(AnsiString FileName)
         OpenDialog->FileName = FileName;
     }
     catch (Exception &e) {
-        MessageBox(Handle, ("Ошибка сохранения файла " + FileName).c_str(),
-            "Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
+        MessageBoxW(Handle, (L"Ошибка сохранения файла " + FileName).c_str(),
+            L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
     delete Stream;
 }
@@ -175,14 +176,14 @@ void TX584Form::EnableRunControls(bool Flag)
     RunItem->Enabled = Flag;
     StepItem->Enabled = Flag;
     RunToCursorItem->Enabled = Flag;
-    Caption = AnsiString("X584 - ") + ExtractFileName(OpenDialog->FileName) + (Flag ? "" : " [Running]");
+    Caption = UnicodeString(L"X584 - ") + ExtractFileName(OpenDialog->FileName) + (Flag ? L"" : L" [Running]");
 }
 //---------------------------------------------------------------------------
 
 void TX584Form::BuildTree(int OpFilter, int ResFilter)
 {
     //создаем древовидный список инструкций
-    char str[64];
+    wchar_t str[64];
     CodeTreeView->Items->Clear();
     for (int i = 0; i < INSTR_COUNT; i++) {
         //фильтруем по результату операции
@@ -286,29 +287,29 @@ void TX584Form::DrawItem(int Index)
 }
 //---------------------------------------------------------------------------
 
-AnsiString NextWord(AnsiString str, int &pos)
+UnicodeString NextWord(UnicodeString str, int &pos)
 {
     //пропускаем ведущие пробелы
-    while (pos <= str.Length() && str[pos] == ' ')
+    while (pos <= str.Length() && str[pos] == L' ')
         pos++;
     int org = pos;
     //ищем конец слова
-    while (pos <= str.Length() && str[pos] != ' ')
+    while (pos <= str.Length() && str[pos] != L' ')
         pos++;
     //выделяем слово
-    return AnsiUpperCase(str.SubString(org, pos - org));
+    return UpperCase(str.SubString(org, pos - org));
 }
 
-const AnsiString FlagNames[12] = {"ПАЛУ3", "!СДЛ1", "!СДП1", "!СДЛ2", "!СДП2",
-    "РРР0", "РРР3", "A15", "B15", "ПАЛУ0", "ПАЛУ1", "ПАЛУ2"};
-const AnsiString AltFlagNames[12] = {"П", "!СДЛ1", "!СДП1", "!СДЛ2", "!СДП2",
-    "РРР0", "РРР3", "А15", "В15", "П0", "П1", "П2"};
+const UnicodeString FlagNames[12] = {L"ПАЛУ3", L"!СДЛ1", L"!СДП1", L"!СДЛ2", L"!СДП2",
+    L"РРР0", L"РРР3", L"A15", L"B15", L"ПАЛУ0", L"ПАЛУ1", L"ПАЛУ2"};
+const UnicodeString AltFlagNames[12] = {L"П", L"!СДЛ1", L"!СДП1", L"!СДЛ2", L"!СДП2",
+    L"РРР0", L"РРР3", L"А15", L"В15", L"П0", L"П1", L"П2"};
 
-bool TX584Form::ParseComment(AnsiString str, int &Instruction)
+bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
 {
     int pos = 1;
-    AnsiString token = NextWord(str, pos);
-    if (token == "IF" || token == "ЕСЛИ") {
+    UnicodeString token = NextWord(str, pos);
+    if (token == L"IF" || token == L"ЕСЛИ") {
         //проверяем логическое условие
         token = NextWord(str, pos);
         int flag = 0;
@@ -321,7 +322,7 @@ bool TX584Form::ParseComment(AnsiString str, int &Instruction)
         if (!flag)
             return false;
         token = NextWord(str, pos);
-        if (token != "THEN" && token != "ТО")
+        if (token != L"THEN" && token != L"ТО")
             return false;
         //читаем адрес перехода в случае истинности условия
         int TrueAddr;
@@ -330,25 +331,25 @@ bool TX584Form::ParseComment(AnsiString str, int &Instruction)
         //проверяем необязательную ветвь else
         token = NextWord(str, pos);
         int FalseAddr;
-        if (token == "")
+        if (token == L"")
             //ветвь отсутствует - берем адрес следующей инструкции
             FalseAddr = Instruction + 1;
-        else if (token == "ELSE" || token == "ИНАЧЕ") {
+        else if (token == L"ELSE" || token == L"ИНАЧЕ") {
             //читаем адрес перехода в случае ложности условия
             if (!TryStrToInt(NextWord(str, pos), FalseAddr) || FalseAddr < 0 || FalseAddr >= MAX_ADDR)
                 return false;
             //проверяем, что больше нет других лексем
-            if (NextWord(str, pos) != "")
+            if (NextWord(str, pos) != L"")
                 return false;
         } else
             return false;
         //выполняем ветвление
         Instruction = OutFlags & flag ? TrueAddr : FalseAddr;
         return true;
-    } else if (token == "GOTO" || token == "ИДИ_НА") {
+    } else if (token == L"GOTO" || token == L"ИДИ_НА") {
         //читаем адрес перехода и проверяем, что больше нет других лексем
         int Addr;
-        if (!TryStrToInt(NextWord(str, pos), Addr) || Addr < 0 || Addr >= MAX_ADDR || NextWord(str, pos) != "")
+        if (!TryStrToInt(NextWord(str, pos), Addr) || Addr < 0 || Addr >= MAX_ADDR || NextWord(str, pos) != L"")
             return false;
         //выполняем безусловный переход
         Instruction = Addr;
@@ -367,22 +368,22 @@ void TX584Form::ShowState()
     Regs[9] = CPU.XWR;
     //преобразуем число в строку с учетом разделяющих пробелов
     for (int i = 0; i < 12; i++) {
-        AnsiString str = "";
+        UnicodeString str = L"";
         unsigned bit = 1 << 15;
         for (int j = 1; j <= 19; j++)
             if (j % 5) {
-                str += Regs[i] & bit ? '1' : '0';
+                str += Regs[i] & bit ? L'1' : L'0';
                 bit >>= 1;
             } else
-                str += ' ';
+                str += L' ';
         //выводим строку, выделяя цветом при изменении
-        TMaskEdit *Edit = dynamic_cast<TMaskEdit *>(FindComponent("RMaskEdit" + IntToStr(i)));
+        TMaskEdit *Edit = dynamic_cast<TMaskEdit *>(FindComponent(L"RMaskEdit" + IntToStr(i)));
         Edit->Font->Color = Edit->Text == str ? clWindowText : clRed;
         Edit->Text = str;
     }
     //отображаем флаги
     for (int i = 0; i < 12; i++)
-        dynamic_cast<TCheckBox *>(FindComponent("OutFlags" + IntToStr(i)))->Checked = OutFlags & 1 << i;
+        dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked = OutFlags & 1 << i;
     //если курсор вышел за пределы экрана, прокручиваем редактор кода
     int topitem = -1;
     if (Instruction < CodeListView->TopItem->Index)
@@ -406,21 +407,21 @@ void TX584Form::Run(int Mode)
 {
     //вводим строку, пропуская разделяющие пробелы
     for (int i = 0; i < 12; i++) {
-        AnsiString str = dynamic_cast<TMaskEdit *>(FindComponent("RMaskEdit" + IntToStr(i)))->Text;
+        UnicodeString str = dynamic_cast<TMaskEdit *>(FindComponent(L"RMaskEdit" + IntToStr(i)))->Text;
         Regs[i] = 0;
         unsigned bit = 1 << 15;
         for (int j = 1; j <= 19; j++)
             if (j % 5) {
-                Regs[i] |= str[j] == '1' ? bit : 0;
+                Regs[i] |= str[j] == L'1' ? bit : 0;
                 bit >>= 1;
             }
     }
     //считываем флаги
     InFlags = 0;
     for (int i = 1; i <= 4; i++)
-        InFlags |= dynamic_cast<TCheckBox *>(FindComponent("InFlags" + IntToStr(i)))->Checked ? 1 << i : 0;
+        InFlags |= dynamic_cast<TCheckBox *>(FindComponent(L"InFlags" + IntToStr(i)))->Checked ? 1 << i : 0;
     for (int i = 0; i < 12; i++)
-        OutFlags |= dynamic_cast<TCheckBox *>(FindComponent("OutFlags" + IntToStr(i)))->Checked ? 1 << i : 0;
+        OutFlags |= dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked ? 1 << i : 0;
     //инициируем состояние процессора
     for (int i = 0; i < 8; i++)
         CPU.Reg[i] = Regs[i];
@@ -441,7 +442,7 @@ void TX584Form::Run(int Mode)
                 find = true;
                 if (CPU.FindOperand(i, OP_IN, Code[Instruction])) {
                     ShowState();
-                    InputForm->RMaskEdit->Text = "0000 0000 0000 0000";
+                    InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
                     InputForm->RMaskEditChange(this);
                     if (InputForm->ShowModal() == mrOk)
                         DI = InputForm->Value;
@@ -454,7 +455,7 @@ void TX584Form::Run(int Mode)
         //нашли инструкцию - выполняем
         if (find) {
             //указываем перенос
-            InFlags = InFlags & ~F_CI | (Code[Instruction] & ATTR_CARRY ? F_CI : 0);
+            InFlags = (InFlags & ~F_CI) | (Code[Instruction] & ATTR_CARRY ? F_CI : 0);
             //выполняем инструкцию
             CPU.Execute(Code[Instruction], DI, Regs[10], Regs[11], InFlags, OutFlags);
         }
@@ -471,7 +472,7 @@ void TX584Form::Run(int Mode)
             break;
         //обрабатываем сообщения на случай зацикливания
         Application->ProcessMessages();
-    } while (!Terminated && (Mode < 0 && Instruction != -Mode || Mode >= 0 && Mode < count));
+    } while (!Terminated && ((Mode < 0 && Instruction != -Mode) || (Mode >= 0 && Mode < count)));
 
 Stop:
     EnableRunControls(true);
@@ -487,11 +488,11 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
     //инициализируем окно редактора кода
     for (int i = 0; i < MAX_ADDR; i++) {
         TListItem *Item = CodeListView->Items->Add();
-        Item->Caption = "";
+        Item->Caption = L"";
         //добавляем колонки
-        Item->SubItems->Add(AnsiString().sprintf("%03d.", i));
-        Item->SubItems->Add("");
-        Item->SubItems->Add("");
+        Item->SubItems->Add(UnicodeString().sprintf(L"%03d.", i));
+        Item->SubItems->Add(L"");
+        Item->SubItems->Add(L"");
     }
     NewItemClick(this);
     //создаем дерево микроинструкций
@@ -511,8 +512,8 @@ void __fastcall TX584Form::FormResize(TObject *Sender)
 void __fastcall TX584Form::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
     if (Modified)
-        switch (MessageBox(Handle, ("Файл " + OpenDialog->FileName + " был изменен. Сохранить изменения?").c_str(),
-            "Сохранение файла", MB_YESNOCANCEL | MB_ICONWARNING | MB_DEFBUTTON1 | MB_APPLMODAL)) {
+        switch (MessageBoxW(Handle, (L"Файл " + OpenDialog->FileName + L" был изменен. Сохранить изменения?").c_str(),
+            L"Сохранение файла", MB_YESNOCANCEL | MB_ICONWARNING | MB_DEFBUTTON1 | MB_APPLMODAL)) {
         case IDYES:
             SaveItemClick(this);
             break;
@@ -533,9 +534,9 @@ void __fastcall TX584Form::ApplicationEventsHint(TObject *Sender)
 void __fastcall TX584Form::ApplicationEventsIdle(TObject *Sender,
       bool &Done)
 {
-    StatusBar->Panels->Items[1]->Text = GetKeyState(VK_CAPITAL) & 1 ? "CAP" : "";
-    StatusBar->Panels->Items[2]->Text = GetKeyState(VK_NUMLOCK) & 1 ? "NUM" : "";
-    StatusBar->Panels->Items[3]->Text = GetKeyState(VK_SCROLL) & 1 ? "SCRL" : "";
+    StatusBar->Panels->Items[1]->Text = GetKeyState(VK_CAPITAL) & 1 ? L"CAP" : L"";
+    StatusBar->Panels->Items[2]->Text = GetKeyState(VK_NUMLOCK) & 1 ? L"NUM" : L"";
+    StatusBar->Panels->Items[3]->Text = GetKeyState(VK_SCROLL) & 1 ? L"SCRL" : L"";
     Done = true;
 }
 
@@ -556,10 +557,10 @@ void __fastcall TX584Form::CodeListViewCustomDrawItem(
         (Code[Item->Index] & ATTR_BREAKPOINT ? 3 : 2) : (Code[Item->Index] & ATTR_BREAKPOINT ? 1 : 0), true);
     //рисуем фон
     Rect.Left += LeftImageList->Width;
-    if (SelCount > 0 && Item->Index >= CodeListView->ItemFocused->Index &&
-                        Item->Index < CodeListView->ItemFocused->Index + SelCount ||
-        SelCount < 0 && Item->Index >= CodeListView->ItemFocused->Index + SelCount &&
-                        Item->Index <= CodeListView->ItemFocused->Index) {
+    if ((SelCount > 0 && Item->Index >= CodeListView->ItemFocused->Index &&
+                         Item->Index < CodeListView->ItemFocused->Index + SelCount) ||
+        (SelCount < 0 && Item->Index >= CodeListView->ItemFocused->Index + SelCount &&
+                         Item->Index <= CodeListView->ItemFocused->Index)) {
         //выделяем стандартным цветом
         CodeListView->Canvas->Brush->Color = SEL_COLOR;
         CodeListView->Canvas->FillRect(Rect);
@@ -618,7 +619,7 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
         if ((Code[Row] & ATTR_CUSED) != 0 && PtInRect(Rect, Point(X, Y))) {
             //инвертируем состояние флажка и перерисовываем его
             Code[Row] ^= ATTR_CARRY;
-            char str[64];
+            wchar_t str[64];
             CPU.Format(Code[Row], str);
             Item->SubItems->Strings[1] = str;
             CheckImageList->Draw(CodeListView->Canvas, Rect.Left, Rect.Top,
@@ -676,14 +677,15 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
         if (GetKeyState(VK_SHIFT) & 0x8000) {
             int index = CodeListView->ItemFocused->Index + (SelCount < 0 ? SelCount : SelCount - 1);
             //перерисовываем элемент
-            if (index)
-                if (--SelCount >= 1)
+            if (index) {
+                if (--SelCount >= 1) {
                     DrawItem(index);
-                else {
+                } else {
                     if (SelCount == 0)
                         SelCount = -1;
                     DrawItem(index - 1);
                 }
+            }
             Key = 0;    
         } else
             if (SelCount != 1) {
@@ -694,14 +696,15 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
     case VK_DOWN:
         if (GetKeyState(VK_SHIFT) & 0x8000) {
             int index = CodeListView->ItemFocused->Index + (SelCount < 0 ? SelCount : SelCount - 1);
-            if (index != MAX_ADDR - 1)
-                if (++SelCount > 1)
+            if (index != MAX_ADDR - 1) {
+                if (++SelCount > 1) {
                     DrawItem(index + 1);
-                else {
+                } else {
                     if (SelCount == 0)
                         SelCount = 1;
                     DrawItem(index);
                 }
+            }
             Key = 0;
         } else
             if (SelCount != 1) {
@@ -817,9 +820,9 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
     unsigned val = (unsigned)Node->Data & ~ATTR_CUSED;
     DescMemo->Lines->Clear();
     if (!Node->Count) {
-        AnsiString str = "Код микроинструкции: ";
+        UnicodeString str = L"Код микроинструкции: ";
         for (int i = 8; i >= 0; i--)
-            str += val & 1 << i ? '1' : '0';
+            str += val & 1 << i ? L'1' : L'0';
         DescMemo->Lines->Add(str);
     }
     //получаем элемент верхнего уровня
@@ -833,7 +836,7 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
             DescMemo->Lines->Add(iSet[i].Help);
             return;
         }
-    DescMemo->Lines->Add("Информация по текущей микроинструкции отсутствует");
+    DescMemo->Lines->Add(L"Информация по текущей микроинструкции отсутствует");
 }
 //---------------------------------------------------------------------------
 
@@ -853,10 +856,10 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
             }
         //форматируем и добавляем инструкцию
         Code[pos] = (unsigned)Node->Data;
-        char str[64];
+        wchar_t str[64];
         CPU.Format(Code[pos], str);
         CodeListView->Items->Item[pos]->SubItems->Strings[1] = str;
-        CodeListView->Items->Item[pos]->SubItems->Strings[2] = "";
+        CodeListView->Items->Item[pos]->SubItems->Strings[2] = L"";
         if (++pos >= MAX_ADDR)
             pos = MAX_ADDR - 1;
         CodeListView->ItemIndex = pos;
@@ -930,10 +933,10 @@ void __fastcall TX584Form::RegMaskEditChange(TObject *Sender)
 {
     //форматируем текст
     TMaskEdit *MaskEdit = dynamic_cast<TMaskEdit *>(Sender);
-    AnsiString str = MaskEdit->Text;
+    UnicodeString str = MaskEdit->Text;
     for (int i = 1; i <= str.Length(); i++)
-        if (str[i] == ' ' && i % 5 != 0)
-            str[i] = '0';
+        if (str[i] == L' ' && i % 5 != 0)
+            str[i] = L'0';
     if (str != MaskEdit->Text) {
         int pos = MaskEdit->SelStart;
         MaskEdit->Text = str;
@@ -961,8 +964,8 @@ void __fastcall TX584Form::NewItemClick(TObject *Sender)
     InputEditExit(this);
     //сохраняем предыдущий файл
     if (Modified)
-        switch (MessageBox(Handle, ("Файл " + OpenDialog->FileName + " был изменен. Сохранить изменения?").c_str(),
-            "Сохранение файла", MB_YESNOCANCEL | MB_ICONWARNING | MB_DEFBUTTON1 | MB_APPLMODAL)) {
+        switch (MessageBoxW(Handle, (L"Файл " + OpenDialog->FileName + L" был изменен. Сохранить изменения?").c_str(),
+            L"Сохранение файла", MB_YESNOCANCEL | MB_ICONWARNING | MB_DEFBUTTON1 | MB_APPLMODAL)) {
         case IDYES:
             SaveItemClick(this);
             break;
@@ -973,13 +976,13 @@ void __fastcall TX584Form::NewItemClick(TObject *Sender)
     for (int i = 0; i < MAX_ADDR; i++) {
         Code[i] = NOP;
         CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-        CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
+        CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
     }
     //сбрасываем состояние регистров
     ResetItemClick(this);
     //создаем новый файл
     OpenDialog->FileName = NONAME_X584;
-    Caption = "X584 - " + ExtractFileName(OpenDialog->FileName);
+    Caption = L"X584 - " + ExtractFileName(OpenDialog->FileName);
     SetModifyFlag(false);
 }
 //---------------------------------------------------------------------------
@@ -989,8 +992,8 @@ void __fastcall TX584Form::OpenItemClick(TObject *Sender)
     InputEditExit(this);
     //сохраняем предыдущий файл
     if (Modified)
-        switch (MessageBox(Handle, ("Файл " + OpenDialog->FileName + " был изменен. Сохранить изменения?").c_str(),
-            "Открытие файла", MB_YESNOCANCEL | MB_ICONWARNING | MB_DEFBUTTON1 | MB_APPLMODAL)) {
+        switch (MessageBoxW(Handle, (L"Файл " + OpenDialog->FileName + L" был изменен. Сохранить изменения?").c_str(),
+            L"Открытие файла", MB_YESNOCANCEL | MB_ICONWARNING | MB_DEFBUTTON1 | MB_APPLMODAL)) {
         case IDYES:
             SaveItemClick(this);
             break;
@@ -1020,7 +1023,7 @@ void __fastcall TX584Form::SaveAsItemClick(TObject *Sender)
         SaveFile(SaveDialog->FileName);
         //меняем имя текущего файла
         OpenDialog->FileName = SaveDialog->FileName;
-        Caption = AnsiString("X584 - ") + ExtractFileName(OpenDialog->FileName);
+        Caption = UnicodeString(L"X584 - ") + ExtractFileName(OpenDialog->FileName);
     }
 }
 //---------------------------------------------------------------------------
@@ -1028,13 +1031,13 @@ void __fastcall TX584Form::SaveAsItemClick(TObject *Sender)
 void __fastcall TX584Form::WordItemClick(TObject *Sender)
 {
     try {
-        TExportThread *Export = new TExportThread(false);
+        TExportThread *Export = new TExportThread(true);
         Export->FreeOnTerminate = true;
-        Export->Resume();
+        Export->Start();
     }
     catch (Exception &e) {
-        MessageBox(Handle, "Ошибка экспортирования данных в Microsoft Word.",
-            "Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
+        MessageBoxW(Handle, L"Ошибка экспортирования данных в Microsoft Word.",
+            L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
         WordItem->Enabled = true;
     }
 }
@@ -1053,7 +1056,7 @@ void __fastcall TX584Form::CutItemClick(TObject *Sender)
         CopyItemClick(this);
         DeleteItemClick(this);
     } else
-        PostMessage(ActiveControl->Handle, WM_CUT, 0, 0);
+        PostMessageW(ActiveControl->Handle, WM_CUT, 0, 0);
 }
 //---------------------------------------------------------------------------
 
@@ -1076,7 +1079,7 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
             }
         }
     } else
-        PostMessage(ActiveControl->Handle, WM_COPY, 0, 0);
+        PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
     PasteItem->Enabled = true;
     PasteToolButton->Enabled = true;
 }
@@ -1099,7 +1102,7 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
         for (int i = 0; i < ClipboardSize; i++)
             if (index + i < MAX_ADDR) {
                 Code[index + i] = MIClipboard[i];
-                char str[64];
+                wchar_t str[64];
                 CPU.Format(Code[index + i], str);
                 CodeListView->Items->Item[index + i]->SubItems->Strings[1] = str;
                 CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CMClipboard[i];
@@ -1110,7 +1113,7 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
         CodeListView->Repaint();
         SetModifyFlag(true);
     } else
-        PostMessage(ActiveControl->Handle, WM_PASTE, 0, 0);
+        PostMessageW(ActiveControl->Handle, WM_PASTE, 0, 0);
 }
 //---------------------------------------------------------------------------
 
@@ -1130,7 +1133,7 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
                     //очищаем инструкции
                     Code[i] = NOP;
                     CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                    CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
+                    CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
                 }
             //снимаем выделение
             SelCount = 1;
@@ -1139,7 +1142,7 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
             for (int i = CodeListView->ItemIndex; i < CodeListView->ItemIndex + SelCount; i++) {
                 Code[i] = NOP;
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
+                CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
             }
         CodeListView->Repaint();
         SetModifyFlag(true);
@@ -1150,7 +1153,7 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 void __fastcall TX584Form::InsertItemClick(TObject *Sender)
 {
     InsertItem->Checked = !InsertItem->Checked;
-    StatusBar->Panels->Items[4]->Text = InsertItem->Checked ? "INS" : "";
+    StatusBar->Panels->Items[4]->Text = InsertItem->Checked ? L"INS" : L"";
 }
 //---------------------------------------------------------------------------
 
@@ -1187,14 +1190,14 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
     InputEditExit(this);
     //очищаем регистры
     for (int i = 0; i < 12; i++) {
-        TMaskEdit *MaskEdit = dynamic_cast<TMaskEdit *>(FindComponent("RMaskEdit" + IntToStr(i)));
-        MaskEdit->Text = "0000 0000 0000 0000";
+        TMaskEdit *MaskEdit = dynamic_cast<TMaskEdit *>(FindComponent(L"RMaskEdit" + IntToStr(i)));
+        MaskEdit->Text = L"0000 0000 0000 0000";
         MaskEdit->Font->Color = clBlack;
     }
     //сбрасываем флаги
     InFlags1->Checked = true; InFlags2->Checked = true; InFlags3->Checked = false; InFlags4->Checked = false;
     for (int i = 0; i < 12; i++)
-        dynamic_cast<TCheckBox *>(FindComponent("OutFlags" + IntToStr(i)))->Checked = i >= 1 && i <= 4;
+        dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked = i >= 1 && i <= 4;
     //перерисовываем редактор кода
     Instruction = 0;
     CodeListView->ItemIndex = 0;
@@ -1207,8 +1210,8 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
 
 void __fastcall TX584Form::HelpItemClick(TObject *Sender)
 {
-    AnsiString HelpFilePath = ExtractFilePath(Application->ExeName) + "X584.chm";
-    ShellExecute(NULL, NULL, HelpFilePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+    UnicodeString HelpFilePath = ExtractFilePath(Application->ExeName) + L"X584.chm";
+    ShellExecuteW(NULL, NULL, HelpFilePath.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 //---------------------------------------------------------------------------
 
@@ -1217,5 +1220,4 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
     AboutForm->ShowModal();
 }
 //---------------------------------------------------------------------------
-
 

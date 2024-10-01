@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2024 X584 developers
  *
  * This file is part of X584.
@@ -37,6 +37,7 @@
 #include "K584core.h"
 #include "Word_2K_SRVR.h"
 #include <OleServer.hpp>
+#include <System.ImageList.hpp>
 //---------------------------------------------------------------------------
 
 #define MAX_ADDR        1024
@@ -228,20 +229,20 @@ public:		// User declarations
     unsigned InFlags, OutFlags;         //входные и выходные флаги
     int SelCount;                       //количество выделенных строк
     unsigned MIClipboard[MAX_ADDR];     //буфер обмена для микроинструкций
-    AnsiString CMClipboard[MAX_ADDR];   //буфер обмена для комментариев
+    UnicodeString CMClipboard[MAX_ADDR];//буфер обмена для комментариев
     int ClipboardSize;                  //размер буфера обмена
     bool Modified;                      //флаг изменений
     int EditRow;                        //строка редактирования
     TPoint EditPoint;                   //точка редактирования
     bool Terminated;                    //флаг завершения выполнения
     int OldInstruction;                 //прежняя выполняемая инструкция
-    void LoadFile(AnsiString FileName);
-    void SaveFile(AnsiString FileName);
+    void LoadFile(UnicodeString FileName);
+    void SaveFile(UnicodeString FileName);
     void SetModifyFlag(bool Flag);
     void EnableRunControls(bool Flag);
     void BuildTree(int OpFilter, int ResFilter);
     void DrawItem(int Index);
-    bool ParseComment(AnsiString str, int &Instruction);
+    bool ParseComment(UnicodeString str, int &Instruction);
     void ShowState();
     void Run(int Mode);
     __fastcall TX584Form(TComponent* Owner);
