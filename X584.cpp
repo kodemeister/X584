@@ -21,19 +21,21 @@
 
 #include <vcl.h>
 #pragma hdrstop
+#include <tchar.h>
 //---------------------------------------------------------------------------
-USEFORM("Sources\Main.cpp", X584Form);
-USEFORM("Sources\Input.cpp", InputForm);
 USEFORM("Sources\About.cpp", AboutForm);
+USEFORM("Sources\Input.cpp", InputForm);
+USEFORM("Sources\Main.cpp", X584Form);
 //---------------------------------------------------------------------------
-WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
     try
     {
          Application->Initialize();
+         Application->MainFormOnTaskBar = true;
          Application->CreateForm(__classid(TX584Form), &X584Form);
-         Application->CreateForm(__classid(TInputForm), &InputForm);
          Application->CreateForm(__classid(TAboutForm), &AboutForm);
+         Application->CreateForm(__classid(TInputForm), &InputForm);
          Application->Run();
     }
     catch (Exception &exception)
