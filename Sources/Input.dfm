@@ -8,11 +8,11 @@ object InputForm: TInputForm
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
-  TextHeight = 13
+  TextHeight = 15
   object OKButton: TButton
     Left = 168
     Top = 112
@@ -42,12 +42,12 @@ object InputForm: TInputForm
       Left = 16
       Top = 24
       Width = 205
-      Height = 32
+      Height = 38
       EditMask = '0000 0000 0000 0000;1;_'
-      Font.Charset = RUSSIAN_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -21
-      Font.Name = 'Times New Roman'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       MaxLength = 19
       ParentFont = False
@@ -204,12 +204,12 @@ object InputForm: TInputForm
       Left = 232
       Top = 24
       Width = 61
-      Height = 32
+      Height = 38
       EditMask = '00000;1;_'
-      Font.Charset = RUSSIAN_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -21
-      Font.Name = 'Times New Roman'
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       MaxLength = 5
       ParentFont = False

@@ -9,8 +9,8 @@ object X584Form: TX584Form
   Constraints.MinWidth = 831
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
   Font.Style = []
   Menu = MainMenu
   Position = poScreenCenter
@@ -21,7 +21,7 @@ object X584Form: TX584Form
   DesignSize = (
     815
     513)
-  TextHeight = 13
+  TextHeight = 15
   object CodeListView: TListView
     Left = 3
     Top = 32
@@ -91,64 +91,64 @@ object X584Form: TX584Form
     object RLabel0: TLabel
       Left = 16
       Top = 20
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'0'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel1: TLabel
       Left = 16
       Top = 44
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'1'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel2: TLabel
       Left = 16
       Top = 68
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'2'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel3: TLabel
       Left = 16
       Top = 92
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'3'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel4: TLabel
       Left = 16
       Top = 116
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'4'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel5: TLabel
       Left = 16
       Top = 140
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'5'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel6: TLabel
       Left = 16
       Top = 164
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'6'
       OnMouseDown = ControlsMouseDown
     end
     object RLabel7: TLabel
       Left = 16
       Top = 188
-      Width = 29
-      Height = 13
+      Width = 31
+      Height = 15
       Caption = #1056#1054#1053'7'
       OnMouseDown = ControlsMouseDown
     end
@@ -156,7 +156,7 @@ object X584Form: TX584Form
       Left = 16
       Top = 220
       Width = 14
-      Height = 13
+      Height = 15
       Caption = #1056#1056
       OnMouseDown = ControlsMouseDown
     end
@@ -164,7 +164,7 @@ object X584Form: TX584Form
       Left = 16
       Top = 244
       Width = 21
-      Height = 13
+      Height = 15
       Caption = #1056#1056#1056
       OnMouseDown = ControlsMouseDown
     end
@@ -172,7 +172,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 16
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 0
@@ -185,7 +185,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 40
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 1
@@ -198,7 +198,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 64
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 2
@@ -211,7 +211,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 88
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 3
@@ -224,7 +224,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 112
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 4
@@ -237,7 +237,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 136
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 5
@@ -250,7 +250,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 160
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 6
@@ -263,7 +263,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 184
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 7
@@ -276,7 +276,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 216
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 8
@@ -289,7 +289,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 240
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 9
@@ -311,16 +311,16 @@ object X584Form: TX584Form
     object OutLabel: TLabel
       Left = 16
       Top = 20
-      Width = 29
-      Height = 13
+      Width = 33
+      Height = 15
       Caption = #1064#1042#1099#1093
       OnMouseDown = ControlsMouseDown
     end
     object AddrLabel: TLabel
       Left = 16
       Top = 44
-      Width = 28
-      Height = 13
+      Width = 32
+      Height = 15
       Caption = #1064#1040#1076#1088
       OnMouseDown = ControlsMouseDown
     end
@@ -328,7 +328,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 16
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       ReadOnly = True
@@ -339,7 +339,7 @@ object X584Form: TX584Form
       Left = 72
       Top = 40
       Width = 113
-      Height = 21
+      Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       ReadOnly = True
@@ -869,7 +869,7 @@ object X584Form: TX584Form
     Left = 16
     Top = 139
     Width = 57
-    Height = 19
+    Height = 21
     Constraints.MinWidth = 16
     Ctl3D = False
     MaxLength = 128

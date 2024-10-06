@@ -8,12 +8,12 @@ object AboutForm: TAboutForm
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
   OnShow = FormShow
-  TextHeight = 13
+  TextHeight = 15
   object IconImage: TImage
     Left = 8
     Top = 64
@@ -88,29 +88,29 @@ object AboutForm: TAboutForm
   object Label1: TLabel
     Left = 56
     Top = 64
-    Width = 88
-    Height = 13
+    Width = 90
+    Height = 15
     Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.30'
   end
   object Label2: TLabel
     Left = 56
     Top = 88
-    Width = 290
-    Height = 13
+    Width = 318
+    Height = 15
     Caption = #1055#1088#1086#1075#1088#1072#1084#1084#1085#1086'-'#1083#1086#1075#1080#1095#1077#1089#1082#1072#1103' '#1084#1086#1076#1077#1083#1100' '#1084#1080#1082#1088#1086#1087#1088#1086#1094#1077#1089#1089#1086#1088#1072' '#1050'584'
   end
   object Label3: TLabel
     Left = 56
     Top = 112
-    Width = 190
-    Height = 13
+    Width = 200
+    Height = 15
     Caption = #1056#1072#1079#1088#1072#1073#1086#1090#1072#1083#1080' '#1089#1090#1091#1076#1077#1085#1090#1099' '#1082#1072#1092#1077#1076#1088#1099' '#1048#1042#1058
   end
   object Label4: TLabel
     Left = 56
     Top = 128
-    Width = 289
-    Height = 13
+    Width = 309
+    Height = 15
     Caption = #1054#1084#1089#1082#1086#1075#1086' '#1043#1086#1089#1091#1076#1072#1088#1089#1090#1074#1077#1085#1085#1086#1075#1086' '#1058#1077#1093#1085#1080#1095#1077#1089#1082#1086#1075#1086' '#1059#1085#1080#1074#1077#1088#1089#1080#1090#1077#1090#1072
   end
   object WinXPImage: TImage
@@ -420,47 +420,47 @@ object AboutForm: TAboutForm
   object Label5: TLabel
     Left = 72
     Top = 152
-    Width = 273
-    Height = 13
+    Width = 235
+    Height = 15
     Caption = #1040#1088#1090#1091#1088' '#1050#1072#1089#1080#1084#1086#1074'                                '#1075#1088'. '#1042'-313'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
   end
   object Label6: TLabel
     Left = 72
     Top = 168
-    Width = 284
-    Height = 13
+    Width = 248
+    Height = 15
     Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086'                            '#1075#1088'. '#1048#1042'-313'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
   end
   object Label9: TLabel
     Left = 56
     Top = 240
-    Width = 325
-    Height = 13
+    Width = 356
+    Height = 15
     Caption = #1054#1090#1095#1077#1090#1099' '#1086#1073' '#1086#1096#1080#1073#1082#1072#1093' '#1087#1088#1086#1089#1100#1073#1072' '#1086#1090#1087#1088#1072#1074#1083#1103#1090#1100' '#1074' '#1088#1077#1087#1086#1079#1080#1090#1086#1088#1080#1081' '#1087#1088#1086#1077#1082#1090#1072
   end
   object RepositoryLabel: TLabel
     Left = 72
     Top = 264
-    Width = 216
-    Height = 16
+    Width = 218
+    Height = 17
     Cursor = crHandPoint
     Caption = 'https://github.com/kodemeister/X584'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
     Font.Height = -13
-    Font.Name = 'MS Sans Serif'
+    Font.Name = 'Segoe UI'
     Font.Style = [fsUnderline]
     ParentFont = False
     OnClick = RepositoryLabelClick
@@ -468,34 +468,34 @@ object AboutForm: TAboutForm
   object MemCaptionLabel: TLabel
     Left = 56
     Top = 320
-    Width = 162
-    Height = 13
+    Width = 171
+    Height = 15
     Caption = #1044#1086#1089#1090#1091#1087#1085#1072#1103' '#1092#1080#1079#1080#1095#1077#1089#1082#1072#1103' '#1087#1072#1084#1103#1090#1100':'
   end
   object MemLabel: TLabel
     Left = 240
     Top = 320
     Width = 53
-    Height = 13
+    Height = 15
     Caption = '131072 '#1050#1041
   end
   object Label7: TLabel
     Left = 56
     Top = 192
-    Width = 160
-    Height = 13
+    Width = 178
+    Height = 15
     Caption = #1048#1089#1087#1088#1072#1074#1083#1077#1085#1080#1103' '#1080' '#1091#1083#1091#1095#1096#1077#1085#1080#1103' '#1074#1085#1077#1089
   end
   object Label8: TLabel
     Left = 72
     Top = 216
-    Width = 290
-    Height = 13
+    Width = 258
+    Height = 15
     Caption = #1044#1072#1085#1080#1083#1072' '#1050#1086#1085#1076#1088#1072#1090#1077#1085#1082#1086'                       '#1075#1088'. '#1048#1042#1058'-221'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
   end
@@ -616,13 +616,13 @@ object AboutForm: TAboutForm
     object AboutLabel: TLabel
       Left = 168
       Top = 16
-      Width = 80
-      Height = 13
+      Width = 76
+      Height = 15
       Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
       Font.Style = [fsBold]
       ParentFont = False
     end
