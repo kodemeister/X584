@@ -67,10 +67,10 @@
 
   <IDEOPTIONS>
 [Version Info]
-IncludeVerInfo=0
+IncludeVerInfo=1
 AutoIncBuild=0
 MajorVer=1
-MinorVer=0
+MinorVer=30
 Release=0
 Build=0
 Debug=0
@@ -83,14 +83,14 @@ CodePage=1251
 
 [Version Info Keys]
 CompanyName=
-FileDescription=
-FileVersion=1.0.0.0
-InternalName=
-LegalCopyright=
+FileDescription=Симулятор процессора К584ВМ1
+FileVersion=1.30.0.0
+InternalName=X584
+LegalCopyright=(c) X584 developers, 2005-2024
 LegalTrademarks=
-OriginalFilename=
-ProductName=
-ProductVersion=1.0.0.0
+OriginalFilename=X584.exe
+ProductName=X584
+ProductVersion=1.30
 Comments=
 
 [HistoryLists\hlIncludePath]
