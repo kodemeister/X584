@@ -226,6 +226,7 @@ public:		// User declarations
     TButton *ResButton;                 //предыдущая выделенная кнопка фильтра результатов
     unsigned Regs[12];                  //регистры и шины
     unsigned InFlags, OutFlags;         //входные и выходные флаги
+    int SelStart;                       //номер первой выделенной строки
     int SelCount;                       //количество выделенных строк
     unsigned MIClipboard[MAX_ADDR];     //буфер обмена для микроинструкций
     AnsiString CMClipboard[MAX_ADDR];   //буфер обмена для комментариев

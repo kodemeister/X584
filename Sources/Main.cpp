@@ -587,6 +587,7 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
     TListItem *Item = CodeListView->Items->Item[Row];
     //проверяем, не зажата ли клавиша Shift
     if (Shift.Contains(ssShift)) {
+        SelStart = CodeListView->ItemFocused->Index;
         //выделяем элементы до предыдущего выделения
         SelCount = Row - CodeListView->ItemFocused->Index;
         if (SelCount >= 0)
@@ -600,6 +601,7 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
     }
     CodeListView->ItemIndex = Row;
     CodeListView->ItemFocused = Item;
+    SelStart = Row;
     TRect Rect = Item->DisplayRect(drBounds);
     //проверяем, не поставили ли точку останова
     if (X - Rect.Left < LeftImageList->Width) {
@@ -842,6 +844,15 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
         int pos = CodeListView->ItemIndex;
+        // если выделено несколько элементов, берём самый верхний
+        if (pos == -1) {
+           if (SelCount > 0)
+              pos = SelStart;
+           else
+              pos = SelStart + SelCount;
+           SelCount = 1;
+           CodeListView->Repaint();
+        }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
             for (int i = MAX_ADDR - 1; i > pos; i--) {
@@ -1136,7 +1147,12 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
             SelCount = 1;
         } else
             //очищаем выделенные инструкции
-            for (int i = CodeListView->ItemIndex; i < CodeListView->ItemIndex + SelCount; i++) {
+            for (int i = SelStart;
+                (SelCount > 0)
+                  ? (i < SelStart + SelCount)
+                  : (i>=0 && i >= SelStart + SelCount);
+                (SelCount > 0) ? ++i : --i)
+            {
                 Code[i] = NOP;
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
                 CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
