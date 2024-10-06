@@ -216,6 +216,8 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
+    void __fastcall CodeTreeViewKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 private:	// User declarations
 public:		// User declarations
     K584 CPU;                           //объект процессора

@@ -1218,4 +1218,12 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TX584Form::CodeTreeViewKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_RETURN) {
+        CodeTreeViewDblClick(this);
+    }
+}
+//---------------------------------------------------------------------------
 

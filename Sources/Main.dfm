@@ -80,6 +80,7 @@ object X584Form: TX584Form
     OnCollapsed = CodeTreeViewCollapsed
     OnDblClick = CodeTreeViewDblClick
     OnExpanded = CodeTreeViewExpanded
+    OnKeyDown = CodeTreeViewKeyDown
   end
   object RegGroupBox: TGroupBox
     Left = 608
