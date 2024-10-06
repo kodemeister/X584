@@ -87,7 +87,7 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\release\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
         <ProjectType>CppVCLApplication</ProjectType>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
-        <AllPackageLibs>rtl.lib;vcl.lib;bcboffice2k.lib</AllPackageLibs>
+        <AllPackageLibs>rtl.lib;vcl.lib;bcboffice2k.lib;vclwinx.lib;vclimg.lib;bindengine.lib</AllPackageLibs>
         <_TCHARMapping>wchar_t</_TCHARMapping>
         <Multithreaded>true</Multithreaded>
         <Icon_MainIcon>$(BDS)\bin\cbuilder_PROJECTICON.ico</Icon_MainIcon>
@@ -161,7 +161,7 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <ILINK_LibraryPath>$(BDSLIB)\$(PLATFORM)$(CC_SUFFIX)\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <LinkPackageImports>rtl.bpi;vcl.bpi;bcboffice2k.bpi</LinkPackageImports>
+        <LinkPackageImports>rtl.bpi;vcl.bpi;bcboffice2k.bpi;vclwinx.bpi;vclimg.bpi;bindengine.bpi</LinkPackageImports>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>Graphics\Icon.ico</Icon_MainIcon>
@@ -188,7 +188,7 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>Graphics\Icon.ico</Icon_MainIcon>
-        <LinkPackageImports>rtl.bpi;vcl.bpi;bcboffice2k.bpi</LinkPackageImports>
+        <LinkPackageImports>rtl.bpi;vcl.bpi;bcboffice2k.bpi;vclwinx.bpi;vclimg.bpi;bindengine.bpi</LinkPackageImports>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>

@@ -28,14 +28,15 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 #include <Graphics.hpp>
+#include <Vcl.BaseImageCollection.hpp>
+#include <Vcl.ImageCollection.hpp>
+#include <Vcl.VirtualImage.hpp>
 //---------------------------------------------------------------------------
 class TAboutForm : public TForm
 {
 __published:	// IDE-managed Components
     TPanel *HeaderPanel;
-    TImage *InfoImage;
     TLabel *AboutLabel;
-    TImage *IconImage;
     TLabel *Label1;
     TLabel *Label2;
     TLabel *Label3;
@@ -50,6 +51,9 @@ __published:	// IDE-managed Components
     TLabel *MemLabel;
     TLabel *Label7;
     TLabel *Label8;
+    TImageCollection *ImageCollection;
+    TVirtualImage *InfoImage;
+    TVirtualImage *IconImage;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall RepositoryLabelClick(TObject *Sender);
 private:	// User declarations

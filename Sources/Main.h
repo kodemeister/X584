@@ -38,6 +38,9 @@
 #include "Word_2K_SRVR.h"
 #include <OleServer.hpp>
 #include <System.ImageList.hpp>
+#include <Vcl.BaseImageCollection.hpp>
+#include <Vcl.ImageCollection.hpp>
+#include <Vcl.VirtualImageList.hpp>
 //---------------------------------------------------------------------------
 
 #define MAX_ADDR        1024
@@ -46,11 +49,6 @@ class TX584Form : public TForm
 {
 __published:	// IDE-managed Components
     TListView *CodeListView;
-    TImageList *LeftImageList;
-    TImageList *CheckImageList;
-    TImageList *EmptyImageList;
-    TImageList *ButtonsImageList;
-    TImageList *TreeImageList;
     TTreeView *CodeTreeView;
     TGroupBox *RegGroupBox;
     TGroupBox *BusGroupBox;
@@ -167,6 +165,12 @@ __published:	// IDE-managed Components
     TTimer *ClickTimer;
     TWordApplication *WordApplication;
     TWordDocument *WordDocument;
+    TImageCollection *ImageCollection;
+    TVirtualImageList *LeftImageList;
+    TVirtualImageList *CheckImageList;
+    TVirtualImageList *EmptyImageList;
+    TVirtualImageList *ButtonsImageList;
+    TVirtualImageList *TreeImageList;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
