@@ -40,7 +40,6 @@ __published:	// IDE-managed Components
     TLabel *Label2;
     TLabel *Label3;
     TLabel *Label4;
-    TImage *WinXPImage;
     TLabel *Label5;
     TLabel *Label6;
     TLabel *Label9;
