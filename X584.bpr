@@ -83,14 +83,14 @@ CodePage=1251
 
 [Version Info Keys]
 CompanyName=
-FileDescription=Симулятор процессора К584ВМ1
+FileDescription=A simulator for K584VM1 processor
 FileVersion=1.30.0.0
 InternalName=X584
 LegalCopyright=(c) X584 developers, 2005-2024
 LegalTrademarks=
 OriginalFilename=X584.exe
 ProductName=X584
-ProductVersion=1.30
+ProductVersion=1.30.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
