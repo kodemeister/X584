@@ -807,7 +807,7 @@ void __fastcall TX584Form::CodeListViewDragDrop(TObject *Sender,
 }
 
 //---------------------------------------------------------------------------
-//                      *** ДЕРЕВО МИКРОИНСТУКЦИЙ ***
+//                      *** ДЕРЕВО МИКРОИНСТРУКЦИЙ ***
 //---------------------------------------------------------------------------
 
 void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
@@ -879,6 +879,15 @@ void __fastcall TX584Form::CodeTreeViewCollapsed(TObject *Sender,
 {
     Node->ImageIndex = 0;
     Node->SelectedIndex = 0;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TX584Form::CodeTreeViewKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_RETURN) {
+        CodeTreeViewDblClick(this);
+    }
 }
 //---------------------------------------------------------------------------
 
@@ -1217,5 +1226,4 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
     AboutForm->ShowModal();
 }
 //---------------------------------------------------------------------------
-
 
