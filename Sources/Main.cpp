@@ -587,7 +587,6 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
     TListItem *Item = CodeListView->Items->Item[Row];
     //проверяем, не зажата ли клавиша Shift
     if (Shift.Contains(ssShift)) {
-        SelStart = CodeListView->ItemFocused->Index;
         //выделяем элементы до предыдущего выделения
         SelCount = Row - CodeListView->ItemFocused->Index;
         if (SelCount >= 0)
@@ -601,7 +600,6 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
     }
     CodeListView->ItemIndex = Row;
     CodeListView->ItemFocused = Item;
-    SelStart = Row;
     TRect Rect = Item->DisplayRect(drBounds);
     //проверяем, не поставили ли точку останова
     if (X - Rect.Left < LeftImageList->Width) {
@@ -639,6 +637,18 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
             ClickTimer->Enabled = false;
             ClickTimer->Enabled = true;
         }
+    }
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::GetSelection(int &SelStart, int &SelEnd)
+{
+    if (SelCount > 0) {
+        SelStart = CodeListView->ItemFocused->Index;
+        SelEnd = SelStart + SelCount;
+    } else {
+        SelStart = CodeListView->ItemFocused->Index + SelCount;
+        SelEnd = SelStart + (1 - SelCount);
     }
 }
 //---------------------------------------------------------------------------
@@ -843,15 +853,13 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
 {
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
-        int pos = CodeListView->ItemIndex;
+        int pos = CodeListView->ItemFocused->Index;
         // если выделено несколько элементов, берём самый верхний
-        if (pos == -1) {
-           if (SelCount > 0)
-              pos = SelStart;
-           else
-              pos = SelStart + SelCount;
-           SelCount = 1;
-           CodeListView->Repaint();
+        if (SelCount != 1) {
+            int _selEnd;
+            GetSelection(pos, _selEnd);
+            SelCount = 1;
+            CodeListView->Repaint();
         }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
@@ -1129,14 +1137,17 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
+            int SelStart, SelEnd, SelLength;
+            GetSelection(SelStart, SelEnd);
+            SelLength = SelEnd - SelStart;
             //сдвигаем все инструкции на SelCount позиций влево
-            for (int i = CodeListView->ItemIndex; i < MAX_ADDR; i++)
-                if (i + SelCount < MAX_ADDR) {
-                    Code[i] = Code[i + SelCount];
+            for (int i = SelStart; i < MAX_ADDR; i++)
+                if (i < SelEnd) {
+                    Code[i] = Code[i + SelLength];
                     CodeListView->Items->Item[i]->SubItems->Strings[1] =
-                        CodeListView->Items->Item[i + SelCount]->SubItems->Strings[1];
+                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[1];
                     CodeListView->Items->Item[i]->SubItems->Strings[2] =
-                        CodeListView->Items->Item[i + SelCount]->SubItems->Strings[2];
+                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[2];
                 } else {
                     //очищаем инструкции
                     Code[i] = NOP;
@@ -1145,18 +1156,18 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
                 }
             //снимаем выделение
             SelCount = 1;
-        } else
+            CodeListView->ItemIndex = SelStart;
+            CodeListView->ItemFocused = CodeListView->Items->Item[SelStart];
+        } else {
+            int SelStart, SelEnd;
+            GetSelection(SelStart, SelEnd);
             //очищаем выделенные инструкции
-            for (int i = SelStart;
-                (SelCount > 0)
-                  ? (i < SelStart + SelCount)
-                  : (i>=0 && i >= SelStart + SelCount);
-                (SelCount > 0) ? ++i : --i)
-            {
+            for (int i = SelStart; i < SelEnd; i++) {
                 Code[i] = NOP;
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
                 CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
             }
+        }
         CodeListView->Repaint();
         SetModifyFlag(true);
     }
