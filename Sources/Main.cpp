@@ -1142,7 +1142,7 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
             SelLength = SelEnd - SelStart;
             //сдвигаем все инструкции на SelCount позиций влево
             for (int i = SelStart; i < MAX_ADDR; i++)
-                if (i < SelEnd) {
+                if (i + SelLength < MAX_ADDR) {
                     Code[i] = Code[i + SelLength];
                     CodeListView->Items->Item[i]->SubItems->Strings[1] =
                         CodeListView->Items->Item[i + SelLength]->SubItems->Strings[1];
