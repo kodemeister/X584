@@ -41,8 +41,8 @@ __published:	// IDE-managed Components
     TLabel *Label3;
     TLabel *Label4;
     TImage *WinXPImage;
-    TLabel *Label5;
-    TLabel *Label6;
+    TLabel *DeveloperLabel1;
+    TLabel *DeveloperLabel2;
     TLabel *Label9;
     TLabel *RepositoryLabel;
     TPanel *Panel1;
@@ -50,7 +50,10 @@ __published:	// IDE-managed Components
     TButton *OKButton;
     TLabel *MemLabel;
     TLabel *Label7;
-    TLabel *Label8;
+    TLabel *DeveloperLabel3;
+    TLabel *GroupLabel1;
+    TLabel *GroupLabel2;
+    TLabel *GroupLabel3;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall RepositoryLabelClick(TObject *Sender);
 private:	// User declarations

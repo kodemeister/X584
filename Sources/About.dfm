@@ -419,12 +419,12 @@ object AboutForm: TAboutForm
       9E9E9EEDEDED8000FF00}
     Transparent = True
   end
-  object Label5: TLabel
+  object DeveloperLabel1: TLabel
     Left = 72
     Top = 152
-    Width = 273
+    Width = 91
     Height = 13
-    Caption = #1040#1088#1090#1091#1088' '#1050#1072#1089#1080#1084#1086#1074'                                '#1075#1088'. '#1042'-313'
+    Caption = #1040#1088#1090#1091#1088' '#1050#1072#1089#1080#1084#1086#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -432,12 +432,12 @@ object AboutForm: TAboutForm
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Label6: TLabel
+  object DeveloperLabel2: TLabel
     Left = 72
     Top = 168
-    Width = 284
+    Width = 109
     Height = 13
-    Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086'                            '#1075#1088'. '#1048#1042'-313'
+    Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -488,12 +488,51 @@ object AboutForm: TAboutForm
     Height = 13
     Caption = #1048#1089#1087#1088#1072#1074#1083#1077#1085#1080#1103' '#1080' '#1091#1083#1091#1095#1096#1077#1085#1080#1103' '#1074#1085#1077#1089
   end
-  object Label8: TLabel
+  object DeveloperLabel3: TLabel
     Left = 72
     Top = 216
-    Width = 290
+    Width = 127
     Height = 13
-    Caption = #1044#1072#1085#1080#1083#1072' '#1050#1086#1085#1076#1088#1072#1090#1077#1085#1082#1086'                       '#1075#1088'. '#1048#1042#1058'-221'
+    Caption = #1044#1072#1085#1080#1083#1072' '#1050#1086#1085#1076#1088#1072#1090#1077#1085#1082#1086
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupLabel1: TLabel
+    Left = 288
+    Top = 152
+    Width = 55
+    Height = 13
+    Caption = #1075#1088'. '#1042'-313'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupLabel2: TLabel
+    Left = 288
+    Top = 168
+    Width = 64
+    Height = 13
+    Caption = #1075#1088'. '#1048#1042'-313'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupLabel3: TLabel
+    Left = 288
+    Top = 216
+    Width = 72
+    Height = 13
+    Caption = #1075#1088'. '#1048#1042#1058'-221'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
