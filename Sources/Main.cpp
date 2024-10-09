@@ -724,6 +724,15 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
                 CodeListView->Repaint();
             }
         break;
+    case VK_PRIOR:
+    case VK_NEXT:
+    case VK_HOME:
+    case VK_END:
+        if (SelCount != 1) {
+            SelCount = 1;
+            CodeListView->Repaint();
+        }
+        break;
     }
 }
 //---------------------------------------------------------------------------
