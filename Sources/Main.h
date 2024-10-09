@@ -220,6 +220,7 @@ __published:	// IDE-managed Components
     void __fastcall AboutItemClick(TObject *Sender);
 
 private:	// User declarations
+    void GetSelection(int &SelStart, int &SelEnd);
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций

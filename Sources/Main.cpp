@@ -641,6 +641,18 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::GetSelection(int &SelStart, int &SelEnd)
+{
+    if (SelCount > 0) {
+        SelStart = CodeListView->ItemFocused->Index;
+        SelEnd = SelStart + SelCount;
+    } else {
+        SelStart = CodeListView->ItemFocused->Index + SelCount;
+        SelEnd = SelStart + (1 - SelCount);
+    }
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TX584Form::CodeListViewDblClick(TObject *Sender)
 {
     //получаем координаты двойного щелчка
@@ -841,7 +853,14 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
 {
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
-        int pos = CodeListView->ItemIndex;
+        int pos = CodeListView->ItemFocused->Index;
+        // если выделено несколько элементов, берём самый верхний
+        if (SelCount != 1) {
+            int _selEnd;
+            GetSelection(pos, _selEnd);
+            SelCount = 1;
+            CodeListView->Repaint();
+        }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
             for (int i = MAX_ADDR - 1; i > pos; i--) {
@@ -1127,14 +1146,17 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
+            int SelStart, SelEnd, SelLength;
+            GetSelection(SelStart, SelEnd);
+            SelLength = SelEnd - SelStart;
             //сдвигаем все инструкции на SelCount позиций влево
-            for (int i = CodeListView->ItemIndex; i < MAX_ADDR; i++)
-                if (i + SelCount < MAX_ADDR) {
-                    Code[i] = Code[i + SelCount];
+            for (int i = SelStart; i < MAX_ADDR; i++)
+                if (i + SelLength < MAX_ADDR) {
+                    Code[i] = Code[i + SelLength];
                     CodeListView->Items->Item[i]->SubItems->Strings[1] =
-                        CodeListView->Items->Item[i + SelCount]->SubItems->Strings[1];
+                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[1];
                     CodeListView->Items->Item[i]->SubItems->Strings[2] =
-                        CodeListView->Items->Item[i + SelCount]->SubItems->Strings[2];
+                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[2];
                 } else {
                     //очищаем инструкции
                     Code[i] = NOP;
@@ -1143,13 +1165,18 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
                 }
             //снимаем выделение
             SelCount = 1;
-        } else
+            CodeListView->ItemIndex = SelStart;
+            CodeListView->ItemFocused = CodeListView->Items->Item[SelStart];
+        } else {
+            int SelStart, SelEnd;
+            GetSelection(SelStart, SelEnd);
             //очищаем выделенные инструкции
-            for (int i = CodeListView->ItemIndex; i < CodeListView->ItemIndex + SelCount; i++) {
+            for (int i = SelStart; i < SelEnd; i++) {
                 Code[i] = NOP;
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
                 CodeListView->Items->Item[i]->SubItems->Strings[2] = "";
             }
+        }
         CodeListView->Repaint();
         SetModifyFlag(true);
     }
