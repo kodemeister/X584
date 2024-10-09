@@ -856,8 +856,8 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
         int pos = CodeListView->ItemFocused->Index;
         // если выделено несколько элементов, берём самый верхний
         if (SelCount != 1) {
-            int _selEnd;
-            GetSelection(pos, _selEnd);
+            int SelEnd;
+            GetSelection(pos, SelEnd);
             SelCount = 1;
             CodeListView->Repaint();
         }
@@ -1149,7 +1149,7 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
             int SelStart, SelEnd, SelLength;
             GetSelection(SelStart, SelEnd);
             SelLength = SelEnd - SelStart;
-            //сдвигаем все инструкции на SelCount позиций влево
+            //сдвигаем все инструкции на SelLength позиций влево
             for (int i = SelStart; i < MAX_ADDR; i++)
                 if (i + SelLength < MAX_ADDR) {
                     Code[i] = Code[i + SelLength];
