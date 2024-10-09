@@ -859,7 +859,6 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
             int SelEnd;
             GetSelection(pos, SelEnd);
             SelCount = 1;
-            CodeListView->Repaint();
         }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
@@ -880,6 +879,7 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
             pos = MAX_ADDR - 1;
         CodeListView->ItemIndex = pos;
         CodeListView->ItemFocused = CodeListView->Items->Item[pos];
+        CodeListView->Repaint();
         SetModifyFlag(true);
     }
 }
