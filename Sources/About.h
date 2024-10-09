@@ -36,7 +36,7 @@ __published:	// IDE-managed Components
     TImage *InfoImage;
     TLabel *AboutLabel;
     TImage *IconImage;
-    TLabel *Label1;
+    TLabel *VersionLabel;
     TLabel *Label2;
     TLabel *Label3;
     TLabel *Label4;

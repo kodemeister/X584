@@ -87,12 +87,12 @@ object AboutForm: TAboutForm
       000000000000000000000000000000000000}
     Transparent = True
   end
-  object Label1: TLabel
+  object VersionLabel: TLabel
     Left = 56
     Top = 64
     Width = 88
     Height = 13
-    Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.30'
+    Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.31'
   end
   object Label2: TLabel
     Left = 56
