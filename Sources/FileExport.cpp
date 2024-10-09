@@ -33,6 +33,7 @@ TExportThread::TExportThread(bool CreateSuspended)
 void __fastcall TExportThread::Execute()
 {
     X584Form->WordItem->Enabled = false;
+    X584Form->WordToolButton->Enabled = false;
     //соединяемся с сервером автоматизации
     CoInitialize(NULL);
     X584Form->WordApplication->Connect();
@@ -91,5 +92,6 @@ void __fastcall TExportThread::Execute()
     X584Form->WordDocument->Disconnect();
     X584Form->WordApplication->Disconnect();
     X584Form->WordItem->Enabled = true;
+    X584Form->WordToolButton->Enabled = true;
     CoUninitialize();
 }

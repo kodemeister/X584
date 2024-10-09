@@ -173,8 +173,11 @@ void TX584Form::SetModifyFlag(bool Flag)
 void TX584Form::EnableRunControls(bool Flag)
 {
     RunItem->Enabled = Flag;
+    RunToolButton->Enabled = Flag;
     StepItem->Enabled = Flag;
+    StepToolButton->Enabled = Flag;
     RunToCursorItem->Enabled = Flag;
+    RunToCursorToolButton->Enabled = Flag;
     Caption = AnsiString("X584 - ") + ExtractFileName(OpenDialog->FileName) + (Flag ? "" : " [Running]");
 }
 //---------------------------------------------------------------------------
@@ -1064,6 +1067,7 @@ void __fastcall TX584Form::WordItemClick(TObject *Sender)
         MessageBox(Handle, "Ошибка экспортирования данных в Microsoft Word.",
             "Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
         WordItem->Enabled = true;
+        WordToolButton->Enabled = true;
     }
 }
 //---------------------------------------------------------------------------
