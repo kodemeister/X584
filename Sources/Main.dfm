@@ -2,7 +2,7 @@ object X584Form: TX584Form
   Left = 191
   Top = 110
   Caption = 'X584'
-  ClientHeight = 513
+  ClientHeight = 532
   ClientWidth = 815
   Color = clBtnFace
   Constraints.MinHeight = 591
@@ -20,7 +20,7 @@ object X584Form: TX584Form
   OnResize = FormResize
   DesignSize = (
     815
-    513)
+    532)
   TextHeight = 15
   object CodeListView: TListView
     Left = 3
@@ -369,7 +369,7 @@ object X584Form: TX584Form
     object OutFlags1: TCheckBox
       Left = 72
       Top = 16
-      Width = 49
+      Width = 62
       Height = 17
       Caption = '!'#1057#1044#1051'1'
       Checked = True
@@ -379,7 +379,7 @@ object X584Form: TX584Form
     object OutFlags2: TCheckBox
       Left = 72
       Top = 32
-      Width = 49
+      Width = 62
       Height = 17
       Caption = '!'#1057#1044#1055'1'
       Checked = True
@@ -425,7 +425,7 @@ object X584Form: TX584Form
     object OutFlags9: TCheckBox
       Left = 8
       Top = 64
-      Width = 57
+      Width = 58
       Height = 17
       Caption = #1055#1040#1051#1059'0'
       TabOrder = 3
@@ -612,7 +612,7 @@ object X584Form: TX584Form
     object InFlags2: TCheckBox
       Left = 8
       Top = 42
-      Width = 41
+      Width = 54
       Height = 17
       Caption = '!'#1055#1057#1095
       Checked = True
@@ -622,7 +622,7 @@ object X584Form: TX584Form
     object InFlags3: TCheckBox
       Left = 8
       Top = 69
-      Width = 49
+      Width = 54
       Height = 17
       Caption = #1048#1053#1050#1056
       TabOrder = 2
@@ -630,7 +630,7 @@ object X584Form: TX584Form
     object InFlags4: TCheckBox
       Left = 8
       Top = 96
-      Width = 33
+      Width = 41
       Height = 17
       Caption = #1055#1056
       TabOrder = 3
@@ -860,7 +860,7 @@ object X584Form: TX584Form
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 494
+    Top = 513
     Width = 815
     Height = 19
     Panels = <
