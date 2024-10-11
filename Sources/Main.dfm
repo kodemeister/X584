@@ -172,7 +172,7 @@ object X584Form: TX584Form
     object RMaskEdit0: TMaskEdit
       Left = 72
       Top = 16
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -185,7 +185,7 @@ object X584Form: TX584Form
     object RMaskEdit1: TMaskEdit
       Left = 72
       Top = 40
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -198,7 +198,7 @@ object X584Form: TX584Form
     object RMaskEdit2: TMaskEdit
       Left = 72
       Top = 64
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -211,7 +211,7 @@ object X584Form: TX584Form
     object RMaskEdit3: TMaskEdit
       Left = 72
       Top = 88
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -224,7 +224,7 @@ object X584Form: TX584Form
     object RMaskEdit4: TMaskEdit
       Left = 72
       Top = 112
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -237,7 +237,7 @@ object X584Form: TX584Form
     object RMaskEdit5: TMaskEdit
       Left = 72
       Top = 136
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -250,7 +250,7 @@ object X584Form: TX584Form
     object RMaskEdit6: TMaskEdit
       Left = 72
       Top = 160
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -263,7 +263,7 @@ object X584Form: TX584Form
     object RMaskEdit7: TMaskEdit
       Left = 72
       Top = 184
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -276,7 +276,7 @@ object X584Form: TX584Form
     object RMaskEdit8: TMaskEdit
       Left = 72
       Top = 216
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -289,7 +289,7 @@ object X584Form: TX584Form
     object RMaskEdit9: TMaskEdit
       Left = 72
       Top = 240
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -328,7 +328,7 @@ object X584Form: TX584Form
     object RMaskEdit10: TMaskEdit
       Left = 72
       Top = 16
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
@@ -339,7 +339,7 @@ object X584Form: TX584Form
     object RMaskEdit11: TMaskEdit
       Left = 72
       Top = 40
-      Width = 113
+      Width = 121
       Height = 23
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
