@@ -198,6 +198,8 @@ __published:	// IDE-managed Components
     void __fastcall CodeTreeViewExpanded(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewCollapsed(TObject *Sender,
           TTreeNode *Node);
+    void __fastcall CodeTreeViewKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
     void __fastcall FilterOpButtonClick(TObject *Sender);
     void __fastcall FilterResButtonClick(TObject *Sender);
     void __fastcall RegMaskEditKeyPress(TObject *Sender, char &Key);
@@ -221,7 +223,9 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
+
 private:	// User declarations
+    void GetSelection(int &SelStart, int &SelEnd);
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций

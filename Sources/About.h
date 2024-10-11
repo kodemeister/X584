@@ -37,12 +37,12 @@ class TAboutForm : public TForm
 __published:	// IDE-managed Components
     TPanel *HeaderPanel;
     TLabel *AboutLabel;
-    TLabel *Label1;
+    TLabel *VersionLabel;
     TLabel *Label2;
     TLabel *Label3;
     TLabel *Label4;
-    TLabel *Label5;
-    TLabel *Label6;
+    TLabel *DeveloperLabel1;
+    TLabel *DeveloperLabel2;
     TLabel *Label9;
     TLabel *RepositoryLabel;
     TPanel *Panel1;
@@ -50,7 +50,10 @@ __published:	// IDE-managed Components
     TButton *OKButton;
     TLabel *MemLabel;
     TLabel *Label7;
-    TLabel *Label8;
+    TLabel *DeveloperLabel3;
+    TLabel *GroupLabel1;
+    TLabel *GroupLabel2;
+    TLabel *GroupLabel3;
     TImageCollection *ImageCollection;
     TVirtualImage *InfoImage;
     TVirtualImage *IconImage;

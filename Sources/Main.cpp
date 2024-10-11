@@ -174,8 +174,11 @@ void TX584Form::SetModifyFlag(bool Flag)
 void TX584Form::EnableRunControls(bool Flag)
 {
     RunItem->Enabled = Flag;
+    RunToolButton->Enabled = Flag;
     StepItem->Enabled = Flag;
+    StepToolButton->Enabled = Flag;
     RunToCursorItem->Enabled = Flag;
+    RunToCursorToolButton->Enabled = Flag;
     Caption = UnicodeString(L"X584 - ") + ExtractFileName(OpenDialog->FileName) + (Flag ? L"" : L" [Running]");
 }
 //---------------------------------------------------------------------------
@@ -642,6 +645,18 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::GetSelection(int &SelStart, int &SelEnd)
+{
+    if (SelCount > 0) {
+        SelStart = CodeListView->ItemFocused->Index;
+        SelEnd = SelStart + SelCount;
+    } else {
+        SelStart = CodeListView->ItemFocused->Index + SelCount;
+        SelEnd = SelStart + (1 - SelCount);
+    }
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TX584Form::CodeListViewDblClick(TObject *Sender)
 {
     //получаем координаты двойного щелчка
@@ -711,6 +726,15 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
                 SelCount = 1;
                 CodeListView->Repaint();
             }
+        break;
+    case VK_PRIOR:
+    case VK_NEXT:
+    case VK_HOME:
+    case VK_END:
+        if (SelCount != 1) {
+            SelCount = 1;
+            CodeListView->Repaint();
+        }
         break;
     }
 }
@@ -810,7 +834,7 @@ void __fastcall TX584Form::CodeListViewDragDrop(TObject *Sender,
 }
 
 //---------------------------------------------------------------------------
-//                      *** ДЕРЕВО МИКРОИНСТУКЦИЙ ***
+//                      *** ДЕРЕВО МИКРОИНСТРУКЦИЙ ***
 //---------------------------------------------------------------------------
 
 void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
@@ -844,7 +868,13 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
 {
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
-        int pos = CodeListView->ItemIndex;
+        int pos = CodeListView->ItemFocused->Index;
+        // если выделено несколько элементов, берём самый верхний
+        if (SelCount != 1) {
+            int SelEnd;
+            GetSelection(pos, SelEnd);
+            SelCount = 1;
+        }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
             for (int i = MAX_ADDR - 1; i > pos; i--) {
@@ -864,6 +894,7 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
             pos = MAX_ADDR - 1;
         CodeListView->ItemIndex = pos;
         CodeListView->ItemFocused = CodeListView->Items->Item[pos];
+        CodeListView->Repaint();
         SetModifyFlag(true);
     }
 }
@@ -882,6 +913,15 @@ void __fastcall TX584Form::CodeTreeViewCollapsed(TObject *Sender,
 {
     Node->ImageIndex = 0;
     Node->SelectedIndex = 0;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TX584Form::CodeTreeViewKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key == VK_RETURN) {
+        CodeTreeViewDblClick(this);
+    }
 }
 //---------------------------------------------------------------------------
 
@@ -1039,6 +1079,7 @@ void __fastcall TX584Form::WordItemClick(TObject *Sender)
         MessageBoxW(Handle, L"Ошибка экспортирования данных в Microsoft Word.",
             L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
         WordItem->Enabled = true;
+        WordToolButton->Enabled = true;
     }
 }
 //---------------------------------------------------------------------------
@@ -1121,14 +1162,17 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
-            //сдвигаем все инструкции на SelCount позиций влево
-            for (int i = CodeListView->ItemIndex; i < MAX_ADDR; i++)
-                if (i + SelCount < MAX_ADDR) {
-                    Code[i] = Code[i + SelCount];
+            int SelStart, SelEnd, SelLength;
+            GetSelection(SelStart, SelEnd);
+            SelLength = SelEnd - SelStart;
+            //сдвигаем все инструкции на SelLength позиций влево
+            for (int i = SelStart; i < MAX_ADDR; i++)
+                if (i + SelLength < MAX_ADDR) {
+                    Code[i] = Code[i + SelLength];
                     CodeListView->Items->Item[i]->SubItems->Strings[1] =
-                        CodeListView->Items->Item[i + SelCount]->SubItems->Strings[1];
+                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[1];
                     CodeListView->Items->Item[i]->SubItems->Strings[2] =
-                        CodeListView->Items->Item[i + SelCount]->SubItems->Strings[2];
+                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[2];
                 } else {
                     //очищаем инструкции
                     Code[i] = NOP;
@@ -1137,13 +1181,18 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
                 }
             //снимаем выделение
             SelCount = 1;
-        } else
+            CodeListView->ItemIndex = SelStart;
+            CodeListView->ItemFocused = CodeListView->Items->Item[SelStart];
+        } else {
+            int SelStart, SelEnd;
+            GetSelection(SelStart, SelEnd);
             //очищаем выделенные инструкции
-            for (int i = CodeListView->ItemIndex; i < CodeListView->ItemIndex + SelCount; i++) {
+            for (int i = SelStart; i < SelEnd; i++) {
                 Code[i] = NOP;
                 CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
                 CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
             }
+        }
         CodeListView->Repaint();
         SetModifyFlag(true);
     }

@@ -14,12 +14,12 @@ object AboutForm: TAboutForm
   Position = poScreenCenter
   OnShow = FormShow
   TextHeight = 15
-  object Label1: TLabel
+  object VersionLabel: TLabel
     Left = 56
     Top = 64
     Width = 90
     Height = 15
-    Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.30'
+    Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.31'
   end
   object Label2: TLabel
     Left = 56
@@ -42,12 +42,12 @@ object AboutForm: TAboutForm
     Height = 15
     Caption = #1054#1084#1089#1082#1086#1075#1086' '#1043#1086#1089#1091#1076#1072#1088#1089#1090#1074#1077#1085#1085#1086#1075#1086' '#1058#1077#1093#1085#1080#1095#1077#1089#1082#1086#1075#1086' '#1059#1085#1080#1074#1077#1088#1089#1080#1090#1077#1090#1072
   end
-  object Label5: TLabel
+  object DeveloperLabel1: TLabel
     Left = 72
     Top = 152
-    Width = 235
+    Width = 87
     Height = 15
-    Caption = #1040#1088#1090#1091#1088' '#1050#1072#1089#1080#1084#1086#1074'                                '#1075#1088'. '#1042'-313'
+    Caption = #1040#1088#1090#1091#1088' '#1050#1072#1089#1080#1084#1086#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -55,12 +55,12 @@ object AboutForm: TAboutForm
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Label6: TLabel
+  object DeveloperLabel2: TLabel
     Left = 72
     Top = 168
-    Width = 248
+    Width = 103
     Height = 15
-    Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086'                            '#1075#1088'. '#1048#1042'-313'
+    Caption = #1056#1086#1084#1072#1085' '#1056#1086#1084#1072#1085#1077#1085#1082#1086
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -111,12 +111,51 @@ object AboutForm: TAboutForm
     Height = 15
     Caption = #1048#1089#1087#1088#1072#1074#1083#1077#1085#1080#1103' '#1080' '#1091#1083#1091#1095#1096#1077#1085#1080#1103' '#1074#1085#1077#1089
   end
-  object Label8: TLabel
+  object DeveloperLabel3: TLabel
     Left = 72
     Top = 216
-    Width = 258
+    Width = 121
     Height = 15
-    Caption = #1044#1072#1085#1080#1083#1072' '#1050#1086#1085#1076#1088#1072#1090#1077#1085#1082#1086'                       '#1075#1088'. '#1048#1042#1058'-221'
+    Caption = #1044#1072#1085#1080#1083#1072' '#1050#1086#1085#1076#1088#1072#1090#1077#1085#1082#1086
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupLabel1: TLabel
+    Left = 288
+    Top = 152
+    Width = 52
+    Height = 15
+    Caption = #1075#1088'. '#1042'-313'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupLabel2: TLabel
+    Left = 288
+    Top = 168
+    Width = 61
+    Height = 15
+    Caption = #1075#1088'. '#1048#1042'-313'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object GroupLabel3: TLabel
+    Left = 288
+    Top = 216
+    Width = 68
+    Height = 15
+    Caption = #1075#1088'. '#1048#1042#1058'-221'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12

@@ -23,3 +23,11 @@ P.S. For future reference. **NEVER EVER CREATE HELP FILES IN FORMATS LIKE
 DOC OR DOCX** (only if you want to make difficulties to future 
 generations). Nowadays there are multiple markup languages which make 
 help file generation in various formats much and much simpler.
+
+## Build instructions
+
+To build X584 help, you will need HTML Help Workshop from Microsoft which
+contains HTML Help Compiler inside it. You should run this command in your
+command prompt from HTML Help Workshop run directory:
+
+     > hhc X584.hhp
