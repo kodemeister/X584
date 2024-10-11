@@ -300,7 +300,7 @@ UnicodeString NextWord(UnicodeString str, int &pos)
     while (pos <= str.Length() && str[pos] != L' ')
         pos++;
     //выделяем слово
-    return UpperCase(str.SubString(org, pos - org));
+    return AnsiUpperCase(str.SubString(org, pos - org));
 }
 
 const UnicodeString FlagNames[12] = {L"ПАЛУ3", L"!СДЛ1", L"!СДП1", L"!СДЛ2", L"!СДП2",
