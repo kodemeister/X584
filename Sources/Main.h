@@ -37,6 +37,7 @@
 #include "K584core.h"
 #include "Word_2K_SRVR.h"
 #include <OleServer.hpp>
+#include <Messages.hpp>
 //---------------------------------------------------------------------------
 
 #define MAX_ADDR        1024
@@ -167,6 +168,7 @@ __published:	// IDE-managed Components
     TWordApplication *WordApplication;
     TWordDocument *WordDocument;
     void __fastcall FormCreate(TObject *Sender);
+    void __fastcall FormDestroy(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall ApplicationEventsHint(TObject *Sender);
@@ -188,7 +190,7 @@ __published:	// IDE-managed Components
           int X, int Y, TDragState State, bool &Accept);
     void __fastcall CodeListViewDragDrop(TObject *Sender, TObject *Source,
           int X, int Y);
-    void __fastcall CodeTreeViewChange(TObject *Sender, TTreeNode *Node);          
+    void __fastcall CodeTreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewDblClick(TObject *Sender);
     void __fastcall CodeTreeViewExpanded(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewCollapsed(TObject *Sender,
@@ -218,8 +220,20 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
-
 private:	// User declarations
+    // для буфера обмена
+    UINT ClipboardFormat;
+    HWND PreviousWindow;
+    int  GetClipboardBufferSize();
+    void PutIntoClipboard();
+    void GetFromClipboard();
+    void OnClipboard(TWMNoParams &x);
+    void OnChangeClipboardChain(TWMChangeCBChain &msg);
+BEGIN_MESSAGE_MAP
+    MESSAGE_HANDLER(WM_DRAWCLIPBOARD, TWMNoParams, OnClipboard);
+    MESSAGE_HANDLER(WM_CHANGECBCHAIN, TWMChangeCBChain, OnChangeClipboardChain);
+END_MESSAGE_MAP(TForm);
+    // для получения выбора
     void GetSelection(int &SelStart, int &SelEnd);
 public:		// User declarations
     K584 CPU;                           //объект процессора
