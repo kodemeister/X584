@@ -41,6 +41,7 @@
 #include <Vcl.BaseImageCollection.hpp>
 #include <Vcl.ImageCollection.hpp>
 #include <Vcl.VirtualImageList.hpp>
+#include <Messages.hpp>
 //---------------------------------------------------------------------------
 
 #define MAX_ADDR        1024
@@ -171,7 +172,8 @@ __published:	// IDE-managed Components
     TVirtualImageList *EmptyImageList;
     TVirtualImageList *ButtonsImageList;
     TVirtualImageList *TreeImageList;
-    void __fastcall FormCreate(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
+    void __fastcall FormDestroy(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall ApplicationEventsHint(TObject *Sender);
@@ -222,10 +224,23 @@ __published:	// IDE-managed Components
     void __fastcall BreakItemClick(TObject *Sender);
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
-    void __fastcall AboutItemClick(TObject *Sender);
+	void __fastcall AboutItemClick(TObject *Sender);
 
 private:	// User declarations
-    void GetSelection(int &SelStart, int &SelEnd);
+	void GetSelection(int &SelStart, int &SelEnd);
+
+	// для буфера обмена
+    UINT ClipboardFormat;
+    HWND PreviousWindow;
+    int  GetClipboardBufferSize();
+    void PutIntoClipboard();
+    void GetFromClipboard();
+    void OnClipboard(TWMNoParams &x);
+    void OnChangeClipboardChain(TWMChangeCBChain &msg);
+BEGIN_MESSAGE_MAP
+    MESSAGE_HANDLER(WM_DRAWCLIPBOARD, TWMNoParams, OnClipboard);
+    MESSAGE_HANDLER(WM_CHANGECBCHAIN, TWMChangeCBChain, OnChangeClipboardChain);
+END_MESSAGE_MAP(TForm);
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций

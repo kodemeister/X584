@@ -16,6 +16,7 @@ object X584Form: TX584Form
   Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnMouseDown = ControlsMouseDown
   OnResize = FormResize
   DesignSize = (

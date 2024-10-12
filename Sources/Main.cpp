@@ -26,6 +26,7 @@
 #include "Input.h"
 #include "About.h"
 #include "FileExport.h"
+#include <Vcl.Clipbrd.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Word_2K_SRVR"
@@ -36,6 +37,7 @@ TX584Form *X584Form;
 __fastcall TX584Form::TX584Form(TComponent* Owner)
     : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), SelCount(0), ClipboardSize(0)
 {
+	ClipboardFormat = RegisterClipboardFormatA("X584Clipboard");
 }
 //---------------------------------------------------------------------------
 
@@ -502,7 +504,15 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
     BuildTree(OpFilter, ResFilter);
     if (ParamCount() > 0) {
         LoadFile(ParamStr(1));
-    }
+	}
+
+    PreviousWindow = SetClipboardViewer(Handle);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TX584Form::FormDestroy(TObject *Sender)
+{
+    ChangeClipboardChain(Handle, PreviousWindow);
 }
 //---------------------------------------------------------------------------
 
@@ -1118,7 +1128,8 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
                 MIClipboard[i] = Code[index + SelCount + i];
                 CMClipboard[i] = CodeListView->Items->Item[index + SelCount + i]->SubItems->Strings[2];
             }
-        }
+		}
+		PutIntoClipboard();
     } else
         PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
     PasteItem->Enabled = true;
@@ -1128,7 +1139,8 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 
 void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 {
-    if (ActiveControl == CodeListView && !InputEdit->Visible) {
+	if (ActiveControl == CodeListView && !InputEdit->Visible) {
+		GetFromClipboard();
         int index = CodeListView->ItemFocused->Index;
         if (InsertItem->Checked)
             //сдвигаем все инструкции на ClipboardSize позиций вправо
@@ -1267,6 +1279,123 @@ void __fastcall TX584Form::HelpItemClick(TObject *Sender)
 void __fastcall TX584Form::AboutItemClick(TObject *Sender)
 {
     AboutForm->ShowModal();
+}
+
+//---------------------------------------------------------------------------
+//                           *** БУФЕР ОБМЕНА ***
+//---------------------------------------------------------------------------
+
+int TX584Form::GetClipboardBufferSize()
+{
+    int result = 0;
+
+    result += 2; // количество элементов в буфере
+    for (int i = 0; i < ClipboardSize; i++) {
+		result += 2 + 1 + CMClipboard[i].Length() * 2;
+    }
+
+    return result;
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::PutIntoClipboard()
+{
+    HGLOBAL hBuffer = NULL;
+    unsigned char *Buffer, *p;
+    int BufferSize;
+
+    Clipboard()->Clear();
+    BufferSize = GetClipboardBufferSize();
+
+    hBuffer = GlobalAlloc(GMEM_MOVEABLE, BufferSize);
+    Buffer = (unsigned char *)GlobalLock(hBuffer);
+    p = Buffer;
+
+    // записать количество элементов в буфере обмена
+    *p++ = (ClipboardSize & 0xFF);
+    *p++ = ((ClipboardSize >> 8) & 0xFF);
+    // записать каждый элемент
+    for (int i = 0; i < ClipboardSize; i++) {
+        // записать микроинструкцию
+        *p++ = (MIClipboard[i] & 0xFF);
+        *p++ = ((MIClipboard[i] >> 8) & 0xFF);
+        // записать длину комментария
+        *p++ = (CMClipboard[i].Length() & 0xFF);
+        // записать комментарий
+		for (int j = 1; j <= CMClipboard[i].Length(); j++) {
+			WideChar Ch = CMClipboard[i][j];
+			*p++ = ((int)Ch)&0xFF;
+			*p++ = (((int)Ch) >> 8) & 0xFF;
+        }
+    }
+    GlobalUnlock(hBuffer);
+    Clipboard()->SetAsHandle(ClipboardFormat, (unsigned)hBuffer);
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::GetFromClipboard()
+{
+    HGLOBAL hBuffer;
+    unsigned char *Buffer, *p;
+
+    if (!Clipboard()->HasFormat(ClipboardFormat)) {
+        ClipboardSize = 0;
+        return;
+    }
+
+    hBuffer = (HGLOBAL)Clipboard()->GetAsHandle(ClipboardFormat);
+    Buffer = (unsigned char *)GlobalLock(hBuffer);
+
+    p = Buffer;
+    // считать количество элементов в буфере обмена
+    ClipboardSize = 0;
+    ClipboardSize = *p++;
+    ClipboardSize |= (*p++) << 8;
+
+    for (int i = 0; i < ClipboardSize; i++) {
+        // считать код микроинструкции
+        int Opcode = 0;
+        Opcode = *p++;
+        Opcode |= (*p++) << 8;
+        MIClipboard[i] = Opcode;
+
+        // считать длину комментария
+        int CommentSize = *p++;
+        // считать сам комментарий
+		CMClipboard[i] = UnicodeString();
+		for (int j = 0; j < CommentSize; j++) {
+			WideChar Ch;
+			Ch = *p++;
+			Ch |= (*p++) << 8;
+			CMClipboard[i] += Ch;
+        }
+    }
+    GlobalUnlock(hBuffer);
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::OnClipboard(TWMNoParams &x)
+{
+    if (Clipboard()->HasFormat(ClipboardFormat)) {
+        PasteItem->Enabled = true;
+        PasteToolButton->Enabled = true;
+    }
+    else {
+        PasteItem->Enabled = false;
+        PasteToolButton->Enabled = false;
+    }
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::OnChangeClipboardChain(TWMChangeCBChain &msg)
+{
+    if (PreviousWindow == msg.Remove) {
+        PreviousWindow = msg.Next;
+    }
+
+    if (msg.Remove != Handle) {
+        SendMessage(PreviousWindow, WM_CHANGECBCHAIN, (unsigned int)msg.Remove, (long)msg.Next);
+    }
 }
 //---------------------------------------------------------------------------
 
