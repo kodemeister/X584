@@ -218,9 +218,10 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
-
 private:	// User declarations
     void GetSelection(int &SelStart, int &SelEnd);
+
+    TListItem *LastTopItem;
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций
