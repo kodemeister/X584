@@ -1304,6 +1304,7 @@ void TX584Form::PutIntoClipboard()
     unsigned char *Buffer, *p;
     int BufferSize;
 
+	Clipboard()->Open();
     Clipboard()->Clear();
     BufferSize = GetClipboardBufferSize();
 
@@ -1329,15 +1330,17 @@ void TX584Form::PutIntoClipboard()
         }
     }
     GlobalUnlock(hBuffer);
-    Clipboard()->SetAsHandle(ClipboardFormat, (unsigned)hBuffer);
+	Clipboard()->SetAsHandle(ClipboardFormat, (unsigned)hBuffer);
+	Clipboard()->Close();
 }
 //---------------------------------------------------------------------------
 
 void TX584Form::GetFromClipboard()
 {
     HGLOBAL hBuffer;
-    unsigned char *Buffer, *p;
+	unsigned char *Buffer, *p;
 
+    Clipboard()->Open();
     if (!Clipboard()->HasFormat(ClipboardFormat)) {
         ClipboardSize = 0;
         return;
@@ -1370,7 +1373,8 @@ void TX584Form::GetFromClipboard()
 			CMClipboard[i] += Ch;
         }
     }
-    GlobalUnlock(hBuffer);
+	GlobalUnlock(hBuffer);
+	Clipboard()->Close();
 }
 //---------------------------------------------------------------------------
 
