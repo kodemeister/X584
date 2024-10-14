@@ -1106,24 +1106,25 @@ void TX584Form::RemoveSelectedItems()
         NewItems[Index] = false;
     }
 
-    int i = 0, j = 0;
-    for (; i < MAX_ADDR && j < MAX_ADDR; i++, j++) {
-        if (!NewItems[i]) {
-            j++;
-        }
-        Code[i] = Code[j];
+    int NewIndex = 0;
+    int OldIndex = 0;
 
-        TListItem *ItemA, *ItemB;
-        ItemA = CodeListView->Items->Item[i];
-        ItemB = CodeListView->Items->Item[j];
-        ItemA->SubItems->Strings[1] = ItemB->SubItems->Strings[1];
-        ItemA->SubItems->Strings[2] = ItemB->SubItems->Strings[2];
+    for (; OldIndex < MAX_ADDR && NewIndex < MAX_ADDR; OldIndex++) {
+        if (NewItems[OldIndex]) {
+            TListItem *ItemOld, *ItemNew;
+            Code[NewIndex] = Code[OldIndex];
+            ItemOld = CodeListView->Items->Item[OldIndex];
+            ItemNew = CodeListView->Items->Item[NewIndex];
+            ItemNew->SubItems->Strings[1] = ItemOld->SubItems->Strings[1];
+            ItemNew->SubItems->Strings[2] = ItemOld->SubItems->Strings[2];
+            NewIndex++;
+        }
     }
 
-    for (; i < MAX_ADDR; i++) {
-        Code[i] = NOP;
-        CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-        CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+    for (; NewIndex < MAX_ADDR; NewIndex++) {
+        Code[NewIndex] = NOP;
+        CodeListView->Items->Item[NewIndex]->SubItems->Strings[1] = NOP_TEXT;
+        CodeListView->Items->Item[NewIndex]->SubItems->Strings[2] = L"";
     }
 }
 //---------------------------------------------------------------------------
