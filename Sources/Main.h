@@ -41,6 +41,7 @@
 #include <Vcl.BaseImageCollection.hpp>
 #include <Vcl.ImageCollection.hpp>
 #include <Vcl.VirtualImageList.hpp>
+#include <Winapi.Messages.hpp>
 //---------------------------------------------------------------------------
 
 #define MAX_ADDR        1024
@@ -223,9 +224,18 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
-
+    void __fastcall FormDestroy(TObject *Sender);
 private:	// User declarations
     void GetSelection(int &SelStart, int &SelEnd);
+
+    // Для буфера обмена
+    unsigned ClipboardFormat;
+    void PutIntoClipboard();
+    void GetFromClipboard();
+    void OnClipboard(TWMNoParams &x);
+BEGIN_MESSAGE_MAP
+    MESSAGE_HANDLER(WM_CLIPBOARDUPDATE, TWMNoParams, OnClipboard);
+END_MESSAGE_MAP(TForm);
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций

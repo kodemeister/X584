@@ -26,6 +26,8 @@
 #include "Input.h"
 #include "About.h"
 #include "FileExport.h"
+#include <Vcl.Clipbrd.hpp>
+#include <cstdint>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Word_2K_SRVR"
@@ -36,6 +38,7 @@ TX584Form *X584Form;
 __fastcall TX584Form::TX584Form(TComponent* Owner)
     : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), SelCount(0), ClipboardSize(0)
 {
+    ClipboardFormat = RegisterClipboardFormatW(L"X584 v2 Code");
 }
 //---------------------------------------------------------------------------
 
@@ -503,6 +506,18 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
     if (ParamCount() > 0) {
         LoadFile(ParamStr(1));
     }
+
+    AddClipboardFormatListener(Handle);
+
+    // проверяем буфер обмена при отображении формы
+    TWMNoParams x = {WM_CLIPBOARDUPDATE};
+    OnClipboard(x);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TX584Form::FormDestroy(TObject *Sender)
+{
+    RemoveClipboardFormatListener(Handle);
 }
 //---------------------------------------------------------------------------
 
@@ -525,6 +540,8 @@ void __fastcall TX584Form::FormCloseQuery(TObject *Sender, bool &CanClose)
             break;
         }
     Terminated = true;
+
+    AddClipboardFormatListener(Handle);
 }
 //---------------------------------------------------------------------------
 
@@ -1119,6 +1136,7 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
                 CMClipboard[i] = CodeListView->Items->Item[index + SelCount + i]->SubItems->Strings[2];
             }
         }
+        PutIntoClipboard();
     } else
         PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
     PasteItem->Enabled = true;
@@ -1129,6 +1147,7 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
+        GetFromClipboard();
         int index = CodeListView->ItemFocused->Index;
         if (InsertItem->Checked)
             //сдвигаем все инструкции на ClipboardSize позиций вправо
@@ -1268,5 +1287,82 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
 {
     AboutForm->ShowModal();
 }
+
+//---------------------------------------------------------------------------
+//                           *** БУФЕР ОБМЕНА ***
 //---------------------------------------------------------------------------
 
+void TX584Form::PutIntoClipboard()
+{
+    TMemoryStream *Buffer;
+    TBinaryWriter *Writer;
+
+    Buffer = new TMemoryStream();
+    Writer = new TBinaryWriter(Buffer, TEncoding::UTF8);
+
+    Writer->Write(ClipboardSize);
+    for (int i = 0; i < ClipboardSize; i++) {
+        Writer->Write(MIClipboard[i]);
+        Writer->Write(CMClipboard[i]);
+    }
+
+    HGLOBAL hClipboardBuffer;
+    void *ClipboardBuffer;
+
+    Clipboard()->Clear();
+
+    hClipboardBuffer = GlobalAlloc(GMEM_MOVEABLE, Buffer->Size);
+    ClipboardBuffer = GlobalLock(hClipboardBuffer);
+    memcpy(ClipboardBuffer, Buffer->Memory, Buffer->Size);
+
+    delete Writer;
+    delete Buffer;
+
+    GlobalUnlock(hClipboardBuffer);
+    Clipboard()->SetAsHandle(ClipboardFormat, reinterpret_cast<THandle>(hClipboardBuffer));
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::GetFromClipboard()
+{
+    TMemoryStream *Buffer;
+    TBinaryReader *Reader;
+
+    if (!Clipboard()->HasFormat(ClipboardFormat)) {
+        ClipboardSize = 0;
+        return;
+    }
+
+    HGLOBAL hClipboardBuffer;
+    void *ClipboardBuffer;
+    size_t ClipboardBufferSize;
+
+    hClipboardBuffer = reinterpret_cast<HGLOBAL>(Clipboard()->GetAsHandle(ClipboardFormat));
+    ClipboardBuffer = GlobalLock(hClipboardBuffer);
+    ClipboardBufferSize = GlobalSize(hClipboardBuffer);
+
+    Buffer = new TMemoryStream();
+    Buffer->Write(ClipboardBuffer, ClipboardBufferSize);
+    Buffer->Seek(INT64_C(0), soBeginning);
+
+    GlobalUnlock(hClipboardBuffer);
+
+    Reader = new TBinaryReader(Buffer, TEncoding::UTF8, false);
+    ClipboardSize = Reader->ReadInteger();
+    for (int i = 0; i < ClipboardSize; i++) {
+        MIClipboard[i] = Reader->ReadCardinal();
+        CMClipboard[i] = Reader->ReadString();
+    }
+
+    delete Reader;
+    delete Buffer;
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::OnClipboard(TWMNoParams &x)
+{
+    bool ClipboardHasData = Clipboard()->HasFormat(ClipboardFormat);
+    PasteItem->Enabled = ClipboardHasData;
+    PasteToolButton->Enabled = ClipboardHasData;
+}
+//---------------------------------------------------------------------------
