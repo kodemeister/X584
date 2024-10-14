@@ -26,6 +26,7 @@
 #include "Input.h"
 #include "About.h"
 #include "FileExport.h"
+#include <Clipbrd.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Word_2K_SRVR"
@@ -540,7 +541,9 @@ void __fastcall TX584Form::ApplicationEventsIdle(TObject *Sender,
     StatusBar->Panels->Items[2]->Text = GetKeyState(VK_NUMLOCK) & 1 ? "NUM" : "";
     StatusBar->Panels->Items[3]->Text = GetKeyState(VK_SCROLL) & 1 ? "SCRL" : "";
 
-    if (InputEdit->Visible && LastTopItem != CodeListView->TopItem) {
+    if (InputEdit->Visible &&
+        (LastTopItem != CodeListView->TopItem || LastItemLeft != CodeListView->TopItem->Left))
+    {
         InputEditExit(this);
     }
 
@@ -749,6 +752,7 @@ void __fastcall TX584Form::ClickTimerTimer(TObject *Sender)
     TPoint Point = ScreenToClient(Mouse->CursorPos);
     if (Point.x >= EditPoint.x && Point.y >= EditPoint.y && Point.y < EditPoint.y + LeftImageList->Height) {
         LastTopItem = CodeListView->TopItem;
+        LastItemLeft = CodeListView->TopItem->Left;
         InputEdit->Left = EditPoint.x;
         InputEdit->Top = EditPoint.y + (LeftImageList->Height - InputEdit->Height) / 2;
         int w1 = CodeListView->Canvas->TextWidth(CodeListView->Items->Item[EditRow]->SubItems->Strings[2]) + 8;
@@ -1272,4 +1276,5 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
     AboutForm->ShowModal();
 }
 //---------------------------------------------------------------------------
+
 
