@@ -4,7 +4,7 @@ object InputForm: TInputForm
   BorderStyle = bsDialog
   Caption = #1042#1074#1086#1076
   ClientHeight = 144
-  ClientWidth = 329
+  ClientWidth = 371
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,7 +14,7 @@ object InputForm: TInputForm
   Position = poScreenCenter
   TextHeight = 15
   object OKButton: TButton
-    Left = 168
+    Left = 208
     Top = 112
     Width = 75
     Height = 25
@@ -23,7 +23,7 @@ object InputForm: TInputForm
     TabOrder = 0
   end
   object CancelButton: TButton
-    Left = 248
+    Left = 288
     Top = 112
     Width = 75
     Height = 25
@@ -34,15 +34,16 @@ object InputForm: TInputForm
   object GroupBox1: TGroupBox
     Left = 8
     Top = 8
-    Width = 313
+    Width = 355
     Height = 97
     Caption = #1042#1074#1077#1076#1080#1090#1077' '#1079#1085#1072#1095#1077#1085#1080#1077
     TabOrder = 2
     object RMaskEdit: TMaskEdit
       Left = 16
       Top = 24
-      Width = 205
+      Width = 235
       Height = 38
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -57,8 +58,8 @@ object InputForm: TInputForm
       OnKeyPress = RMaskEditKeyPress
     end
     object CheckBox0: TCheckBox
-      Left = 280
-      Top = 64
+      Left = 322
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -66,8 +67,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox1: TCheckBox
-      Left = 264
-      Top = 64
+      Left = 304
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -75,8 +76,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox2: TCheckBox
-      Left = 248
-      Top = 64
+      Left = 286
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -84,8 +85,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox3: TCheckBox
-      Left = 232
-      Top = 64
+      Left = 268
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -93,8 +94,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox4: TCheckBox
-      Left = 208
-      Top = 64
+      Left = 238
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -102,8 +103,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox5: TCheckBox
-      Left = 192
-      Top = 64
+      Left = 220
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -111,8 +112,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox6: TCheckBox
-      Left = 176
-      Top = 64
+      Left = 202
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -120,8 +121,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox7: TCheckBox
-      Left = 160
-      Top = 64
+      Left = 184
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -129,8 +130,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox8: TCheckBox
-      Left = 136
-      Top = 64
+      Left = 154
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -138,8 +139,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox9: TCheckBox
-      Left = 120
-      Top = 64
+      Left = 136
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -147,8 +148,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox10: TCheckBox
-      Left = 104
-      Top = 64
+      Left = 118
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -156,8 +157,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox11: TCheckBox
-      Left = 88
-      Top = 64
+      Left = 100
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -165,8 +166,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox12: TCheckBox
-      Left = 64
-      Top = 64
+      Left = 70
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -174,8 +175,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox13: TCheckBox
-      Left = 48
-      Top = 64
+      Left = 52
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -183,8 +184,8 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object CheckBox14: TCheckBox
-      Left = 32
-      Top = 64
+      Left = 34
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -193,7 +194,7 @@ object InputForm: TInputForm
     end
     object CheckBox15: TCheckBox
       Left = 16
-      Top = 64
+      Top = 68
       Width = 17
       Height = 17
       TabStop = False
@@ -201,10 +202,11 @@ object InputForm: TInputForm
       OnClick = CheckBoxClick
     end
     object RDecMaskEdit: TMaskEdit
-      Left = 232
+      Left = 268
       Top = 24
-      Width = 61
+      Width = 68
       Height = 38
+      Alignment = taCenter
       EditMask = '00000;1;_'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText

@@ -2,11 +2,11 @@ object X584Form: TX584Form
   Left = 191
   Top = 110
   Caption = 'X584'
-  ClientHeight = 513
-  ClientWidth = 815
+  ClientHeight = 710
+  ClientWidth = 1090
   Color = clBtnFace
-  Constraints.MinHeight = 591
-  Constraints.MinWidth = 831
+  Constraints.MinHeight = 680
+  Constraints.MinWidth = 900
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
@@ -19,14 +19,14 @@ object X584Form: TX584Form
   OnMouseDown = ControlsMouseDown
   OnResize = FormResize
   DesignSize = (
-    815
-    513)
+    1090
+    710)
   TextHeight = 15
   object CodeListView: TListView
     Left = 3
     Top = 32
-    Width = 334
-    Height = 481
+    Width = 532
+    Height = 650
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
       item
@@ -44,9 +44,9 @@ object X584Form: TX584Form
       end
       item
         Caption = #1052#1085#1077#1084#1086#1082#1086#1076' '#1080#1085#1089#1090#1088#1091#1082#1094#1080#1080
-        MaxWidth = 250
+        MaxWidth = 300
         MinWidth = 100
-        Width = 150
+        Width = 200
       end
       item
         Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
@@ -64,10 +64,10 @@ object X584Form: TX584Form
     OnMouseDown = CodeListViewMouseDown
   end
   object CodeTreeView: TTreeView
-    Left = 344
+    Left = 544
     Top = 32
-    Width = 257
-    Height = 273
+    Width = 312
+    Height = 422
     Anchors = [akTop, akRight, akBottom]
     DragMode = dmAutomatic
     Images = TreeImageList
@@ -81,17 +81,17 @@ object X584Form: TX584Form
     OnKeyDown = CodeTreeViewKeyDown
   end
   object RegGroupBox: TGroupBox
-    Left = 608
+    Left = 864
     Top = 32
-    Width = 209
-    Height = 273
+    Width = 216
+    Height = 326
     Anchors = [akTop, akRight]
     Caption = #1056#1077#1075#1080#1089#1090#1088#1099
     TabOrder = 4
     OnMouseDown = ControlsMouseDown
     object RLabel0: TLabel
       Left = 16
-      Top = 20
+      Top = 26
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'0'
@@ -99,7 +99,7 @@ object X584Form: TX584Form
     end
     object RLabel1: TLabel
       Left = 16
-      Top = 44
+      Top = 54
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'1'
@@ -107,7 +107,7 @@ object X584Form: TX584Form
     end
     object RLabel2: TLabel
       Left = 16
-      Top = 68
+      Top = 82
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'2'
@@ -115,7 +115,7 @@ object X584Form: TX584Form
     end
     object RLabel3: TLabel
       Left = 16
-      Top = 92
+      Top = 110
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'3'
@@ -123,7 +123,7 @@ object X584Form: TX584Form
     end
     object RLabel4: TLabel
       Left = 16
-      Top = 116
+      Top = 138
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'4'
@@ -131,7 +131,7 @@ object X584Form: TX584Form
     end
     object RLabel5: TLabel
       Left = 16
-      Top = 140
+      Top = 166
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'5'
@@ -139,7 +139,7 @@ object X584Form: TX584Form
     end
     object RLabel6: TLabel
       Left = 16
-      Top = 164
+      Top = 194
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'6'
@@ -147,7 +147,7 @@ object X584Form: TX584Form
     end
     object RLabel7: TLabel
       Left = 16
-      Top = 188
+      Top = 222
       Width = 31
       Height = 15
       Caption = #1056#1054#1053'7'
@@ -155,7 +155,7 @@ object X584Form: TX584Form
     end
     object WRLabel: TLabel
       Left = 16
-      Top = 220
+      Top = 262
       Width = 14
       Height = 15
       Caption = #1056#1056
@@ -163,7 +163,7 @@ object X584Form: TX584Form
     end
     object XWRLabel: TLabel
       Left = 16
-      Top = 244
+      Top = 290
       Width = 21
       Height = 15
       Caption = #1056#1056#1056
@@ -171,9 +171,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit0: TMaskEdit
       Left = 72
-      Top = 16
-      Width = 113
+      Top = 24
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 0
@@ -184,9 +185,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit1: TMaskEdit
       Left = 72
-      Top = 40
-      Width = 113
+      Top = 52
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 1
@@ -197,9 +199,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit2: TMaskEdit
       Left = 72
-      Top = 64
-      Width = 113
+      Top = 80
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 2
@@ -210,9 +213,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit3: TMaskEdit
       Left = 72
-      Top = 88
-      Width = 113
+      Top = 108
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 3
@@ -223,9 +227,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit4: TMaskEdit
       Left = 72
-      Top = 112
-      Width = 113
+      Top = 136
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 4
@@ -236,9 +241,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit5: TMaskEdit
       Left = 72
-      Top = 136
-      Width = 113
+      Top = 164
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 5
@@ -249,9 +255,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit6: TMaskEdit
       Left = 72
-      Top = 160
-      Width = 113
+      Top = 192
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 6
@@ -262,9 +269,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit7: TMaskEdit
       Left = 72
-      Top = 184
-      Width = 113
+      Top = 220
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 7
@@ -275,9 +283,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit8: TMaskEdit
       Left = 72
-      Top = 216
-      Width = 113
+      Top = 260
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 8
@@ -288,9 +297,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit9: TMaskEdit
       Left = 72
-      Top = 240
-      Width = 113
+      Top = 288
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       TabOrder = 9
@@ -301,17 +311,17 @@ object X584Form: TX584Form
     end
   end
   object BusGroupBox: TGroupBox
-    Left = 608
-    Top = 312
-    Width = 209
-    Height = 73
+    Left = 864
+    Top = 364
+    Width = 216
+    Height = 90
     Anchors = [akTop, akRight]
     Caption = #1064#1080#1085#1099
     TabOrder = 5
     OnMouseDown = ControlsMouseDown
     object OutLabel: TLabel
       Left = 16
-      Top = 20
+      Top = 26
       Width = 33
       Height = 15
       Caption = #1064#1042#1099#1093
@@ -319,7 +329,7 @@ object X584Form: TX584Form
     end
     object AddrLabel: TLabel
       Left = 16
-      Top = 44
+      Top = 54
       Width = 32
       Height = 15
       Caption = #1064#1040#1076#1088
@@ -327,9 +337,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit10: TMaskEdit
       Left = 72
-      Top = 16
-      Width = 113
+      Top = 24
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       ReadOnly = True
@@ -338,9 +349,10 @@ object X584Form: TX584Form
     end
     object RMaskEdit11: TMaskEdit
       Left = 72
-      Top = 40
-      Width = 113
+      Top = 52
+      Width = 128
       Height = 23
+      Alignment = taCenter
       EditMask = '0000 0000 0000 0000;1;_'
       MaxLength = 19
       ReadOnly = True
@@ -349,10 +361,10 @@ object X584Form: TX584Form
     end
   end
   object OutGroupBox: TGroupBox
-    Left = 680
-    Top = 392
-    Width = 137
-    Height = 121
+    Left = 944
+    Top = 460
+    Width = 136
+    Height = 136
     Anchors = [akTop, akRight]
     Caption = #1042#1099#1093#1086#1076#1099
     Enabled = False
@@ -360,7 +372,7 @@ object X584Form: TX584Form
     OnMouseDown = ControlsMouseDown
     object OutFlags0: TCheckBox
       Left = 8
-      Top = 16
+      Top = 24
       Width = 57
       Height = 17
       Caption = #1055#1040#1051#1059'3'
@@ -368,7 +380,7 @@ object X584Form: TX584Form
     end
     object OutFlags1: TCheckBox
       Left = 72
-      Top = 16
+      Top = 24
       Width = 49
       Height = 17
       Caption = '!'#1057#1044#1051'1'
@@ -378,7 +390,7 @@ object X584Form: TX584Form
     end
     object OutFlags2: TCheckBox
       Left = 72
-      Top = 32
+      Top = 40
       Width = 49
       Height = 17
       Caption = '!'#1057#1044#1055'1'
@@ -388,7 +400,7 @@ object X584Form: TX584Form
     end
     object OutFlags3: TCheckBox
       Left = 72
-      Top = 48
+      Top = 56
       Width = 57
       Height = 17
       Caption = '!'#1057#1044#1051'2'
@@ -398,7 +410,7 @@ object X584Form: TX584Form
     end
     object OutFlags4: TCheckBox
       Left = 72
-      Top = 64
+      Top = 72
       Width = 57
       Height = 17
       Caption = '!'#1057#1044#1055'2'
@@ -408,7 +420,7 @@ object X584Form: TX584Form
     end
     object OutFlags5: TCheckBox
       Left = 8
-      Top = 80
+      Top = 88
       Width = 49
       Height = 17
       Caption = #1056#1056#1056'0'
@@ -416,7 +428,7 @@ object X584Form: TX584Form
     end
     object OutFlags6: TCheckBox
       Left = 8
-      Top = 96
+      Top = 104
       Width = 49
       Height = 17
       Caption = #1056#1056#1056'3'
@@ -424,7 +436,7 @@ object X584Form: TX584Form
     end
     object OutFlags9: TCheckBox
       Left = 8
-      Top = 64
+      Top = 72
       Width = 57
       Height = 17
       Caption = #1055#1040#1051#1059'0'
@@ -432,7 +444,7 @@ object X584Form: TX584Form
     end
     object OutFlags10: TCheckBox
       Left = 8
-      Top = 48
+      Top = 56
       Width = 57
       Height = 17
       Caption = #1055#1040#1051#1059'1'
@@ -440,7 +452,7 @@ object X584Form: TX584Form
     end
     object OutFlags11: TCheckBox
       Left = 8
-      Top = 32
+      Top = 40
       Width = 57
       Height = 17
       Caption = #1055#1040#1051#1059'2'
@@ -448,7 +460,7 @@ object X584Form: TX584Form
     end
     object OutFlags7: TCheckBox
       Left = 72
-      Top = 80
+      Top = 88
       Width = 41
       Height = 17
       Caption = 'A15'
@@ -456,7 +468,7 @@ object X584Form: TX584Form
     end
     object OutFlags8: TCheckBox
       Left = 72
-      Top = 96
+      Top = 104
       Width = 41
       Height = 17
       Caption = 'B15'
@@ -464,28 +476,28 @@ object X584Form: TX584Form
     end
   end
   object FilterOpGroupBox: TGroupBox
-    Left = 344
-    Top = 312
-    Width = 257
-    Height = 89
+    Left = 544
+    Top = 460
+    Width = 312
+    Height = 96
     Anchors = [akRight, akBottom]
     Caption = #1060#1080#1083#1100#1090#1088' '#1084#1080#1082#1088#1086#1080#1085#1089#1090#1088#1091#1082#1094#1080#1081
     TabOrder = 2
     OnMouseDown = ControlsMouseDown
     object FilterOpRegButton: TButton
       Tag = 2
-      Left = 8
+      Left = 9
       Top = 24
-      Width = 49
+      Width = 54
       Height = 25
       Caption = #1056#1054#1053
       TabOrder = 0
       OnClick = FilterOpButtonClick
     end
     object FilterOpWRButton: TButton
-      Left = 56
+      Left = 69
       Top = 24
-      Width = 49
+      Width = 54
       Height = 25
       Caption = #1056#1056
       TabOrder = 1
@@ -493,9 +505,9 @@ object X584Form: TX584Form
     end
     object FilterOpXWRButton: TButton
       Tag = 1
-      Left = 104
+      Left = 129
       Top = 24
-      Width = 49
+      Width = 54
       Height = 25
       Caption = #1056#1056#1056
       TabOrder = 2
@@ -503,9 +515,9 @@ object X584Form: TX584Form
     end
     object FilterOpInButton: TButton
       Tag = 3
-      Left = 152
+      Left = 189
       Top = 24
-      Width = 49
+      Width = 54
       Height = 25
       Caption = #1064#1042#1093
       TabOrder = 3
@@ -513,9 +525,9 @@ object X584Form: TX584Form
     end
     object FilterOpCarryButton: TButton
       Tag = 5
-      Left = 200
+      Left = 249
       Top = 24
-      Width = 49
+      Width = 54
       Height = 25
       Caption = #1055
       TabOrder = 4
@@ -523,18 +535,18 @@ object X584Form: TX584Form
     end
     object FilterResRegButton: TButton
       Tag = 2
-      Left = 8
-      Top = 48
-      Width = 49
+      Left = 9
+      Top = 54
+      Width = 54
       Height = 25
       Caption = #1056#1054#1053
       TabOrder = 5
       OnClick = FilterResButtonClick
     end
     object FilterResWRButton: TButton
-      Left = 56
-      Top = 48
-      Width = 49
+      Left = 69
+      Top = 54
+      Width = 54
       Height = 25
       Caption = #1056#1056
       TabOrder = 6
@@ -542,9 +554,9 @@ object X584Form: TX584Form
     end
     object FilterResXWRButton: TButton
       Tag = 1
-      Left = 104
-      Top = 48
-      Width = 49
+      Left = 129
+      Top = 54
+      Width = 54
       Height = 25
       Caption = #1056#1056#1056
       TabOrder = 7
@@ -552,9 +564,9 @@ object X584Form: TX584Form
     end
     object FilterResOutButton: TButton
       Tag = 4
-      Left = 152
-      Top = 48
-      Width = 49
+      Left = 189
+      Top = 54
+      Width = 54
       Height = 25
       Caption = #1064#1042#1099#1093
       TabOrder = 8
@@ -562,9 +574,9 @@ object X584Form: TX584Form
     end
     object FilterResWRXWRButton: TButton
       Tag = 6
-      Left = 200
-      Top = 48
-      Width = 49
+      Left = 249
+      Top = 54
+      Width = 54
       Height = 25
       Caption = #1056#1056','#1056#1056#1056
       TabOrder = 9
@@ -572,36 +584,36 @@ object X584Form: TX584Form
     end
   end
   object DescGroupBox: TGroupBox
-    Left = 344
-    Top = 408
-    Width = 257
-    Height = 105
+    Left = 544
+    Top = 562
+    Width = 312
+    Height = 120
     Anchors = [akRight, akBottom]
     Caption = #1054#1087#1080#1089#1072#1085#1080#1077' '#1084#1080#1082#1088#1086#1082#1086#1084#1072#1085#1076#1099
     Enabled = False
     TabOrder = 3
     OnMouseDown = ControlsMouseDown
     object DescMemo: TMemo
-      Left = 8
-      Top = 16
-      Width = 241
-      Height = 81
+      Left = 9
+      Top = 24
+      Width = 294
+      Height = 80
       ReadOnly = True
       TabOrder = 0
     end
   end
   object InGroupBox: TGroupBox
-    Left = 608
-    Top = 392
-    Width = 65
-    Height = 121
+    Left = 864
+    Top = 460
+    Width = 72
+    Height = 136
     Anchors = [akTop, akRight]
     Caption = #1042#1093#1086#1076#1099
     TabOrder = 6
     OnMouseDown = ControlsMouseDown
     object InFlags1: TCheckBox
       Left = 8
-      Top = 16
+      Top = 24
       Width = 33
       Height = 17
       Caption = 'P0'
@@ -611,7 +623,7 @@ object X584Form: TX584Form
     end
     object InFlags2: TCheckBox
       Left = 8
-      Top = 42
+      Top = 51
       Width = 41
       Height = 17
       Caption = '!'#1055#1057#1095
@@ -621,7 +633,7 @@ object X584Form: TX584Form
     end
     object InFlags3: TCheckBox
       Left = 8
-      Top = 69
+      Top = 77
       Width = 49
       Height = 17
       Caption = #1048#1053#1050#1056
@@ -629,7 +641,7 @@ object X584Form: TX584Form
     end
     object InFlags4: TCheckBox
       Left = 8
-      Top = 96
+      Top = 104
       Width = 33
       Height = 17
       Caption = #1055#1056
@@ -639,7 +651,7 @@ object X584Form: TX584Form
   object ToolBar: TToolBar
     Left = 0
     Top = 0
-    Width = 815
+    Width = 1090
     Height = 31
     ButtonHeight = 24
     ButtonWidth = 24
@@ -860,30 +872,31 @@ object X584Form: TX584Form
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 494
-    Width = 815
+    Top = 691
+    Width = 1090
     Height = 19
     Panels = <
       item
-        Width = 670
+        Width = 900
       end
       item
         Alignment = taCenter
-        Width = 30
+        Width = 40
       end
       item
         Alignment = taCenter
-        Width = 30
+        Width = 40
       end
       item
         Alignment = taCenter
-        Width = 30
+        Width = 40
       end
       item
-        Width = 30
+        Alignment = taCenter
+        Width = 40
       end
       item
-        Width = 50
+        Width = 40
       end>
   end
   object InputEdit: TEdit

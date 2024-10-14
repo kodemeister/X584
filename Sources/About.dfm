@@ -180,7 +180,8 @@ object AboutForm: TAboutForm
     Width = 424
     Height = 49
     Align = alTop
-    Color = clWindow
+    Color = clWhite
+    ParentBackground = False
     TabOrder = 0
     object AboutLabel: TLabel
       Left = 168
