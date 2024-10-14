@@ -1101,24 +1101,27 @@ void __fastcall TX584Form::CutItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::CopySelectedItems()
+{
+    TListItem *Item;
+    TItemStates selected = TItemStates() << isSelected;
+
+    Item = CodeListView->Selected;
+    ClipboardSize = 0;
+    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+        int Index = Item->Index;
+
+        MIClipboard[ClipboardSize] = Code[Index];
+        CMClipboard[ClipboardSize] = Item->SubItems->Strings[2];
+        ClipboardSize++;
+    }
+}
+//---------------------------------------------------------------------------
 void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         //сохраняем инструкции в буфере обмена
-        int index = CodeListView->ItemFocused->Index;
-        if (SelCount > 0) {
-            ClipboardSize = SelCount;
-            for (int i = 0; i < ClipboardSize; i++) {
-                MIClipboard[i] = Code[index + i];
-                CMClipboard[i] = CodeListView->Items->Item[index + i]->SubItems->Strings[2];
-            }
-        } else {
-            ClipboardSize = 1 - SelCount;
-            for (int i = 0; i < ClipboardSize; i++) {
-                MIClipboard[i] = Code[index + SelCount + i];
-                CMClipboard[i] = CodeListView->Items->Item[index + SelCount + i]->SubItems->Strings[2];
-            }
-        }
+        CopySelectedItems();
     } else
         PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
     PasteItem->Enabled = true;
@@ -1158,40 +1161,83 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::ClearSelectedItems()
+{
+    TListItem *Item;
+
+    Item = CodeListView->Selected;
+    TItemStates selected = TItemStates() << isSelected;
+    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+        int Index = Item->Index;
+        Code[Index] = NOP;
+        Item->SubItems->Strings[1] = NOP_TEXT;
+        Item->SubItems->Strings[2] = L"";
+    }
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::RemoveSelectedItems()
+{
+    bool NewItems[MAX_ADDR] = {0};
+
+    for (int i = 0; i < MAX_ADDR; i++) {
+        NewItems[i] = true;
+    }
+
+    TListItem *Item;
+    Item = CodeListView->Selected;
+
+    TItemStates selected = TItemStates() << isSelected;
+
+    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+        int Index = Item->Index;
+        NewItems[Index] = false;
+    }
+
+    int i = 0, j = 0;
+    for (; i < MAX_ADDR && j < MAX_ADDR; i++, j++) {
+        if (!NewItems[i]) {
+            j++;
+        }
+        Code[i] = Code[j];
+
+        TListItem *ItemA, *ItemB;
+        ItemA = CodeListView->Items->Item[i];
+        ItemB = CodeListView->Items->Item[j];
+        ItemA->SubItems->Strings[1] = ItemB->SubItems->Strings[1];
+        ItemA->SubItems->Strings[2] = ItemB->SubItems->Strings[2];
+    }
+
+    for (; i < MAX_ADDR; i++) {
+        Code[i] = NOP;
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
+        CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+    }
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::ClearSelection()
+{
+    TListItem *FirstItem, *Item;
+
+    FirstItem = Item = CodeListView->Selected;
+    TItemStates selected = TItemStates() << isSelected;
+    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+        Item->Selected = false;
+    }
+    FirstItem->Selected = true;
+    CodeListView->ItemFocused = FirstItem;
+}
+//---------------------------------------------------------------------------
 void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
-            int SelStart, SelEnd, SelLength;
-            GetSelection(SelStart, SelEnd);
-            SelLength = SelEnd - SelStart;
-            //сдвигаем все инструкции на SelLength позиций влево
-            for (int i = SelStart; i < MAX_ADDR; i++)
-                if (i + SelLength < MAX_ADDR) {
-                    Code[i] = Code[i + SelLength];
-                    CodeListView->Items->Item[i]->SubItems->Strings[1] =
-                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[1];
-                    CodeListView->Items->Item[i]->SubItems->Strings[2] =
-                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[2];
-                } else {
-                    //очищаем инструкции
-                    Code[i] = NOP;
-                    CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                    CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
-                }
+            RemoveSelectedItems();
             //снимаем выделение
-            SelCount = 1;
-            CodeListView->ItemIndex = SelStart;
-            CodeListView->ItemFocused = CodeListView->Items->Item[SelStart];
+            ClearSelection();
         } else {
-            int SelStart, SelEnd;
-            GetSelection(SelStart, SelEnd);
-            //очищаем выделенные инструкции
-            for (int i = SelStart; i < SelEnd; i++) {
-                Code[i] = NOP;
-                CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
-            }
+            ClearSelectedItems();
         }
         CodeListView->Repaint();
         SetModifyFlag(true);
