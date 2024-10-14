@@ -34,7 +34,7 @@ TX584Form *X584Form;
 //---------------------------------------------------------------------------
 #define NONAME_X584 L"Безымянный.x584"
 __fastcall TX584Form::TX584Form(TComponent* Owner)
-    : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), SelCount(0), ClipboardSize(0)
+    : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), ClipboardSize(0), PreviousSelected(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -548,7 +548,6 @@ void __fastcall TX584Form::ApplicationEventsIdle(TObject *Sender,
 //---------------------------------------------------------------------------
 
 #define ROW_COLOR (TColor)0x00FFF6EE
-#define SEL_COLOR (TColor)0x00EBB99D
 
 void __fastcall TX584Form::CodeListViewCustomDrawItem(
       TCustomListView *Sender, TListItem *Item, TCustomDrawState State,
@@ -560,18 +559,9 @@ void __fastcall TX584Form::CodeListViewCustomDrawItem(
         (Code[Item->Index] & ATTR_BREAKPOINT ? 3 : 2) : (Code[Item->Index] & ATTR_BREAKPOINT ? 1 : 0), true);
     //рисуем фон
     Rect.Left += LeftImageList->Width;
-    if ((SelCount > 0 && Item->Index >= CodeListView->ItemFocused->Index &&
-                         Item->Index < CodeListView->ItemFocused->Index + SelCount) ||
-        (SelCount < 0 && Item->Index >= CodeListView->ItemFocused->Index + SelCount &&
-                         Item->Index <= CodeListView->ItemFocused->Index)) {
-        //выделяем стандартным цветом
-        CodeListView->Canvas->Brush->Color = SEL_COLOR;
-        CodeListView->Canvas->FillRect(Rect);
-    } else {
-        //нечетные строки - цветные, четные - белые
-        CodeListView->Canvas->Brush->Color = Item->Index & 0x01 ? ROW_COLOR : clWhite;
-        CodeListView->Canvas->FillRect(Rect);
-    }
+    //нечетные строки - цветные, четные - белые
+    CodeListView->Canvas->Brush->Color = Item->Index & 0x01 ? ROW_COLOR : clWhite;
+    CodeListView->Canvas->FillRect(Rect);
     //отображаем флажки
     if (Code[Item->Index] & ATTR_CUSED)
         CheckImageList->Draw(CodeListView->Canvas, Rect.Left + (CodeListView->Columns->Items[0]->Width -
@@ -584,26 +574,15 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     //определяем выделенный ряд
-    int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / LeftImageList->Height;
-    if (Row >= MAX_ADDR)
-        Row = MAX_ADDR - 1;
-    bool WasSelected = CodeListView->ItemFocused->Index == Row;
-    TListItem *Item = CodeListView->Items->Item[Row];
-    //проверяем, не зажата ли клавиша Shift
-    if (Shift.Contains(ssShift)) {
-        //выделяем элементы до предыдущего выделения
-        SelCount = Row - CodeListView->ItemFocused->Index;
-        if (SelCount >= 0)
-            SelCount++;
-        CodeListView->Repaint();
+    int Row = CodeListView->ItemFocused->Index;
+    TListItem *Item = CodeListView->ItemFocused;
+    bool WasSelected = (PreviousSelected == Row);
+    //проверяем, не зажата ли клавиша Shift или Ctrl
+    if (Shift.Contains(ssShift)||Shift.Contains(ssCtrl)) {
         return;
     }
-    if (SelCount != 1) {
-        SelCount = 1;
-        CodeListView->Repaint();
-    }
+
     CodeListView->ItemIndex = Row;
-    CodeListView->ItemFocused = Item;
     TRect Rect = Item->DisplayRect(drBounds);
     //проверяем, не поставили ли точку останова
     if (X - Rect.Left < LeftImageList->Width) {
@@ -642,18 +621,7 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
             ClickTimer->Enabled = true;
         }
     }
-}
-//---------------------------------------------------------------------------
-
-void TX584Form::GetSelection(int &SelStart, int &SelEnd)
-{
-    if (SelCount > 0) {
-        SelStart = CodeListView->ItemFocused->Index;
-        SelEnd = SelStart + SelCount;
-    } else {
-        SelStart = CodeListView->ItemFocused->Index + SelCount;
-        SelEnd = SelStart + (1 - SelCount);
-    }
+    PreviousSelected = Row;
 }
 //---------------------------------------------------------------------------
 
@@ -687,54 +655,6 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
     case VK_INSERT:
         InsertItemClick(this);
         Key = 0;
-        break;
-    case VK_UP:
-        if (GetKeyState(VK_SHIFT) & 0x8000) {
-            int index = CodeListView->ItemFocused->Index + (SelCount < 0 ? SelCount : SelCount - 1);
-            //перерисовываем элемент
-            if (index) {
-                if (--SelCount >= 1) {
-                    DrawItem(index);
-                } else {
-                    if (SelCount == 0)
-                        SelCount = -1;
-                    DrawItem(index - 1);
-                }
-            }
-            Key = 0;    
-        } else
-            if (SelCount != 1) {
-                SelCount = 1;
-                CodeListView->Repaint();
-            }
-        break;
-    case VK_DOWN:
-        if (GetKeyState(VK_SHIFT) & 0x8000) {
-            int index = CodeListView->ItemFocused->Index + (SelCount < 0 ? SelCount : SelCount - 1);
-            if (index != MAX_ADDR - 1) {
-                if (++SelCount > 1) {
-                    DrawItem(index + 1);
-                } else {
-                    if (SelCount == 0)
-                        SelCount = 1;
-                    DrawItem(index);
-                }
-            }
-            Key = 0;
-        } else
-            if (SelCount != 1) {
-                SelCount = 1;
-                CodeListView->Repaint();
-            }
-        break;
-    case VK_PRIOR:
-    case VK_NEXT:
-    case VK_HOME:
-    case VK_END:
-        if (SelCount != 1) {
-            SelCount = 1;
-            CodeListView->Repaint();
-        }
         break;
     }
 }
@@ -814,10 +734,8 @@ void __fastcall TX584Form::CodeListViewDragOver(TObject *Sender,
             int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / LeftImageList->Height;
             if (Row >= MAX_ADDR)
                 Row = MAX_ADDR - 1;
-            if (SelCount != 1) {
-                SelCount = 1;
-                CodeListView->Repaint();
-            }
+            ClearSelection();
+
             CodeListView->ItemIndex = Row;
             TListItem *Item = CodeListView->Items->Item[Row];
             CodeListView->ItemFocused = Item;
@@ -869,12 +787,6 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
         int pos = CodeListView->ItemFocused->Index;
-        // если выделено несколько элементов, берём самый верхний
-        if (SelCount != 1) {
-            int SelEnd;
-            GetSelection(pos, SelEnd);
-            SelCount = 1;
-        }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
             for (int i = MAX_ADDR - 1; i > pos; i--) {
@@ -1142,6 +1054,7 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
                 CodeListView->Items->Item[i]->SubItems->Strings[2] =
                     CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[2];
             }
+        ClearSelection();
         //на освободившееся место помещаем инструкции из буфера обмена
         for (int i = 0; i < ClipboardSize; i++)
             if (index + i < MAX_ADDR) {
@@ -1150,10 +1063,9 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
                 CPU.Format(Code[index + i], str);
                 CodeListView->Items->Item[index + i]->SubItems->Strings[1] = str;
                 CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CMClipboard[i];
+                CodeListView->Items->Item[index + i]->Selected = true;
             }
-        SelCount = ClipboardSize;
-        if (index + SelCount > MAX_ADDR)
-            SelCount = MAX_ADDR - index;
+
         CodeListView->Repaint();
         SetModifyFlag(true);
     } else
@@ -1218,15 +1130,21 @@ void TX584Form::RemoveSelectedItems()
 
 void TX584Form::ClearSelection()
 {
+    if (!CodeListView) {
+        return;
+    }
     TListItem *FirstItem, *Item;
 
     FirstItem = Item = CodeListView->Selected;
-    TItemStates selected = TItemStates() << isSelected;
-    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
-        Item->Selected = false;
+
+    if (FirstItem) {
+        TItemStates selected = TItemStates() << isSelected;
+        for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+            Item->Selected = false;
+        }
+        FirstItem->Selected = true;
+        CodeListView->ItemFocused = FirstItem;
     }
-    FirstItem->Selected = true;
-    CodeListView->ItemFocused = FirstItem;
 }
 //---------------------------------------------------------------------------
 void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
@@ -1295,8 +1213,8 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
         dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked = i >= 1 && i <= 4;
     //перерисовываем редактор кода
     Instruction = 0;
+    ClearSelection();
     CodeListView->ItemIndex = 0;
-    SelCount = 1;
     CodeListView->ItemFocused = CodeListView->Items->Item[0];
     CodeListView->Repaint();
     Terminated = true;

@@ -225,12 +225,11 @@ __published:	// IDE-managed Components
     void __fastcall AboutItemClick(TObject *Sender);
 
 private:	// User declarations
-    void GetSelection(int &SelStart, int &SelEnd);
-
     void CopySelectedItems();
     void ClearSelectedItems();
     void RemoveSelectedItems();
     void ClearSelection();
+    int PreviousSelected;
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций
@@ -240,7 +239,6 @@ public:		// User declarations
     TButton *ResButton;                 //предыдущая выделенная кнопка фильтра результатов
     unsigned Regs[12];                  //регистры и шины
     unsigned InFlags, OutFlags;         //входные и выходные флаги
-    int SelCount;                       //количество выделенных строк
     unsigned MIClipboard[MAX_ADDR];     //буфер обмена для микроинструкций
     UnicodeString CMClipboard[MAX_ADDR];//буфер обмена для комментариев
     int ClipboardSize;                  //размер буфера обмена
