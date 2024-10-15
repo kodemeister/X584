@@ -585,7 +585,8 @@ void __fastcall TX584Form::CodeListViewAdvancedCustomDrawItem(TCustomListView *S
     TRect Rectangle = Item->DisplayRect(drBounds);
     TRect TextRectangle;
 
-    for (int i = 0; i <= 2; i++) {
+    int LastColumnIndex = CodeListView->Columns->Count - 2;
+    for (int i = 0; i <= LastColumnIndex; i++) {
         TTextFormat format = TTextFormat();
 
         Rectangle.Left += CodeListView->Columns->Items[i]->Width;
