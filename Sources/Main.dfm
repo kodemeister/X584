@@ -374,7 +374,7 @@ object X584Form: TX584Form
     object OutFlags0: TCheckBox
       Left = 8
       Top = 24
-      Width = 57
+      Width = 65
       Height = 17
       Caption = #1055#1040#1051#1059'3'
       TabOrder = 0
@@ -382,7 +382,7 @@ object X584Form: TX584Form
     object OutFlags1: TCheckBox
       Left = 72
       Top = 24
-      Width = 49
+      Width = 61
       Height = 17
       Caption = '!'#1057#1044#1051'1'
       Checked = True
@@ -392,7 +392,7 @@ object X584Form: TX584Form
     object OutFlags2: TCheckBox
       Left = 72
       Top = 40
-      Width = 49
+      Width = 61
       Height = 17
       Caption = '!'#1057#1044#1055'1'
       Checked = True
@@ -438,7 +438,7 @@ object X584Form: TX584Form
     object OutFlags9: TCheckBox
       Left = 8
       Top = 72
-      Width = 57
+      Width = 58
       Height = 17
       Caption = #1055#1040#1051#1059'0'
       TabOrder = 3
@@ -446,7 +446,7 @@ object X584Form: TX584Form
     object OutFlags10: TCheckBox
       Left = 8
       Top = 56
-      Width = 57
+      Width = 58
       Height = 17
       Caption = #1055#1040#1051#1059'1'
       TabOrder = 2
@@ -454,7 +454,7 @@ object X584Form: TX584Form
     object OutFlags11: TCheckBox
       Left = 8
       Top = 40
-      Width = 57
+      Width = 58
       Height = 17
       Caption = #1055#1040#1051#1059'2'
       TabOrder = 1
@@ -625,7 +625,7 @@ object X584Form: TX584Form
     object InFlags2: TCheckBox
       Left = 8
       Top = 51
-      Width = 41
+      Width = 49
       Height = 17
       Caption = '!'#1055#1057#1095
       Checked = True
@@ -635,7 +635,7 @@ object X584Form: TX584Form
     object InFlags3: TCheckBox
       Left = 8
       Top = 77
-      Width = 49
+      Width = 61
       Height = 17
       Caption = #1048#1053#1050#1056
       TabOrder = 2
@@ -643,7 +643,7 @@ object X584Form: TX584Form
     object InFlags4: TCheckBox
       Left = 8
       Top = 104
-      Width = 33
+      Width = 41
       Height = 17
       Caption = #1055#1056
       TabOrder = 3
