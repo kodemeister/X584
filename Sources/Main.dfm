@@ -58,6 +58,7 @@ object X584Form: TX584Form
     SmallImages = EmptyImageList
     TabOrder = 0
     ViewStyle = vsReport
+    OnAdvancedCustomDrawItem = CodeListViewAdvancedCustomDrawItem
     OnCustomDrawItem = CodeListViewCustomDrawItem
     OnDblClick = CodeListViewDblClick
     OnDragDrop = CodeListViewDragDrop

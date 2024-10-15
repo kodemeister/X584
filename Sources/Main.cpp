@@ -548,6 +548,7 @@ void __fastcall TX584Form::ApplicationEventsIdle(TObject *Sender,
 //---------------------------------------------------------------------------
 
 #define ROW_COLOR (TColor)0x00FFF6EE
+#define SEL_COLOR (TColor)0x00EBB99D
 
 void __fastcall TX584Form::CodeListViewCustomDrawItem(
       TCustomListView *Sender, TListItem *Item, TCustomDrawState State,
@@ -559,9 +560,15 @@ void __fastcall TX584Form::CodeListViewCustomDrawItem(
         (Code[Item->Index] & ATTR_BREAKPOINT ? 3 : 2) : (Code[Item->Index] & ATTR_BREAKPOINT ? 1 : 0), true);
     //рисуем фон
     Rect.Left += LeftImageList->Width;
-    //нечетные строки - цветные, четные - белые
-    CodeListView->Canvas->Brush->Color = Item->Index & 0x01 ? ROW_COLOR : clWhite;
-    CodeListView->Canvas->FillRect(Rect);
+    if (!Item->Selected) {
+        //нечетные строки - цветные, четные - белые
+        CodeListView->Canvas->Brush->Color = Item->Index & 0x01 ? ROW_COLOR : clWhite;
+        CodeListView->Canvas->FillRect(Rect);
+    }
+    else {
+        CodeListView->Canvas->Brush->Color = SEL_COLOR;
+        CodeListView->Canvas->FillRect(Rect);
+    }
     //отображаем флажки
     if (Code[Item->Index] & ATTR_CUSED)
         CheckImageList->Draw(CodeListView->Canvas, Rect.Left + (CodeListView->Columns->Items[0]->Width -
@@ -570,6 +577,45 @@ void __fastcall TX584Form::CodeListViewCustomDrawItem(
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TX584Form::CodeListViewAdvancedCustomDrawItem(TCustomListView *Sender,
+          TListItem *Item, TCustomDrawState State, TCustomDrawStage Stage,
+          bool &DefaultDraw)
+{
+    DefaultDraw = false;
+    TRect Rectangle = Item->DisplayRect(drBounds);
+    TRect TextRectangle;
+
+    for (int i = 0; i <= 2; i++) {
+        TTextFormat format = TTextFormat();
+
+        Rectangle.Left += CodeListView->Columns->Items[i]->Width;
+        Rectangle.Right = Rectangle.Left + CodeListView->Columns->Items[i+1]->Width;
+        TextRectangle = Rectangle;
+
+        switch (CodeListView->Columns->Items[i+1]->Alignment) {
+        case taLeftJustify:
+            format = format << tfLeft;
+            TextRectangle.Left += 7;
+            TextRectangle.Right -= 7;
+            break;
+        case taRightJustify:
+            format = format << tfRight;
+            TextRectangle.Left += 7;
+            TextRectangle.Right -= 7;
+            break;
+        case taCenter:
+            format = format << tfCenter;
+            break;
+        }
+        format = format << tfVerticalCenter;
+        format = format << tfSingleLine;
+        format = format << tfEndEllipsis;
+
+        UnicodeString str = Item->SubItems->Strings[i];
+        CodeListView->Canvas->TextRect(TextRectangle, str, format);
+    }
+}
+//---------------------------------------------------------------------------
 void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
@@ -1237,4 +1283,3 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
     AboutForm->ShowModal();
 }
 //---------------------------------------------------------------------------
-
