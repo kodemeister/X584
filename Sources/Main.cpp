@@ -610,6 +610,7 @@ void __fastcall TX584Form::CodeListViewAdvancedCustomDrawItem(TCustomListView *S
         format = format << tfVerticalCenter;
         format = format << tfSingleLine;
         format = format << tfEndEllipsis;
+        format = format << tfNoPrefix;
 
         UnicodeString str = Item->SubItems->Strings[i];
         CodeListView->Canvas->TextRect(TextRectangle, str, format);
