@@ -804,6 +804,7 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
         CodeListView->Items->Item[pos]->SubItems->Strings[2] = L"";
         if (++pos >= MAX_ADDR)
             pos = MAX_ADDR - 1;
+        ClearSelection();
         CodeListView->ItemIndex = pos;
         CodeListView->ItemFocused = CodeListView->Items->Item[pos];
         CodeListView->Repaint();
@@ -1139,12 +1140,11 @@ void TX584Form::ClearSelection()
     FirstItem = Item = CodeListView->Selected;
 
     if (FirstItem) {
+        FirstItem->Selected = false;
         TItemStates selected = TItemStates() << isSelected;
         for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
             Item->Selected = false;
         }
-        FirstItem->Selected = true;
-        CodeListView->ItemFocused = FirstItem;
     }
 }
 //---------------------------------------------------------------------------
@@ -1152,9 +1152,11 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
+            TListItem *ItemFocused = CodeListView->ItemFocused;
             RemoveSelectedItems();
             //снимаем выделение
             ClearSelection();
+            ItemFocused->Selected = true;
         } else {
             ClearSelectedItems();
         }
@@ -1217,6 +1219,7 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
     ClearSelection();
     CodeListView->ItemIndex = 0;
     CodeListView->ItemFocused = CodeListView->Items->Item[0];
+    CodeListView->ItemFocused->Selected = true;
     CodeListView->Repaint();
     Terminated = true;
 }

@@ -178,6 +178,8 @@ __published:	// IDE-managed Components
     void __fastcall ApplicationEventsIdle(TObject *Sender, bool &Done);
     void __fastcall CodeListViewCustomDrawItem(TCustomListView *Sender,
           TListItem *Item, TCustomDrawState State, bool &DefaultDraw);
+    void __fastcall CodeListViewAdvancedCustomDrawItem(TCustomListView *Sender, TListItem *Item,
+          TCustomDrawState State, TCustomDrawStage Stage, bool &DefaultDraw);
     void __fastcall CodeListViewMouseDown(TObject *Sender,
           TMouseButton Button, TShiftState Shift, int X, int Y);
     void __fastcall CodeListViewDblClick(TObject *Sender);
@@ -193,7 +195,7 @@ __published:	// IDE-managed Components
           int X, int Y, TDragState State, bool &Accept);
     void __fastcall CodeListViewDragDrop(TObject *Sender, TObject *Source,
           int X, int Y);
-    void __fastcall CodeTreeViewChange(TObject *Sender, TTreeNode *Node);          
+    void __fastcall CodeTreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewDblClick(TObject *Sender);
     void __fastcall CodeTreeViewExpanded(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewCollapsed(TObject *Sender,
@@ -223,7 +225,6 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
-
 private:	// User declarations
     void CopySelectedItems();
     void ClearSelectedItems();
