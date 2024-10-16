@@ -555,6 +555,13 @@ void __fastcall TX584Form::ApplicationEventsIdle(TObject *Sender,
     StatusBar->Panels->Items[1]->Text = GetKeyState(VK_CAPITAL) & 1 ? L"CAP" : L"";
     StatusBar->Panels->Items[2]->Text = GetKeyState(VK_NUMLOCK) & 1 ? L"NUM" : L"";
     StatusBar->Panels->Items[3]->Text = GetKeyState(VK_SCROLL) & 1 ? L"SCRL" : L"";
+
+    if (InputEdit->Visible &&
+        (LastTopItem != CodeListView->TopItem || LastItemLeft != CodeListView->TopItem->Left))
+    {
+        InputEditExit(this);
+    }
+
     Done = true;
 }
 
@@ -761,6 +768,8 @@ void __fastcall TX584Form::ClickTimerTimer(TObject *Sender)
     //если мышь не покинула пределы строки после щелчка, начинаем редактирование
     TPoint Point = ScreenToClient(Mouse->CursorPos);
     if (Point.x >= EditPoint.x && Point.y >= EditPoint.y && Point.y < EditPoint.y + LeftImageList->Height) {
+        LastTopItem = CodeListView->TopItem;
+        LastItemLeft = LastTopItem->Left;
         InputEdit->Left = EditPoint.x;
         InputEdit->Top = EditPoint.y + (LeftImageList->Height - InputEdit->Height) / 2;
         int w1 = CodeListView->Canvas->TextWidth(CodeListView->Items->Item[EditRow]->SubItems->Strings[2]) + 8;
