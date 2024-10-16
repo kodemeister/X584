@@ -228,6 +228,10 @@ __published:	// IDE-managed Components
 private:	// User declarations
     void GetSelection(int &SelStart, int &SelEnd);
 
+    // Для отслеживания положения CodeListView
+    TListItem *LastTopItem;
+    int LastItemLeft;
+
     // Для буфера обмена
     unsigned ClipboardFormat;
     void PutIntoClipboard();
