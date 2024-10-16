@@ -26,7 +26,6 @@
 #include "Input.h"
 #include "About.h"
 #include "FileExport.h"
-#include <Clipbrd.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Word_2K_SRVR"
