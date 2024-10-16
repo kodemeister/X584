@@ -27,7 +27,7 @@
 #include "About.h"
 #include "FileExport.h"
 #include <Vcl.Clipbrd.hpp>
-#include <cstdint>
+#include <memory>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "Word_2K_SRVR"
@@ -511,7 +511,7 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
 
     // проверяем буфер обмена при отображении формы
     TWMNoParams x = {WM_CLIPBOARDUPDATE};
-    OnClipboard(x);
+    OnClipboardUpdate(x);
 }
 //---------------------------------------------------------------------------
 
@@ -540,8 +540,6 @@ void __fastcall TX584Form::FormCloseQuery(TObject *Sender, bool &CanClose)
             break;
         }
     Terminated = true;
-
-    AddClipboardFormatListener(Handle);
 }
 //---------------------------------------------------------------------------
 
@@ -1294,11 +1292,8 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
 
 void TX584Form::PutIntoClipboard()
 {
-    TMemoryStream *Buffer;
-    TBinaryWriter *Writer;
-
-    Buffer = new TMemoryStream();
-    Writer = new TBinaryWriter(Buffer, TEncoding::UTF8);
+    std::unique_ptr<TMemoryStream> Buffer(new TMemoryStream());
+    std::unique_ptr<TBinaryWriter> Writer(new TBinaryWriter(Buffer.get(), TEncoding::UTF8, false));
 
     Writer->Write(ClipboardSize);
     for (int i = 0; i < ClipboardSize; i++) {
@@ -1306,60 +1301,52 @@ void TX584Form::PutIntoClipboard()
         Writer->Write(CMClipboard[i]);
     }
 
-    HGLOBAL hClipboardBuffer;
-    void *ClipboardBuffer;
+    Clipboard()->Open();
 
     Clipboard()->Clear();
 
-    hClipboardBuffer = GlobalAlloc(GMEM_MOVEABLE, Buffer->Size);
-    ClipboardBuffer = GlobalLock(hClipboardBuffer);
+    HGLOBAL hClipboardBuffer = GlobalAlloc(GMEM_MOVEABLE, Buffer->Size);
+    void *ClipboardBuffer = GlobalLock(hClipboardBuffer);
     memcpy(ClipboardBuffer, Buffer->Memory, Buffer->Size);
-
-    delete Writer;
-    delete Buffer;
 
     GlobalUnlock(hClipboardBuffer);
     Clipboard()->SetAsHandle(ClipboardFormat, reinterpret_cast<THandle>(hClipboardBuffer));
+
+    Clipboard()->Close();
 }
 //---------------------------------------------------------------------------
 
 void TX584Form::GetFromClipboard()
 {
-    TMemoryStream *Buffer;
-    TBinaryReader *Reader;
-
     if (!Clipboard()->HasFormat(ClipboardFormat)) {
         ClipboardSize = 0;
         return;
     }
 
-    HGLOBAL hClipboardBuffer;
-    void *ClipboardBuffer;
-    size_t ClipboardBufferSize;
+    Clipboard()->Open();
 
-    hClipboardBuffer = reinterpret_cast<HGLOBAL>(Clipboard()->GetAsHandle(ClipboardFormat));
-    ClipboardBuffer = GlobalLock(hClipboardBuffer);
-    ClipboardBufferSize = GlobalSize(hClipboardBuffer);
+    HGLOBAL hClipboardBuffer = reinterpret_cast<HGLOBAL>(Clipboard()->GetAsHandle(ClipboardFormat));
+    void *ClipboardBuffer = GlobalLock(hClipboardBuffer);
+    size_t ClipboardBufferSize = GlobalSize(hClipboardBuffer);
 
-    Buffer = new TMemoryStream();
+    std::unique_ptr<TMemoryStream> Buffer(new TMemoryStream());
     Buffer->Write(ClipboardBuffer, ClipboardBufferSize);
-    Buffer->Seek(INT64_C(0), soBeginning);
+    Buffer->Seek(0ull, soBeginning);
 
     GlobalUnlock(hClipboardBuffer);
 
-    Reader = new TBinaryReader(Buffer, TEncoding::UTF8, false);
-    ClipboardSize = Reader->ReadInteger();
+    Clipboard()->Close();
+
+    std::unique_ptr<TBinaryReader> Reader(new TBinaryReader(Buffer.get(), TEncoding::UTF8, false));
+    ClipboardSize = Reader->ReadInt32();
     for (int i = 0; i < ClipboardSize; i++) {
-        MIClipboard[i] = Reader->ReadCardinal();
+        MIClipboard[i] = Reader->ReadUInt32();
         CMClipboard[i] = Reader->ReadString();
     }
-
-    delete Reader;
-    delete Buffer;
 }
 //---------------------------------------------------------------------------
 
-void TX584Form::OnClipboard(TWMNoParams &x)
+void TX584Form::OnClipboardUpdate(TWMNoParams &x)
 {
     bool ClipboardHasData = Clipboard()->HasFormat(ClipboardFormat);
     PasteItem->Enabled = ClipboardHasData;
