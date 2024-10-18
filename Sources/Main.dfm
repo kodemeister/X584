@@ -847,22 +847,23 @@ object X584Form: TX584Form
     Height = 19
     Panels = <
       item
-        Width = 670
+        Width = 640
       end
       item
         Alignment = taCenter
-        Width = 30
+        Width = 35
       end
       item
         Alignment = taCenter
-        Width = 30
+        Width = 35
       end
       item
         Alignment = taCenter
-        Width = 30
+        Width = 35
       end
       item
-        Width = 30
+        Alignment = taCenter
+        Width = 35
       end
       item
         Width = 50
