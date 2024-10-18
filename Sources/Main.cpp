@@ -540,6 +540,7 @@ void __fastcall TX584Form::ApplicationEventsIdle(TObject *Sender,
     StatusBar->Panels->Items[2]->Text = GetKeyState(VK_NUMLOCK) & 1 ? "NUM" : "";
     StatusBar->Panels->Items[3]->Text = GetKeyState(VK_SCROLL) & 1 ? "SCRL" : "";
 
+    // ХАК: прекращаем редактирование комментария при прокрутке редактора кода
     if (InputEdit->Visible &&
         (LastTopItem != CodeListView->TopItem || LastItemLeft != CodeListView->TopItem->Left))
     {
@@ -1275,5 +1276,4 @@ void __fastcall TX584Form::AboutItemClick(TObject *Sender)
     AboutForm->ShowModal();
 }
 //---------------------------------------------------------------------------
-
 
