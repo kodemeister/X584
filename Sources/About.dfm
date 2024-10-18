@@ -3,7 +3,7 @@ object AboutForm: TAboutForm
   Top = 110
   BorderStyle = bsDialog
   Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
-  ClientHeight = 381
+  ClientHeight = 397
   ClientWidth = 424
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object AboutForm: TAboutForm
     Top = 64
     Width = 90
     Height = 15
-    Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.31'
+    Caption = 'X584 '#1074#1077#1088#1089#1080#1103' 1.32'
   end
   object Label2: TLabel
     Left = 56
@@ -71,13 +71,13 @@ object AboutForm: TAboutForm
   object Label9: TLabel
     Left = 56
     Top = 240
-    Width = 356
+    Width = 322
     Height = 15
-    Caption = #1054#1090#1095#1077#1090#1099' '#1086#1073' '#1086#1096#1080#1073#1082#1072#1093' '#1087#1088#1086#1089#1100#1073#1072' '#1086#1090#1087#1088#1072#1074#1083#1103#1090#1100' '#1074' '#1088#1077#1087#1086#1079#1080#1090#1086#1088#1080#1081' '#1087#1088#1086#1077#1082#1090#1072
+    Caption = #1055#1088#1077#1076#1083#1086#1078#1077#1085#1080#1103' '#1080' '#1086#1090#1095#1077#1090#1099' '#1086#1073' '#1086#1096#1080#1073#1082#1072#1093' '#1087#1088#1086#1089#1100#1073#1072' '#1086#1090#1087#1088#1072#1074#1083#1103#1090#1100' '#1074
   end
   object RepositoryLabel: TLabel
     Left = 72
-    Top = 264
+    Top = 280
     Width = 218
     Height = 17
     Cursor = crHandPoint
@@ -92,14 +92,14 @@ object AboutForm: TAboutForm
   end
   object MemCaptionLabel: TLabel
     Left = 56
-    Top = 320
+    Top = 336
     Width = 171
     Height = 15
     Caption = #1044#1086#1089#1090#1091#1087#1085#1072#1103' '#1092#1080#1079#1080#1095#1077#1089#1082#1072#1103' '#1087#1072#1084#1103#1090#1100':'
   end
   object MemLabel: TLabel
     Left = 240
-    Top = 320
+    Top = 336
     Width = 53
     Height = 15
     Caption = '131072 '#1050#1041
@@ -174,6 +174,13 @@ object AboutForm: TAboutForm
     ImageIndex = 1
     ImageName = 'icon'
   end
+  object Label10: TLabel
+    Left = 56
+    Top = 256
+    Width = 160
+    Height = 15
+    Caption = 'GitHub '#1088#1077#1087#1086#1079#1080#1090#1086#1088#1080#1081' '#1087#1088#1086#1077#1082#1090#1072
+  end
   object HeaderPanel: TPanel
     Left = 0
     Top = 0
@@ -210,15 +217,15 @@ object AboutForm: TAboutForm
   end
   object Panel1: TPanel
     Left = 40
-    Top = 296
-    Width = 361
+    Top = 312
+    Width = 344
     Height = 2
     BevelOuter = bvLowered
     TabOrder = 1
   end
   object OKButton: TButton
     Left = 336
-    Top = 344
+    Top = 360
     Width = 75
     Height = 25
     Caption = '&OK'

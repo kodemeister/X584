@@ -57,6 +57,7 @@ __published:	// IDE-managed Components
     TImageCollection *ImageCollection;
     TVirtualImage *InfoImage;
     TVirtualImage *IconImage;
+    TLabel *Label10;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall RepositoryLabelClick(TObject *Sender);
 private:	// User declarations

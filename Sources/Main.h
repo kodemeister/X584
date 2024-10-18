@@ -194,7 +194,7 @@ __published:	// IDE-managed Components
           int X, int Y, TDragState State, bool &Accept);
     void __fastcall CodeListViewDragDrop(TObject *Sender, TObject *Source,
           int X, int Y);
-    void __fastcall CodeTreeViewChange(TObject *Sender, TTreeNode *Node);          
+    void __fastcall CodeTreeViewChange(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewDblClick(TObject *Sender);
     void __fastcall CodeTreeViewExpanded(TObject *Sender, TTreeNode *Node);
     void __fastcall CodeTreeViewCollapsed(TObject *Sender,
@@ -227,6 +227,9 @@ __published:	// IDE-managed Components
     void __fastcall FormDestroy(TObject *Sender);
 private:	// User declarations
     void GetSelection(int &SelStart, int &SelEnd);
+
+    TListItem *LastTopItem;
+    int LastItemLeft;
 
     // Для буфера обмена
     unsigned ClipboardFormat;
