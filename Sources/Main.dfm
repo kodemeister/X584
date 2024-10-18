@@ -20,8 +20,8 @@ object X584Form: TX584Form
   OnMouseDown = ControlsMouseDown
   OnResize = FormResize
   DesignSize = (
-    823
-    537)
+    815
+    532)
   PixelsPerInch = 96
   TextHeight = 13
   object CodeListView: TListView
@@ -85,7 +85,7 @@ object X584Form: TX584Form
   object RegGroupBox: TGroupBox
     Left = 608
     Top = 32
-    Width = 209
+    Width = 203
     Height = 273
     Anchors = [akTop, akRight]
     Caption = #1056#1077#1075#1080#1089#1090#1088#1099
@@ -305,7 +305,7 @@ object X584Form: TX584Form
   object BusGroupBox: TGroupBox
     Left = 608
     Top = 312
-    Width = 209
+    Width = 203
     Height = 73
     Anchors = [akTop, akRight]
     Caption = #1064#1080#1085#1099
@@ -353,7 +353,7 @@ object X584Form: TX584Form
   object OutGroupBox: TGroupBox
     Left = 680
     Top = 392
-    Width = 137
+    Width = 131
     Height = 121
     Anchors = [akTop, akRight]
     Caption = #1042#1099#1093#1086#1076#1099
@@ -641,7 +641,7 @@ object X584Form: TX584Form
   object ToolBar: TToolBar
     Left = 0
     Top = 0
-    Width = 823
+    Width = 815
     Height = 31
     ButtonHeight = 24
     ButtonWidth = 24
@@ -842,8 +842,8 @@ object X584Form: TX584Form
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 518
-    Width = 823
+    Top = 513
+    Width = 815
     Height = 19
     Panels = <
       item
