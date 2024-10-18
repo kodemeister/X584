@@ -54,6 +54,7 @@ __published:	// IDE-managed Components
     TLabel *GroupLabel1;
     TLabel *GroupLabel2;
     TLabel *GroupLabel3;
+    TLabel *Label10;
     void __fastcall FormShow(TObject *Sender);
     void __fastcall RepositoryLabelClick(TObject *Sender);
 private:	// User declarations
