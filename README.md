@@ -2,9 +2,6 @@
 
 X584 is a graphical simulator of Soviet-era [K584VM1](https://ru.wikipedia.org/wiki/%D0%9C%D0%B8%D0%BA%D1%80%D0%BE%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%BE%D1%80%D0%BD%D0%B0%D1%8F_%D1%81%D0%B5%D0%BA%D1%86%D0%B8%D1%8F#%D0%A1%D0%B5%D1%80%D0%B8%D1%8F_584) 4-bit slice microprocessor (a clone of [Texas Instruments SBP0400](https://en.wikipedia.org/wiki/Texas_Instruments_SBP0400)).
 
-> [!IMPORTANT]
-> **This is the legacy version for Windows XP, Vista and 7. If you are looking for modern versions supporting Windows 10+, please check [branch 2.0](https://github.com/kodemeister/X584/tree/2.0).**
-
 ![Screenshot](Screenshot.png?raw=true)
 
 ## Features
