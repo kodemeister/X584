@@ -234,13 +234,17 @@ private:	// User declarations
     void RemoveSelectedItems();
     void ClearSelection();
     int PreviousSelected;
+
+    TListItem *LastTopItem;
+    int LastItemLeft;
+    
     // Для буфера обмена
     unsigned ClipboardFormat;
     void PutIntoClipboard();
     void GetFromClipboard();
-    void OnClipboard(TWMNoParams &x);
+    void OnClipboardUpdate(TWMNoParams &x);
 BEGIN_MESSAGE_MAP
-    MESSAGE_HANDLER(WM_CLIPBOARDUPDATE, TWMNoParams, OnClipboard);
+    MESSAGE_HANDLER(WM_CLIPBOARDUPDATE, TWMNoParams, OnClipboardUpdate);
 END_MESSAGE_MAP(TForm);
 public:		// User declarations
     K584 CPU;                           //объект процессора
