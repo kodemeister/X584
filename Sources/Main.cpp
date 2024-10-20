@@ -207,6 +207,10 @@ void TX584Form::SaveFile(UnicodeString FileName)
                 str = comment;
             }
 
+            if (str.Length() >= 255) {
+                str = str.SubString0(0, 255);
+            }
+
             unsigned char len = str.Length();
             Writer->Write(len);
             Stream->Write(str.c_str(), len);
