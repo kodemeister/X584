@@ -168,8 +168,10 @@ void TX584Form::LoadPRJ(TFileStream *Stream)
         int Dummy;
         if (ParseComment(comment, Dummy)) {
             CodeListView->Items->Item[i]->SubItems->Strings[2] = str.SubString(15, str.Length() - 14);
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
         } else {
             CodeListView->Items->Item[i]->SubItems->Strings[3] = str.SubString(15, str.Length() - 14);
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
         }
     }
     //очищаем остальные строки
