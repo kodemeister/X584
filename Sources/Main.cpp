@@ -988,6 +988,12 @@ void __fastcall TX584Form::FilterResButtonClick(TObject *Sender)
 
 void __fastcall TX584Form::RegMaskEditKeyPress(TObject *Sender, char &Key)
 {
+    // обработка нажатия Enter
+    if (Key == '\r') {
+        Key = 0;
+        RegMaskEditDblClick(Sender);
+        return;
+    }
     //фильтруем ненужные цифры
     if (Key >= '2' && Key <= '9')
         Key = 0;
