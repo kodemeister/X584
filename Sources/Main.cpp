@@ -111,8 +111,10 @@ void TX584Form::LoadX584(TFileStream *Stream)
         AnsiStringT<1251> commentStr(comment);
         if (ParseComment(commentStr, Dummy)) {
             CodeListView->Items->Item[i]->SubItems->Strings[2] = commentStr;
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
         } else {
             CodeListView->Items->Item[i]->SubItems->Strings[3] = commentStr;
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
         }
     }
 
