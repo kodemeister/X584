@@ -878,6 +878,7 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
         if (++pos >= MAX_ADDR)
             pos = MAX_ADDR - 1;
         ClearSelection();
+        CodeListView->ItemFocused->Selected = false;
         CodeListView->ItemIndex = pos;
         CodeListView->ItemFocused = CodeListView->Items->Item[pos];
         CodeListView->Repaint();
@@ -1087,14 +1088,28 @@ void __fastcall TX584Form::CutItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void TX584Form::CopySelectedItems()
+std::vector<TListItem*> TX584Form::GetSelectedItems()
 {
-    TListItem *Item;
+    std::vector<TListItem*> result;
     TItemStates selected = TItemStates() << isSelected;
 
-    Item = CodeListView->Selected;
+    for (TListItem *Item = CodeListView->Selected; Item;
+        Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+        result.push_back(Item);
+    }
+
+    return result;
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::CopySelectedItems()
+{
+    std::vector<TListItem *> Selected;
+
+    Selected = GetSelectedItems();
     ClipboardSize = 0;
-    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+    for (size_t i = 0; i < Selected.size(); i++) {
+        TListItem *Item = Selected[i];
         int Index = Item->Index;
 
         MIClipboard[ClipboardSize] = Code[Index];
@@ -1144,19 +1159,20 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 
         CodeListView->Repaint();
         SetModifyFlag(true);
-    } else
+    } else*/
         PostMessageW(ActiveControl->Handle, WM_PASTE, 0, 0);
 }
 //---------------------------------------------------------------------------
 
 void TX584Form::ClearSelectedItems()
 {
-    TListItem *Item;
+    std::vector<TListItem *> Selected;
 
-    Item = CodeListView->Selected;
-    TItemStates selected = TItemStates() << isSelected;
-    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+    Selected = GetSelectedItems();
+    for (size_t i = 0; i < Selected.size(); i++) {
+        TListItem *Item = Selected[i];
         int Index = Item->Index;
+
         Code[Index] = NOP;
         Item->SubItems->Strings[1] = NOP_TEXT;
         Item->SubItems->Strings[2] = L"";
@@ -1166,27 +1182,11 @@ void TX584Form::ClearSelectedItems()
 
 void TX584Form::RemoveSelectedItems()
 {
-    bool NewItems[MAX_ADDR] = {0};
-
-    for (int i = 0; i < MAX_ADDR; i++) {
-        NewItems[i] = true;
-    }
-
-    TListItem *Item;
-    Item = CodeListView->Selected;
-
-    TItemStates selected = TItemStates() << isSelected;
-
-    for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
-        int Index = Item->Index;
-        NewItems[Index] = false;
-    }
-
     int NewIndex = 0;
     int OldIndex = 0;
 
     for (; OldIndex < MAX_ADDR && NewIndex < MAX_ADDR; OldIndex++) {
-        if (NewItems[OldIndex]) {
+        if (CodeListView->Items->Item[OldIndex]->Selected) {
             TListItem *ItemOld, *ItemNew;
             Code[NewIndex] = Code[OldIndex];
             ItemOld = CodeListView->Items->Item[OldIndex];
@@ -1207,19 +1207,14 @@ void TX584Form::RemoveSelectedItems()
 
 void TX584Form::ClearSelection()
 {
-    if (!CodeListView) {
-        return;
+    TListItem *FocusedItem = CodeListView->ItemFocused;
+
+    for (int i = 0; i < CodeListView->Items->Count; i++) {
+        CodeListView->Items->Item[i]->Selected = false;
     }
-    TListItem *FirstItem, *Item;
 
-    FirstItem = Item = CodeListView->Selected;
-
-    if (FirstItem) {
-        FirstItem->Selected = false;
-        TItemStates selected = TItemStates() << isSelected;
-        for (; Item; Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
-            Item->Selected = false;
-        }
+    if (FocusedItem) {
+        FocusedItem->Selected = true;
     }
 }
 //---------------------------------------------------------------------------
@@ -1227,11 +1222,9 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
-            TListItem *ItemFocused = CodeListView->ItemFocused;
             RemoveSelectedItems();
             //снимаем выделение
             ClearSelection();
-            ItemFocused->Selected = true;
         } else {
             ClearSelectedItems();
         }
