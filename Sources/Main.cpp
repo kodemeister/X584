@@ -1080,7 +1080,7 @@ void __fastcall TX584Form::ExitItemClick(TObject *Sender)
 
 void __fastcall TX584Form::CutItemClick(TObject *Sender)
 {
-    if (ActiveControl == CodeListView && !InputEdit->Visible) {
+    if ((ActiveControl == CodeListView || ActiveControl == CodeTreeView) && !InputEdit->Visible) {
         CopyItemClick(this);
         DeleteItemClick(this);
     } else
@@ -1118,9 +1118,10 @@ void TX584Form::CopySelectedItems()
     }
 }
 //---------------------------------------------------------------------------
+
 void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 {
-    if (ActiveControl == CodeListView && !InputEdit->Visible) {
+    if ((ActiveControl == CodeListView || ActiveControl == CodeTreeView) && !InputEdit->Visible) {
         //сохраняем инструкции в буфере обмена
         CopySelectedItems();
         PutIntoClipboard();
@@ -1133,7 +1134,7 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 
 void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 {
-    if (ActiveControl == CodeListView && !InputEdit->Visible) {
+    if ((ActiveControl == CodeListView || ActiveControl == CodeTreeView) && !InputEdit->Visible) {
         GetFromClipboard();
         int index = CodeListView->ItemFocused->Index;
         if (InsertItem->Checked)
@@ -1159,7 +1160,7 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 
         CodeListView->Repaint();
         SetModifyFlag(true);
-    } else*/
+    } else
         PostMessageW(ActiveControl->Handle, WM_PASTE, 0, 0);
 }
 //---------------------------------------------------------------------------
@@ -1220,7 +1221,7 @@ void TX584Form::ClearSelection()
 //---------------------------------------------------------------------------
 void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
-    if (ActiveControl == CodeListView && !InputEdit->Visible) {
+    if ((ActiveControl == CodeListView || ActiveControl == CodeTreeView) && !InputEdit->Visible) {
         if (InsertItem->Checked) {
             RemoveSelectedItems();
             //снимаем выделение
