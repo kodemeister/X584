@@ -803,7 +803,8 @@ void __fastcall TX584Form::CodeListViewDragOver(TObject *Sender,
         Accept = TreeView->Selected->Count == 0;
         if (Accept) {
             //выделяем элемент, над которым перемещается указатель мыши
-            int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / LeftImageList->Height;
+            int RowHeight = CodeListView->TopItem->DisplayRect(drBounds).Height();
+            int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / RowHeight;
             if (Row >= MAX_ADDR)
                 Row = MAX_ADDR - 1;
             ClearSelection();
