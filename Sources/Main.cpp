@@ -1110,18 +1110,17 @@ std::vector<TListItem*> TX584Form::GetSelectedItems()
 
 void TX584Form::CopySelectedItems()
 {
-    std::vector<TListItem *> Selected;
+    std::vector<TListItem *> Selected = GetSelectedItems();
 
-    Selected = GetSelectedItems();
-    ClipboardSize = 0;
     for (size_t i = 0; i < Selected.size(); i++) {
         TListItem *Item = Selected[i];
         int Index = Item->Index;
 
-        MIClipboard[ClipboardSize] = Code[Index];
-        CMClipboard[ClipboardSize] = Item->SubItems->Strings[2];
-        ClipboardSize++;
+        MIClipboard[i] = Code[Index];
+        CMClipboard[i] = Item->SubItems->Strings[2];
     }
+
+    ClipboardSize = Selected.size();
 }
 //---------------------------------------------------------------------------
 
@@ -1173,9 +1172,8 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 
 void TX584Form::ClearSelectedItems()
 {
-    std::vector<TListItem *> Selected;
+    std::vector<TListItem *> Selected = GetSelectedItems();
 
-    Selected = GetSelectedItems();
     for (size_t i = 0; i < Selected.size(); i++) {
         TListItem *Item = Selected[i];
         int Index = Item->Index;
@@ -1191,14 +1189,13 @@ void TX584Form::RemoveSelectedItems()
 {
     int OldIndex, NewIndex;
 
-    for (OldIndex = 0, NewIndex = 0; OldIndex < MAX_ADDR && NewIndex < MAX_ADDR; OldIndex++) {
+    for (OldIndex = 0, NewIndex = 0; OldIndex < MAX_ADDR; OldIndex++) {
         if (!CodeListView->Items->Item[OldIndex]->Selected) {
-            TListItem *ItemOld, *ItemNew;
             Code[NewIndex] = Code[OldIndex];
-            ItemOld = CodeListView->Items->Item[OldIndex];
-            ItemNew = CodeListView->Items->Item[NewIndex];
-            ItemNew->SubItems->Strings[1] = ItemOld->SubItems->Strings[1];
-            ItemNew->SubItems->Strings[2] = ItemOld->SubItems->Strings[2];
+            TListItem *OldItem = CodeListView->Items->Item[OldIndex];
+            TListItem *NewItem = CodeListView->Items->Item[NewIndex];
+            NewItem->SubItems->Strings[1] = OldItem->SubItems->Strings[1];
+            NewItem->SubItems->Strings[2] = OldItem->SubItems->Strings[2];
             NewIndex++;
         }
     }
