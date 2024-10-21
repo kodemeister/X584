@@ -608,15 +608,14 @@ void __fastcall TX584Form::CodeListViewAdvancedCustomDrawItem(TCustomListView *S
     TRect Rectangle = Item->DisplayRect(drBounds);
     TRect TextRectangle;
 
-    int LastColumnIndex = CodeListView->Columns->Count - 2;
-    for (int i = 0; i <= LastColumnIndex; i++) {
+    for (int i = 1; i < CodeListView->Columns->Count; i++) {
         TTextFormat format = TTextFormat();
 
-        Rectangle.Left += CodeListView->Columns->Items[i]->Width;
-        Rectangle.Right = Rectangle.Left + CodeListView->Columns->Items[i+1]->Width;
+        Rectangle.Left += CodeListView->Columns->Items[i-1]->Width;
+        Rectangle.Right = Rectangle.Left + CodeListView->Columns->Items[i]->Width;
         TextRectangle = Rectangle;
 
-        switch (CodeListView->Columns->Items[i+1]->Alignment) {
+        switch (CodeListView->Columns->Items[i]->Alignment) {
         case taLeftJustify:
             format = format << tfLeft;
             TextRectangle.Left += 7;
@@ -636,7 +635,7 @@ void __fastcall TX584Form::CodeListViewAdvancedCustomDrawItem(TCustomListView *S
         format = format << tfEndEllipsis;
         format = format << tfNoPrefix;
 
-        UnicodeString str = Item->SubItems->Strings[i];
+        UnicodeString str = Item->SubItems->Strings[i-1];
         CodeListView->Canvas->TextRect(TextRectangle, str, format);
     }
 }
