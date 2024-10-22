@@ -218,6 +218,7 @@ object InputForm: TInputForm
       TabOrder = 17
       Text = '00000'
       OnChange = RDecMaskEditChange
+      OnKeyPress = RDecMaskEditKeyPress
     end
   end
 end

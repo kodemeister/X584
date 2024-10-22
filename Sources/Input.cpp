@@ -34,9 +34,25 @@ __fastcall TInputForm::TInputForm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TInputForm::RMaskEditKeyPress(TObject *Sender, char &Key)
 {
+    // обрабатываем нажатие Enter в поле ввода
+    if (Key == '\r') {
+        Key = 0;
+        ModalResult = mrOk;
+        return;
+    }
+
     //фильтруем ненужные цифры
     if (Key >= '2' && Key <= '9')
         Key = 0;
+}
+//---------------------------------------------------------------------------
+void __fastcall TInputForm::RDecMaskEditKeyPress(TObject *Sender, System::WideChar &Key)
+{
+    // обрабатываем нажатие Enter в поле ввода
+    if (Key == '\r') {
+        ModalResult = mrOk;
+        return;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TInputForm::RMaskEditChange(TObject *Sender)
