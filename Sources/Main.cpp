@@ -1298,7 +1298,7 @@ void TX584Form::RemoveSelectedItems()
             TListItem *NewItem = CodeListView->Items->Item[NewIndex];
             NewItem->SubItems->Strings[1] = OldItem->SubItems->Strings[1];
             NewItem->SubItems->Strings[2] = OldItem->SubItems->Strings[2];
-            ItemNew->SubItems->Strings[3] = ItemOld->SubItems->Strings[3];
+            NewItem->SubItems->Strings[3] = OldItem->SubItems->Strings[3];
             NewIndex++;
         }
     }
