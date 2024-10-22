@@ -54,6 +54,7 @@ __published:	// IDE-managed Components
     TCheckBox *CheckBox15;
     TMaskEdit *RDecMaskEdit;    
     void __fastcall RMaskEditKeyPress(TObject *Sender, char &Key);
+    void __fastcall RDecMaskEditKeyPress(TObject *Sender, System::WideChar &Key);
     void __fastcall RMaskEditChange(TObject *Sender);
     void __fastcall RDecMaskEditChange(TObject *Sender);
     void __fastcall CheckBoxClick(TObject *Sender);
