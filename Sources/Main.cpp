@@ -100,13 +100,12 @@ void TX584Form::LoadX584(TFileStream *Stream)
         CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
         //загружаем комментарий
         unsigned char len;
-        char comment[256];
         len = Reader->ReadByte();
-        Stream->Read(comment, len);
-        comment[len] = 0;
+
+        TBytes comment = Reader->ReadBytes(len);
 
         int Dummy;
-        AnsiStringT<1251> commentStr(comment);
+        UnicodeString commentStr = TEncoding::GetEncoding(1251)->GetString(comment);
         if (ParseComment(commentStr, Dummy)) {
             CodeListView->Items->Item[i]->SubItems->Strings[2] = commentStr;
             CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
@@ -191,18 +190,20 @@ void TX584Form::SaveFile(UnicodeString FileName)
         Writer->Write(Sign);
         for (int i = 0; i < MAX_ADDR; i++) {
             //сохраняем инструкцию
-            Stream->Write(&Code[i], 2);
+            Writer->Write(static_cast<unsigned short>(Code[i]));
             //сохраняем комментарий
-            AnsiStringT<1251> control = CodeListView->Items->Item[i]->SubItems->Strings[2];
-            AnsiStringT<1251> comment = CodeListView->Items->Item[i]->SubItems->Strings[3];
-            AnsiStringT<1251> str = control.Length() > 0 > control : comment;
+            UnicodeString control = CodeListView->Items->Item[i]->SubItems->Strings[2];
+            UnicodeString comment = CodeListView->Items->Item[i]->SubItems->Strings[3];
+            UnicodeString str = control.Length() > 0 ? control : comment;
 
             if (str.Length() > 255)
                 str.SetLength(255);
 
             unsigned char len = str.Length();
             Writer->Write(len);
-            Stream->Write(str.c_str(), len);
+
+            TBytes encodedStr = TEncoding::GetEncoding(1251)->GetBytes(str);
+            Writer->Write(encodedStr);
         }
 
         //сохраняем новые данные
