@@ -58,17 +58,16 @@ unsigned ReCode[54] = {
 
 void TX584Form::LoadFile(UnicodeString FileName)
 {
-    TFileStream *Stream;
     try {
-        Stream = new TFileStream(FileName, fmOpenRead);
+        std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmOpenRead));
         UnicodeString ext = UpperCase(ExtractFileExt(FileName));
 
         if (ext == L".X584") {
             //родной формат
-            LoadX584(Stream);
+            LoadX584(Stream.get());
         } else {
             //текстовый формат *.Prj
-            LoadPRJ(Stream);
+            LoadPRJ(Stream.get());
         }
         SetModifyFlag(false);
         ResetItemClick(this);
@@ -83,12 +82,11 @@ void TX584Form::LoadFile(UnicodeString FileName)
         MessageBoxW(Handle, (L"Ошибка открытия файла " + FileName).c_str(),
             L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
-    delete Stream;
 }
 
 void TX584Form::LoadX584(TFileStream *Stream)
 {
-    TBinaryReader *Reader = new TBinaryReader(Stream, TEncoding::UTF8, false);
+    std::unique_ptr<TBinaryReader> Reader(new TBinaryReader(Stream, TEncoding::UTF8, false));
     wchar_t buf[256];
     unsigned Sign;
     Sign = Reader->ReadUInt32();
@@ -129,14 +127,12 @@ void TX584Form::LoadX584(TFileStream *Stream)
             CodeListView->Items->Item[i]->SubItems->Strings[3] = Reader->ReadString();
         }
     }
-
-    delete Reader;
 }
 
 void TX584Form::LoadPRJ(TFileStream *Stream)
 {
     wchar_t buf[256];
-    TStringList *List = new TStringList();
+    std::unique_ptr<TStringList> List(new TStringList());
     List->LoadFromStream(Stream, TEncoding::GetEncoding(1251));
     //проверяем заголовок
     if (List->Count < 2 || List->Strings[0] != PRJSTR1 || List->Strings[1] != PRJSTR2)
@@ -181,17 +177,14 @@ void TX584Form::LoadPRJ(TFileStream *Stream)
         CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
         CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
     }
-    delete List;
 }
 //---------------------------------------------------------------------------
 
 void TX584Form::SaveFile(UnicodeString FileName)
 {
-    TFileStream *Stream;
-    TBinaryWriter *Writer;
-    try  {
-        Stream = new TFileStream(FileName, fmCreate);
-        Writer = new TBinaryWriter(Stream, TEncoding::UTF8, false);
+    try {
+        std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmCreate));
+        std::unique_ptr<TBinaryWriter> Writer(new TBinaryWriter(Stream.get(), TEncoding::UTF8, false));
 
         //сохраняем в родном формате
         unsigned int Sign = X584;
@@ -236,8 +229,6 @@ void TX584Form::SaveFile(UnicodeString FileName)
         MessageBoxW(Handle, (L"Ошибка сохранения файла " + FileName).c_str(),
             L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
-    delete Writer;
-    delete Stream;
 }
 //---------------------------------------------------------------------------
 
