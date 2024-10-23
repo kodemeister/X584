@@ -834,6 +834,11 @@ void __fastcall TX584Form::InputEditExit(TObject *Sender)
 {
     //завершаем редактирование и перерисовываем строку
     if (InputEdit->Visible) {
+        int Dummy;
+        if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy)) {
+            CodeListView->Scroll(CodeListView->TopItem->Left-LastItemLeft, LastTopItem->Top - CodeListView->TopItem->Top);
+            throw Exception(L"Неверный управляющий оператор");
+        }
         CodeListView->Items->Item[EditRow]->SubItems->Strings[EditColumn] = InputEdit->Text;
         InputEdit->Visible = false;
         CodeListView->SetFocus();
