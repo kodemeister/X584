@@ -753,7 +753,7 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
         }
         else {
             Rect.Left = Rect.Right;
-            Rect.Right += Rect.Left + CodeListView->Columns->Items[4]->Width;
+            Rect.Right = Rect.Left + CodeListView->Columns->Items[4]->Width;
             if (WasSelected && X >= Rect.Left && X <= Rect.Right) {
                 //щелкнули в области колонки комментариев - запускаем таймер редактирования
                 EditRow = Row;
