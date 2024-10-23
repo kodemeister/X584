@@ -163,10 +163,10 @@ void TX584Form::LoadPRJ(TFileStream *Stream)
         UnicodeString comment = str.SubString(15, str.Length() - 14);
         int Dummy;
         if (ParseComment(comment, Dummy)) {
-            CodeListView->Items->Item[i]->SubItems->Strings[2] = str.SubString(15, str.Length() - 14);
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = comment;
             CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
         } else {
-            CodeListView->Items->Item[i]->SubItems->Strings[3] = str.SubString(15, str.Length() - 14);
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = comment;
             CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
         }
     }
@@ -195,18 +195,10 @@ void TX584Form::SaveFile(UnicodeString FileName)
             //сохраняем комментарий
             AnsiStringT<1251> control = CodeListView->Items->Item[i]->SubItems->Strings[2];
             AnsiStringT<1251> comment = CodeListView->Items->Item[i]->SubItems->Strings[3];
-            AnsiStringT<1251> str;
+            AnsiStringT<1251> str = control.Length() > 0 > control : comment;
 
-            if (control.Length() > 0) {
-                str = control;
-            }
-            else {
-                str = comment;
-            }
-
-            if (str.Length() >= 255) {
-                str = str.SubString0(0, 255);
-            }
+            if (str.Length() > 255)
+                str.SetLength(255);
 
             unsigned char len = str.Length();
             Writer->Write(len);
