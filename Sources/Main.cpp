@@ -873,6 +873,7 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
 
 void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
 {
+    CodeListView->SetFocus();
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
         int pos = CodeListView->ItemFocused->Index;
