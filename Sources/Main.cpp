@@ -27,6 +27,7 @@
 #include "About.h"
 #include "FileExport.h"
 #include <Vcl.Clipbrd.hpp>
+#include <System.StrUtils.hpp>
 #include <memory>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -173,6 +174,100 @@ void TX584Form::LoadPRJ(TFileStream *Stream)
         CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
         CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
     }
+}
+
+void TX584Form::LoadX584(TFileStream *Stream)
+{
+    TBinaryReader *Reader = new TBinaryReader(Stream, TEncoding::UTF8, false);
+    wchar_t buf[256];
+    unsigned Sign;
+    Sign = Reader->ReadUInt32();
+    if (Sign != X584)
+        throw EConvertError(L"Неверный формат");
+    for (int i = 0; i < MAX_ADDR; i++) {
+        //загружаем код микроинструкции
+        Code[i] = Reader->ReadUInt16();
+        //форматируем его
+        CPU.Format(Code[i], buf);
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
+        //загружаем комментарий
+        unsigned char len;
+        char comment[256];
+        len = Reader->ReadByte();
+        Stream->Read(comment, len);
+        comment[len] = 0;
+
+        int Dummy;
+        AnsiStringT<1251> commentStr(comment);
+        if (ParseComment(commentStr, Dummy)) {
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = commentStr;
+        } else {
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = commentStr;
+        }
+    }
+
+    if (Reader->PeekChar() != -1) {
+        Sign = Reader->ReadUInt32();
+        // скорее всего, есть дополнительные данные
+        if (Sign != V2P0)
+            throw EConvertError(L"Неверный формат");
+
+        for (int i = 0; i < MAX_ADDR; i++) {
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = Reader->ReadString();
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = Reader->ReadString();
+        }
+    }
+
+    delete Reader;
+}
+
+void TX584Form::LoadPRJ(TFileStream *Stream)
+{
+    wchar_t buf[256];
+    TStringList *List = new TStringList();
+    List->LoadFromStream(Stream, TEncoding::GetEncoding(1251));
+    //проверяем заголовок
+    if (List->Count < 2 || List->Strings[0] != PRJSTR1 || List->Strings[1] != PRJSTR2)
+        throw EConvertError(L"");
+    //читаем все оставшиеся строки
+    for (int i = 0; i < List->Count - 2; i++) {
+        //читаем поля микроинструкции
+        UnicodeString str = List->Strings[i + 2];
+        unsigned code = StrToInt(str.SubString(1, 3)),
+                 reg = StrToInt(str.SubString(5, 3)),
+                 carry = StrToInt(str.SubString(9, 1)),
+                 op = StrToInt(str.SubString(11, 3));
+        //формируем код микроинструкции
+        unsigned opcode = code < 54 ? iSet[ReCode[code]].BitValue : NOP;
+        if (reg != 0xFF)
+            opcode |= reg;
+        opcode |= carry ? ATTR_CARRY : 0;
+        if (op != 0xFF)
+            opcode |= op << 5;
+        //определяем, используется ли перенос в данной инструкции
+        if (code < 54)
+            opcode |= CPU.FindOperand(ReCode[code], OP_CARRY, opcode) ? ATTR_CUSED : 0;
+        //записываем микроинструкцию в редактор кода
+        Code[i] = opcode;
+        CPU.Format(opcode, buf);
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
+
+        UnicodeString comment = str.SubString(15, str.Length() - 14);
+        int Dummy;
+        if (ParseComment(comment, Dummy)) {
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = str.SubString(15, str.Length() - 14);
+        } else {
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = str.SubString(15, str.Length() - 14);
+        }
+    }
+    //очищаем остальные строки
+    for (int i = List->Count - 2; i < MAX_ADDR; i++) {
+        Code[i] = NOP;
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
+        CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+        CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
+    }
+    delete List;
 }
 //---------------------------------------------------------------------------
 
@@ -386,6 +481,52 @@ UnicodeString TX584Form::FixControlComment(UnicodeString cmt)
     return result;
 }
 
+bool TX584Form::ParseInput(UnicodeString str, unsigned &Number)
+{
+    int pos = 1;
+    UnicodeString token = NextWord(str, pos);
+    if (token != L"INPUT" && token != L"ВВОД") {
+        return false;
+    }
+
+    UnicodeString NumberString = str.SubString(pos, str.Length()-pos+1);
+    UnicodeString WithoutSpaces = AnsiLowerCase(ReplaceStr(NumberString.Trim(), L" ", L""));
+
+    Number = 0;
+    if (WithoutSpaces.Length() >= 16) {
+        // скорее всего, двоичные коды
+        int count = 0;
+        for (int i = 1; i <= NumberString.Length() && count < 16; i++) {
+            if (NumberString[i] == L' ') {
+                pos++;
+                continue;
+            }
+            if (NumberString[i] != L'0' && NumberString[i] != L'1')
+                return false;
+            Number = (Number << 1) | (NumberString[i] - L'0');
+            count++;
+            pos++;
+        }
+    }
+    else {
+        NumberString = LowerCase(NextWord(str, pos));
+        int SignedNumber;
+        if (!TryStrToInt(NumberString, SignedNumber))
+                return false;
+        if (SignedNumber < -32768 || SignedNumber > 65535) {
+            Number = 65535;
+        }
+        else if (SignedNumber < 0) {
+            Number = SignedNumber + 65536; // преобразовать в дополнительный код
+        }
+        else {
+            Number = SignedNumber;
+        }
+    }
+
+    return NextWord(str, pos) == L"";
+}
+
 bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
 {
     int pos = 1;
@@ -523,14 +664,16 @@ void TX584Form::Run(int Mode)
                 find = true;
                 if (CPU.FindOperand(i, OP_IN, Code[Instruction])) {
                     ShowState();
-                    InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
-                    InputForm->RMaskEditChange(this);
-                    if (InputForm->ShowModal() == mrOk)
-                        DI = InputForm->Value;
-                    else
-                        //останавливаем выполнение
-                        goto Stop;
+                    if (!ParseInput(CodeListView->Items->Item[Instruction]->SubItems->Strings[2], DI)) {
+                        InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
+                        InputForm->RMaskEditChange(this);
+                        if (InputForm->ShowModal() == mrOk)
+                            DI = InputForm->Value;
+                        else
+                            //останавливаем выполнение
+                            goto Stop;
                     }
+                }
                 break;
             }
         //нашли инструкцию - выполняем
@@ -1217,7 +1360,7 @@ void TX584Form::CopySelectedItems()
     for (size_t i = 0; i < Selected.size(); i++) {
         TListItem *Item = Selected[i];
         int Index = Item->Index;
-
+      
         MIClipboard[i] = Code[Index];
         CFClipboard[i] = Item->SubItems->Strings[2];
         CMClipboard[i] = Item->SubItems->Strings[3];
