@@ -365,6 +365,26 @@ const UnicodeString FlagNames[12] = {L"ПАЛУ3", L"!СДЛ1", L"!СДП1", L"!
     L"РРР0", L"РРР3", L"A15", L"B15", L"ПАЛУ0", L"ПАЛУ1", L"ПАЛУ2"};
 const UnicodeString AltFlagNames[12] = {L"П", L"!СДЛ1", L"!СДП1", L"!СДЛ2", L"!СДП2",
     L"РРР0", L"РРР3", L"А15", L"В15", L"П0", L"П1", L"П2"};
+const UnicodeString EngFlagNames[12] = {L"CO3", L"!SL1", L"!SR1", L"!SL2", L"!SR2",
+    L"XWR0", L"XWR3", L"A15", L"B15", L"CO0", L"CO1", L"CO2"};
+const UnicodeString EngAltFlagNames[12] =  {L"C",  L"!SL1", L"!SR1", L"!SL2", L"!SR2",
+    L"XWR0", L"XWR3", L"A15", L"B15", L"C0", L"C1", L"C2"};
+
+UnicodeString TX584Form::FixControlComment(UnicodeString cmt)
+{
+    TReplaceFlags flags = TReplaceFlags() << rfReplaceAll << rfIgnoreCase;
+    UnicodeString result = cmt;
+
+    for (int i = 0; i < 12; i++) {
+        result = StringReplace(result, L" " + EngFlagNames[i] + L" ", L" " + FlagNames[i] + L" ", flags);
+        // нужно, чтобы "A15" и "B15" не были заменены на их эквиваленты с русскими А и В
+        if (EngAltFlagNames[i] != L"A15" && EngAltFlagNames[i] != L"B15") {
+            result = StringReplace(result, L" " + EngAltFlagNames[i] + L" ", L" " + AltFlagNames[i] + L" ", flags);
+        }
+    }
+
+    return result;
+}
 
 bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
 {
@@ -375,7 +395,7 @@ bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
         token = NextWord(str, pos);
         int flag = 0;
         for (int i = 0; i < 12; i++)
-            if (token == FlagNames[i] || token == AltFlagNames[i]) {
+            if (token == FlagNames[i] || token == AltFlagNames[i] || token == EngFlagNames[i] || token == EngAltFlagNames[i]) {
                 flag = F_CO << i;
                 break;
             }
