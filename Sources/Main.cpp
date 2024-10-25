@@ -444,6 +444,7 @@ void TX584Form::Run(int Mode)
                 find = true;
                 if (CPU.FindOperand(i, OP_IN, Code[Instruction])) {
                     ShowState();
+                    OldInstruction = Instruction;
                     InputForm->RMaskEdit->Text = "0000 0000 0000 0000";
                     InputForm->RMaskEditChange(this);
                     if (InputForm->ShowModal() == mrOk)
