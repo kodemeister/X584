@@ -894,7 +894,8 @@ void __fastcall TX584Form::InputEditExit(TObject *Sender)
     //завершаем редактирование и перерисовываем строку
     if (InputEdit->Visible) {
         int Dummy;
-        if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy)) {
+        unsigned Dummy2;
+        if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy) && !ParseInput(InputEdit->Text, Dummy2)) {
             CodeListView->Scroll(CodeListView->TopItem->Left-LastItemLeft, LastTopItem->Top - CodeListView->TopItem->Top);
             throw Exception(L"Неверный управляющий оператор");
         }
