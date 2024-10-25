@@ -34,7 +34,6 @@
 #pragma resource "*.dfm"
 TX584Form *X584Form;
 //---------------------------------------------------------------------------
-#define NONAME_X584 L"Безымянный.x584"
 __fastcall TX584Form::TX584Form(TComponent* Owner)
     : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), ClipboardSize(0), PreviousSelected(0)
 {
@@ -44,8 +43,13 @@ __fastcall TX584Form::TX584Form(TComponent* Owner)
 
 #define PRJSTR1 L"Проект Микропрограммы Процессора К-584"
 #define PRJSTR2 L"Код РОН П Л/Аоп.           Коментарии"
+
 #define X584 0x34383558
 #define V2P0 0x302E3256
+
+#define NONAME_X584 L"Безымянный.x584"
+
+#define DEFAULT_DPI 96
 
 //Таблица перекодировки для совместимости с предыдущим эмулятором
 unsigned ReCode[54] = {
@@ -832,10 +836,12 @@ void __fastcall TX584Form::ClickTimerTimer(TObject *Sender)
         LastItemLeft = CodeListView->TopItem->Left;
         InputEdit->Left = EditPoint.x;
         InputEdit->Top = EditPoint.y + (LeftImageList->Height - InputEdit->Height) / 2;
+        int DPI = GetDpiForWindow(Handle);
+        int DefaultWidth = MulDiv(96, DPI, DEFAULT_DPI);
         int w1 = CodeListView->Canvas->TextWidth(CodeListView->Items->Item[EditRow]->SubItems->Strings[EditColumn]) + 8;
-        if (w1 < 64)
-            w1 = 64;
-        int w2 = CodeListView->Left + CodeListView->Width - GetSystemMetrics(SM_CXVSCROLL) - InputEdit->Left - 2;
+        if (w1 < DefaultWidth)
+            w1 = DefaultWidth;
+        int w2 = CodeListView->Left + CodeListView->Width - GetSystemMetricsForDpi(SM_CXVSCROLL, DPI) - InputEdit->Left - 2;
         if (w2 < InputEdit->Constraints->MinWidth)
             return;
         InputEdit->Width = w1 < w2 ? w1 : w2;
