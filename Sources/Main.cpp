@@ -371,6 +371,19 @@ const UnicodeString FlagNames[12] = {L"ПАЛУ3", L"!СДЛ1", L"!СДП1", L"!
 const UnicodeString AltFlagNames[12] = {L"П", L"!СДЛ1", L"!СДП1", L"!СДЛ2", L"!СДП2",
     L"РРР0", L"РРР3", L"А15", L"В15", L"П0", L"П1", L"П2"};
 
+unsigned BinaryToUInt(UnicodeString str)
+{
+    unsigned Result = 0;
+    for (int i = 1; i <= str.Length(); i++) {
+        if (str[i] != '0' && str[i] != '1') {
+            throw EConvertError("Неправильный символ: ожидался 0 или 1");
+        }
+        Result = (Result << 1) | (str[i] - '0');
+    }
+
+    return Result;
+}
+
 bool TX584Form::ParseInput(UnicodeString str, unsigned &Number)
 {
     int pos = 1;
@@ -379,39 +392,35 @@ bool TX584Form::ParseInput(UnicodeString str, unsigned &Number)
         return false;
     }
 
-    UnicodeString NumberString = str.SubString(pos, str.Length()-pos+1);
-    UnicodeString WithoutSpaces = AnsiLowerCase(ReplaceStr(NumberString.Trim(), L" ", L""));
+    TRegEx Binary16RegEx(L" *([01]{16})", TRegExOptions());
+    TRegEx Binary4x4RegEx(L" *([01]{4}) ([01]{4}) ([01]{4}) ([01]{4})", TRegExOptions());
 
-    Number = 0;
-    if (WithoutSpaces.Length() >= 16) {
-        // скорее всего, двоичные коды
-        int count = 0;
-        for (int i = 1; i <= NumberString.Length() && count < 16; i++) {
-            if (NumberString[i] == L' ') {
-                pos++;
-                continue;
-            }
-            if (NumberString[i] != L'0' && NumberString[i] != L'1')
-                return false;
-            Number = (Number << 1) | (NumberString[i] - L'0');
-            count++;
-            pos++;
+    if (Binary16RegEx.IsMatch(str, pos)) {
+        // 16 двоичных цифр без разделителей
+        TMatch Match = Binary16RegEx.Match(str, pos);
+        UnicodeString Value = Match.Groups[1].Value;
+        Number = BinaryToUInt(Value);
+        pos += Match.Length;
+    } else if (Binary4x4RegEx.IsMatch(str, pos)) {
+        // 4 двоичных тетрады с разделителями
+        TMatch Match = Binary4x4RegEx.Match(str, pos);
+        for (int i = 1; i <= Match.Groups.Count; i++) {
+            UnicodeString Nibble = Match.Groups[i].Value;
+            Number = (Number << 4) | BinaryToUInt(Nibble);
         }
-    }
-    else {
-        NumberString = LowerCase(NextWord(str, pos));
+        pos += Match.Length;
+    } else {
+        // 16-битное десятичное или шестнадцатиричное число
+        UnicodeString NumberString = AnsiLowerCase(NextWord(str, pos));
         int SignedNumber;
-        if (!TryStrToInt(NumberString, SignedNumber))
-                return false;
+        if (!TryStrToInt(NumberString, SignedNumber)) {
+            return false;
+        }
         if (SignedNumber < -32768 || SignedNumber > 65535) {
-            Number = 65535;
+            return false;
         }
-        else if (SignedNumber < 0) {
-            Number = SignedNumber + 65536; // преобразовать в дополнительный код
-        }
-        else {
-            Number = SignedNumber;
-        }
+
+        Number = (SignedNumber + 65536) & 65535;
     }
 
     return NextWord(str, pos) == L"";
