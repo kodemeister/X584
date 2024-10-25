@@ -1231,7 +1231,7 @@ void __fastcall TX584Form::StepItemClick(TObject *Sender)
 void __fastcall TX584Form::RunToCursorItemClick(TObject *Sender)
 {
     InputEditExit(this);
-    Run(-CodeListView->ItemIndex);
+    Run(-CodeListView->ItemFocused->Index);
 }
 //---------------------------------------------------------------------------
 
