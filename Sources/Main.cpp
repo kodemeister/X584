@@ -193,9 +193,10 @@ void TX584Form::SaveFile(UnicodeString FileName)
             //сохраняем инструкцию
             Writer->Write(static_cast<unsigned short>(Code[i]));
             //сохраняем комментарий
+            unsigned Dummy;
             UnicodeString control = CodeListView->Items->Item[i]->SubItems->Strings[2];
             UnicodeString comment = CodeListView->Items->Item[i]->SubItems->Strings[3];
-            UnicodeString str = control.Length() > 0 ? control : comment;
+            UnicodeString str = (control.Length() > 0 && !ParseInput(control, Dummy)) ? control : comment;
 
             if (str.Length() > 255)
                 str.SetLength(255);
