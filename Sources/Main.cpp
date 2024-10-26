@@ -585,6 +585,7 @@ void TX584Form::Run(int Mode)
                 find = true;
                 if (CPU.FindOperand(i, OP_IN, Code[Instruction])) {
                     ShowState();
+                    OldInstruction = Instruction;
                     if (!ParseInput(CodeListView->Items->Item[Instruction]->SubItems->Strings[2], DI)) {
                         InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
                         InputForm->RMaskEditChange(this);
@@ -1024,6 +1025,7 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
 
 void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
 {
+    CodeListView->SetFocus();
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
         int pos = CodeListView->ItemFocused->Index;
@@ -1440,7 +1442,7 @@ void __fastcall TX584Form::StepItemClick(TObject *Sender)
 void __fastcall TX584Form::RunToCursorItemClick(TObject *Sender)
 {
     InputEditExit(this);
-    Run(-CodeListView->ItemIndex);
+    Run(-CodeListView->ItemFocused->Index);
 }
 //---------------------------------------------------------------------------
 
