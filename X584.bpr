@@ -29,7 +29,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
     <USERDEFINES value="_DEBUG"/>
-    <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
+    <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="X584.cpp"/>
     <INCLUDEPATH value="Sources;..;..\..;K584\K584;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="Sources;..;..\..;K584\K584;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -48,9 +48,9 @@
     <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>
@@ -95,11 +95,11 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=1
-Item0=..;..\..;K584\K584;$(BCB)\include;$(BCB)\include\vcl
+Item0=Sources;..;..\..;K584\K584;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=1
-Item0=..;..\..;K584\K584;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Item0=Sources;..;..\..;K584\K584;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -115,7 +115,7 @@ Item0=Build
 
 [HistoryLists\hlFinalOutputDir]
 Count=1
-Item0=Build
+Item0=Build\
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
