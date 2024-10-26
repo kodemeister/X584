@@ -27,6 +27,7 @@
 #include "About.h"
 #include "FileExport.h"
 #include <Vcl.Clipbrd.hpp>
+#include <System.StrUtils.hpp>
 #include <memory>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -193,9 +194,10 @@ void TX584Form::SaveFile(UnicodeString FileName)
             //сохраняем инструкцию
             Writer->Write(static_cast<unsigned short>(Code[i]));
             //сохраняем комментарий
+            unsigned Dummy;
             UnicodeString control = FixControlComment(CodeListView->Items->Item[i]->SubItems->Strings[2]);
             UnicodeString comment = CodeListView->Items->Item[i]->SubItems->Strings[3];
-            UnicodeString str = control.Length() > 0 ? control : comment;
+            UnicodeString str = (control.Length() > 0 && !ParseInput(control, Dummy)) ? control : comment;
 
             TBytes encodedStr = TEncoding::GetEncoding(1251)->GetBytes(str);
             if (encodedStr.Length > 255)
@@ -390,6 +392,61 @@ UnicodeString TX584Form::FixControlComment(UnicodeString cmt)
     return result;
 }
 
+unsigned BinaryToUInt(UnicodeString str)
+{
+    unsigned Result = 0;
+    for (int i = 1; i <= str.Length(); i++) {
+        if (str[i] != '0' && str[i] != '1') {
+            throw EConvertError("Неправильный символ: ожидался 0 или 1");
+        }
+        Result = (Result << 1) | (str[i] - '0');
+    }
+
+    return Result;
+}
+
+bool TX584Form::ParseInput(UnicodeString str, unsigned &Number)
+{
+    int pos = 1;
+    UnicodeString token = NextWord(str, pos);
+    if (token != L"INPUT" && token != L"ВВОД") {
+        return false;
+    }
+
+    TRegEx Binary16RegEx(L" *([01]{16})", TRegExOptions());
+    TRegEx Binary4x4RegEx(L" *([01]{4}) ([01]{4}) ([01]{4}) ([01]{4})", TRegExOptions());
+
+    if (Binary16RegEx.IsMatch(str, pos)) {
+        // 16 двоичных цифр без разделителей
+        TMatch Match = Binary16RegEx.Match(str, pos);
+        UnicodeString Value = Match.Groups[1].Value;
+        Number = BinaryToUInt(Value);
+        pos += Match.Length;
+    } else if (Binary4x4RegEx.IsMatch(str, pos)) {
+        // 4 двоичных тетрады с разделителями
+        TMatch Match = Binary4x4RegEx.Match(str, pos);
+        for (int i = 1; i <= Match.Groups.Count; i++) {
+            UnicodeString Nibble = Match.Groups[i].Value;
+            Number = (Number << 4) | BinaryToUInt(Nibble);
+        }
+        pos += Match.Length;
+    } else {
+        // 16-битное десятичное или шестнадцатиричное число
+        UnicodeString NumberString = AnsiLowerCase(NextWord(str, pos));
+        int SignedNumber;
+        if (!TryStrToInt(NumberString, SignedNumber)) {
+            return false;
+        }
+        if (SignedNumber < -32768 || SignedNumber > 65535) {
+            return false;
+        }
+
+        Number = (SignedNumber + 65536) & 65535;
+    }
+
+    return NextWord(str, pos) == L"";
+}
+
 bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
 {
     int pos = 1;
@@ -527,14 +584,16 @@ void TX584Form::Run(int Mode)
                 find = true;
                 if (CPU.FindOperand(i, OP_IN, Code[Instruction])) {
                     ShowState();
-                    InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
-                    InputForm->RMaskEditChange(this);
-                    if (InputForm->ShowModal() == mrOk)
-                        DI = InputForm->Value;
-                    else
-                        //останавливаем выполнение
-                        goto Stop;
+                    if (!ParseInput(CodeListView->Items->Item[Instruction]->SubItems->Strings[2], DI)) {
+                        InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
+                        InputForm->RMaskEditChange(this);
+                        if (InputForm->ShowModal() == mrOk)
+                            DI = InputForm->Value;
+                        else
+                            //останавливаем выполнение
+                            goto Stop;
                     }
+                }
                 break;
             }
         //нашли инструкцию - выполняем
@@ -857,7 +916,10 @@ void __fastcall TX584Form::InputEditExit(TObject *Sender)
     //завершаем редактирование и перерисовываем строку
     if (InputEdit->Visible) {
         int Dummy;
-        if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy)) {
+        unsigned Dummy2;
+        if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy) && !ParseInput(InputEdit->Text, Dummy2)) {
+            // отматываем на последнюю позицию редактирования, нельзя, чтобы поле ввода ушло от нужного столбца
+            CodeListView->Scroll(CodeListView->TopItem->Left-LastItemLeft, LastTopItem->Top - CodeListView->TopItem->Top);
             MessageBoxW(Handle, L"Введен неверный управляющий оператор",
                 L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
         } else {
@@ -1223,7 +1285,7 @@ void TX584Form::CopySelectedItems()
     for (size_t i = 0; i < Selected.size(); i++) {
         TListItem *Item = Selected[i];
         int Index = Item->Index;
-
+      
         MIClipboard[i] = Code[Index];
         CFClipboard[i] = Item->SubItems->Strings[2];
         CMClipboard[i] = Item->SubItems->Strings[3];
