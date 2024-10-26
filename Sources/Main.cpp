@@ -28,6 +28,7 @@
 #include "FileExport.h"
 #include <Vcl.Clipbrd.hpp>
 #include <System.StrUtils.hpp>
+#include <System.RegularExpressions.hpp>
 #include <memory>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
