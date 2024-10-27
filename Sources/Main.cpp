@@ -397,10 +397,10 @@ unsigned BinaryToUInt(UnicodeString str)
 {
     unsigned Result = 0;
     for (int i = 1; i <= str.Length(); i++) {
-        if (str[i] != '0' && str[i] != '1') {
-            throw EConvertError("Неправильный символ: ожидался 0 или 1");
+        if (str[i] != L'0' && str[i] != L'1') {
+            throw EConvertError(L"Неправильный символ: ожидался 0 или 1");
         }
-        Result = (Result << 1) | (str[i] - '0');
+        Result = (Result << 1) | (str[i] - L'0');
     }
 
     return Result;
@@ -426,7 +426,11 @@ bool TX584Form::ParseInput(UnicodeString str, unsigned &Number)
     } else if (Binary4x4RegEx.IsMatch(str, pos)) {
         // 4 двоичных тетрады с разделителями
         TMatch Match = Binary4x4RegEx.Match(str, pos);
-        for (int i = 1; i <= Match.Groups.Count; i++) {
+        Number = 0;
+        // группы нумеруются с 0 по (Match.Groups.Count - 1) включительно
+        // нулевая группа содержит всю совпавшую подстроку целиком
+        // остальные группы соответствуют круглым скобкам в регулярном выражении
+        for (int i = 1; i < Match.Groups.Count; i++) {
             UnicodeString Nibble = Match.Groups[i].Value;
             Number = (Number << 4) | BinaryToUInt(Nibble);
         }
@@ -921,7 +925,7 @@ void __fastcall TX584Form::InputEditExit(TObject *Sender)
         unsigned Dummy2;
         if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy) && !ParseInput(InputEdit->Text, Dummy2)) {
             // отматываем на последнюю позицию редактирования, нельзя, чтобы поле ввода ушло от нужного столбца
-            CodeListView->Scroll(CodeListView->TopItem->Left-LastItemLeft, LastTopItem->Top - CodeListView->TopItem->Top);
+            CodeListView->Scroll(CodeListView->TopItem->Left - LastItemLeft, LastTopItem->Top - CodeListView->TopItem->Top);
             MessageBoxW(Handle, L"Введен неверный управляющий оператор",
                 L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
         } else {
@@ -1288,7 +1292,7 @@ void TX584Form::CopySelectedItems()
     for (size_t i = 0; i < Selected.size(); i++) {
         TListItem *Item = Selected[i];
         int Index = Item->Index;
-      
+
         MIClipboard[i] = Code[Index];
         CFClipboard[i] = Item->SubItems->Strings[2];
         CMClipboard[i] = Item->SubItems->Strings[3];
