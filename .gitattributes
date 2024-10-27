@@ -1,3 +1,5 @@
 /Help/**/*.htm working-tree-encoding=cp1251
 /Help/X584.hhc working-tree-encoding=cp1251
 /Help/X584.hhp working-tree-encoding=cp1251
+
+/X584.cbproj   -text
