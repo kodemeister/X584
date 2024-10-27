@@ -1,6 +1,6 @@
 [OPTIONS]
 Compatibility=1.1 or later
-Compiled file=..\Build\X584.chm
+Compiled file=X584.chm
 Contents file=X584.hhc
 Default topic=index.htm
 Display compile progress=No
