@@ -42,6 +42,7 @@
 #include <Vcl.ImageCollection.hpp>
 #include <Vcl.VirtualImageList.hpp>
 #include <Winapi.Messages.hpp>
+#include <vector>
 //---------------------------------------------------------------------------
 
 #define MAX_ADDR        1024
@@ -173,12 +174,15 @@ __published:	// IDE-managed Components
     TVirtualImageList *ButtonsImageList;
     TVirtualImageList *TreeImageList;
     void __fastcall FormCreate(TObject *Sender);
+    void __fastcall FormDestroy(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall ApplicationEventsHint(TObject *Sender);
     void __fastcall ApplicationEventsIdle(TObject *Sender, bool &Done);
     void __fastcall CodeListViewCustomDrawItem(TCustomListView *Sender,
           TListItem *Item, TCustomDrawState State, bool &DefaultDraw);
+    void __fastcall CodeListViewAdvancedCustomDrawItem(TCustomListView *Sender, TListItem *Item,
+          TCustomDrawState State, TCustomDrawStage Stage, bool &DefaultDraw);
     void __fastcall CodeListViewMouseDown(TObject *Sender,
           TMouseButton Button, TShiftState Shift, int X, int Y);
     void __fastcall CodeListViewDblClick(TObject *Sender);
@@ -224,9 +228,14 @@ __published:	// IDE-managed Components
     void __fastcall ResetItemClick(TObject *Sender);
     void __fastcall HelpItemClick(TObject *Sender);
     void __fastcall AboutItemClick(TObject *Sender);
-    void __fastcall FormDestroy(TObject *Sender);
 private:	// User declarations
-    void GetSelection(int &SelStart, int &SelEnd);
+    // Для обработки выбора элемента
+    std::vector<TListItem*> GetSelectedItems();
+    void CopySelectedItems();
+    void ClearSelectedItems();
+    void RemoveSelectedItems();
+    void ClearSelection();
+    int PreviousSelected;
 
     TListItem *LastTopItem;
     int LastItemLeft;
@@ -239,6 +248,12 @@ private:	// User declarations
 BEGIN_MESSAGE_MAP
     MESSAGE_HANDLER(WM_CLIPBOARDUPDATE, TWMNoParams, OnClipboardUpdate);
 END_MESSAGE_MAP(TForm);
+
+    // Для загрузки файлов
+    void LoadX584(TFileStream *Stream);
+    void LoadPRJ(TFileStream *Stream);
+
+    UnicodeString FixControlComment(UnicodeString cmt);
 public:		// User declarations
     K584 CPU;                           //объект процессора
     unsigned Code[MAX_ADDR];            //массив инструкций
@@ -248,12 +263,13 @@ public:		// User declarations
     TButton *ResButton;                 //предыдущая выделенная кнопка фильтра результатов
     unsigned Regs[12];                  //регистры и шины
     unsigned InFlags, OutFlags;         //входные и выходные флаги
-    int SelCount;                       //количество выделенных строк
     unsigned MIClipboard[MAX_ADDR];     //буфер обмена для микроинструкций
+    UnicodeString CFClipboard[MAX_ADDR];//буфер обмена для управляющих команд
     UnicodeString CMClipboard[MAX_ADDR];//буфер обмена для комментариев
     int ClipboardSize;                  //размер буфера обмена
     bool Modified;                      //флаг изменений
     int EditRow;                        //строка редактирования
+    int EditColumn;                     //столбец редактирования
     TPoint EditPoint;                   //точка редактирования
     bool Terminated;                    //флаг завершения выполнения
     int OldInstruction;                 //прежняя выполняемая инструкция
@@ -263,6 +279,7 @@ public:		// User declarations
     void EnableRunControls(bool Flag);
     void BuildTree(int OpFilter, int ResFilter);
     void DrawItem(int Index);
+    bool ParseInput(UnicodeString str, unsigned &Number);
     bool ParseComment(UnicodeString str, int &Instruction);
     void ShowState();
     void Run(int Mode);

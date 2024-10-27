@@ -3,10 +3,10 @@ object X584Form: TX584Form
   Top = 110
   Caption = 'X584'
   ClientHeight = 710
-  ClientWidth = 1090
+  ClientWidth = 1154
   Color = clBtnFace
   Constraints.MinHeight = 680
-  Constraints.MinWidth = 900
+  Constraints.MinWidth = 950
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
@@ -20,13 +20,13 @@ object X584Form: TX584Form
   OnMouseDown = ControlsMouseDown
   OnResize = FormResize
   DesignSize = (
-    1090
+    1154
     710)
   TextHeight = 15
   object CodeListView: TListView
     Left = 3
     Top = 32
-    Width = 532
+    Width = 595
     Height = 650
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
@@ -47,16 +47,25 @@ object X584Form: TX584Form
         Caption = #1052#1085#1077#1084#1086#1082#1086#1076' '#1080#1085#1089#1090#1088#1091#1082#1094#1080#1080
         MaxWidth = 300
         MinWidth = 100
-        Width = 200
+        Width = 180
+      end
+      item
+        Caption = #1059#1087#1088#1072#1074#1083#1103#1102#1097#1080#1081' '#1086#1087#1077#1088#1072#1090#1086#1088
+        MaxWidth = 300
+        MinWidth = 100
+        Width = 150
       end
       item
         Caption = #1050#1086#1084#1084#1077#1085#1090#1072#1088#1080#1081
         MinWidth = 100
-        Width = 200
+        Width = 150
       end>
+    HideSelection = False
+    MultiSelect = True
     SmallImages = EmptyImageList
     TabOrder = 0
     ViewStyle = vsReport
+    OnAdvancedCustomDrawItem = CodeListViewAdvancedCustomDrawItem
     OnCustomDrawItem = CodeListViewCustomDrawItem
     OnDblClick = CodeListViewDblClick
     OnDragDrop = CodeListViewDragDrop
@@ -65,7 +74,7 @@ object X584Form: TX584Form
     OnMouseDown = CodeListViewMouseDown
   end
   object CodeTreeView: TTreeView
-    Left = 544
+    Left = 608
     Top = 32
     Width = 312
     Height = 422
@@ -82,7 +91,7 @@ object X584Form: TX584Form
     OnKeyDown = CodeTreeViewKeyDown
   end
   object RegGroupBox: TGroupBox
-    Left = 864
+    Left = 928
     Top = 32
     Width = 216
     Height = 326
@@ -312,7 +321,7 @@ object X584Form: TX584Form
     end
   end
   object BusGroupBox: TGroupBox
-    Left = 864
+    Left = 928
     Top = 364
     Width = 216
     Height = 90
@@ -362,7 +371,7 @@ object X584Form: TX584Form
     end
   end
   object OutGroupBox: TGroupBox
-    Left = 944
+    Left = 1008
     Top = 460
     Width = 136
     Height = 136
@@ -477,7 +486,7 @@ object X584Form: TX584Form
     end
   end
   object FilterOpGroupBox: TGroupBox
-    Left = 544
+    Left = 608
     Top = 460
     Width = 312
     Height = 96
@@ -585,7 +594,7 @@ object X584Form: TX584Form
     end
   end
   object DescGroupBox: TGroupBox
-    Left = 544
+    Left = 608
     Top = 562
     Width = 312
     Height = 120
@@ -604,7 +613,7 @@ object X584Form: TX584Form
     end
   end
   object InGroupBox: TGroupBox
-    Left = 864
+    Left = 928
     Top = 460
     Width = 72
     Height = 136
@@ -652,7 +661,7 @@ object X584Form: TX584Form
   object ToolBar: TToolBar
     Left = 0
     Top = 0
-    Width = 1090
+    Width = 1154
     Height = 31
     ButtonHeight = 24
     ButtonWidth = 24
@@ -874,7 +883,7 @@ object X584Form: TX584Form
   object StatusBar: TStatusBar
     Left = 0
     Top = 691
-    Width = 1090
+    Width = 1154
     Height = 19
     Panels = <
       item
@@ -907,7 +916,6 @@ object X584Form: TX584Form
     Height = 21
     Constraints.MinWidth = 16
     Ctl3D = False
-    MaxLength = 128
     ParentCtl3D = False
     TabOrder = 10
     Visible = False

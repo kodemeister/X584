@@ -27,6 +27,8 @@
 #include "About.h"
 #include "FileExport.h"
 #include <Vcl.Clipbrd.hpp>
+#include <System.StrUtils.hpp>
+#include <System.RegularExpressions.hpp>
 #include <memory>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -34,9 +36,8 @@
 #pragma resource "*.dfm"
 TX584Form *X584Form;
 //---------------------------------------------------------------------------
-#define NONAME_X584 L"Безымянный.x584"
 __fastcall TX584Form::TX584Form(TComponent* Owner)
-    : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), SelCount(0), ClipboardSize(0)
+    : TForm(Owner), CPU(16), OpFilter(0), ResFilter(-1), ResButton(NULL), ClipboardSize(0), PreviousSelected(0)
 {
     ClipboardFormat = RegisterClipboardFormatW(L"X584 v2 Code");
 }
@@ -44,7 +45,13 @@ __fastcall TX584Form::TX584Form(TComponent* Owner)
 
 #define PRJSTR1 L"Проект Микропрограммы Процессора К-584"
 #define PRJSTR2 L"Код РОН П Л/Аоп.           Коментарии"
+
 #define X584 0x34383558
+#define V2P0 0x302E3256
+
+#define NONAME_X584 L"Безымянный.x584"
+
+#define DEFAULT_DPI 96
 
 //Таблица перекодировки для совместимости с предыдущим эмулятором
 unsigned ReCode[54] = {
@@ -57,69 +64,16 @@ unsigned ReCode[54] = {
 
 void TX584Form::LoadFile(UnicodeString FileName)
 {
-    TFileStream *Stream;
     try {
-        Stream = new TFileStream(FileName, fmOpenRead);
-        UnicodeString ext = UpperCase(ExtractFileExt(FileName));
-        wchar_t buf[256];
+        std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmOpenRead));
+        UnicodeString ext = AnsiUpperCase(ExtractFileExt(FileName));
+
         if (ext == L".X584") {
             //родной формат
-            unsigned Sign;
-            Stream->Read(&Sign, 4);
-            if (Sign != X584)
-                throw EConvertError(L"");
-            for (int i = 0; i < MAX_ADDR; i++) {
-                //загружаем код микроинструкции
-                Stream->Read(&Code[i], 2);
-                //форматируем его
-                CPU.Format(Code[i], buf);
-                CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
-                //загружаем комментарий
-                unsigned char len;
-                char comment[256];
-                Stream->Read(&len, 1);
-                Stream->Read(comment, len);
-                comment[len] = 0;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = AnsiStringT<1251>(comment);
-            }
+            LoadX584(Stream.get());
         } else {
             //текстовый формат *.Prj
-            TStringList *List = new TStringList();
-            List->LoadFromStream(Stream, TEncoding::GetEncoding(1251));
-            //проверяем заголовок
-            if (List->Count < 2 || List->Strings[0] != PRJSTR1 || List->Strings[1] != PRJSTR2)
-                throw EConvertError(L"");
-            //читаем все оставшиеся строки
-            for (int i = 0; i < List->Count - 2; i++) {
-                //читаем поля микроинструкции
-                UnicodeString str = List->Strings[i + 2];
-                unsigned code = StrToInt(str.SubString(1, 3)),
-                         reg = StrToInt(str.SubString(5, 3)),
-                         carry = StrToInt(str.SubString(9, 1)),
-                         op = StrToInt(str.SubString(11, 3));
-                //формируем код микроинструкции
-                unsigned opcode = code < 54 ? iSet[ReCode[code]].BitValue : NOP;
-                if (reg != 0xFF)
-                    opcode |= reg;
-                opcode |= carry ? ATTR_CARRY : 0;
-                if (op != 0xFF)
-                    opcode |= op << 5;
-                //определяем, используется ли перенос в данной инструкции
-                if (code < 54)
-                    opcode |= CPU.FindOperand(ReCode[code], OP_CARRY, opcode) ? ATTR_CUSED : 0;
-                //записываем микроинструкцию в редактор кода
-                Code[i] = opcode;
-                CPU.Format(opcode, buf);
-                CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = str.SubString(15, str.Length() - 14);
-            }
-            //очищаем остальные строки
-            for (int i = List->Count - 2; i < MAX_ADDR; i++) {
-                Code[i] = NOP;
-                CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
-            }
-            delete List;
+            LoadPRJ(Stream.get());
         }
         SetModifyFlag(false);
         ResetItemClick(this);
@@ -134,27 +88,136 @@ void TX584Form::LoadFile(UnicodeString FileName)
         MessageBoxW(Handle, (L"Ошибка открытия файла " + FileName).c_str(),
             L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
-    delete Stream;
+}
+
+void TX584Form::LoadX584(TFileStream *Stream)
+{
+    std::unique_ptr<TBinaryReader> Reader(new TBinaryReader(Stream, TEncoding::UTF8, false));
+    unsigned Sign = Reader->ReadUInt32();
+    if (Sign != X584)
+        throw EConvertError(L"Неверный формат");
+    for (int i = 0; i < MAX_ADDR; i++) {
+        //загружаем код микроинструкции
+        Code[i] = Reader->ReadUInt16();
+        //форматируем его
+        wchar_t buf[64];
+        CPU.Format(Code[i], buf);
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
+        //загружаем комментарий
+        unsigned char len = Reader->ReadByte();
+        TBytes comment = Reader->ReadBytes(len);
+
+        int Dummy;
+        UnicodeString commentStr = TEncoding::GetEncoding(1251)->GetString(comment);
+        if (ParseComment(commentStr, Dummy)) {
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = commentStr;
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
+        } else {
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = commentStr;
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+        }
+    }
+
+    if (Reader->PeekChar() != -1) {
+        Sign = Reader->ReadUInt32();
+        // скорее всего, есть дополнительные данные
+        if (Sign != V2P0)
+            throw EConvertError(L"Неверный формат");
+
+        for (int i = 0; i < MAX_ADDR; i++) {
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = Reader->ReadString();
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = Reader->ReadString();
+        }
+    }
+}
+
+void TX584Form::LoadPRJ(TFileStream *Stream)
+{
+    std::unique_ptr<TStringList> List(new TStringList());
+    List->LoadFromStream(Stream, TEncoding::GetEncoding(1251));
+    //проверяем заголовок
+    if (List->Count < 2 || List->Strings[0] != PRJSTR1 || List->Strings[1] != PRJSTR2)
+        throw EConvertError(L"Неверный формат");
+    //читаем все оставшиеся строки
+    for (int i = 0; i < List->Count - 2; i++) {
+        //читаем поля микроинструкции
+        UnicodeString str = List->Strings[i + 2];
+        unsigned code = StrToInt(str.SubString(1, 3)),
+                 reg = StrToInt(str.SubString(5, 3)),
+                 carry = StrToInt(str.SubString(9, 1)),
+                 op = StrToInt(str.SubString(11, 3));
+        //формируем код микроинструкции
+        unsigned opcode = code < 54 ? iSet[ReCode[code]].BitValue : NOP;
+        if (reg != 0xFF)
+            opcode |= reg;
+        opcode |= carry ? ATTR_CARRY : 0;
+        if (op != 0xFF)
+            opcode |= op << 5;
+        //определяем, используется ли перенос в данной инструкции
+        if (code < 54)
+            opcode |= CPU.FindOperand(ReCode[code], OP_CARRY, opcode) ? ATTR_CUSED : 0;
+        //записываем микроинструкцию в редактор кода
+        Code[i] = opcode;
+        wchar_t buf[64];
+        CPU.Format(opcode, buf);
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = buf;
+
+        UnicodeString comment = str.SubString(15, str.Length() - 14);
+        int Dummy;
+        if (ParseComment(comment, Dummy)) {
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = comment;
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
+        } else {
+            CodeListView->Items->Item[i]->SubItems->Strings[3] = comment;
+            CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+        }
+    }
+    //очищаем остальные строки
+    for (int i = List->Count - 2; i < MAX_ADDR; i++) {
+        Code[i] = NOP;
+        CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
+        CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+        CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
+    }
 }
 //---------------------------------------------------------------------------
 
 void TX584Form::SaveFile(UnicodeString FileName)
 {
-    TFileStream *Stream;
-    try  {
-        Stream = new TFileStream(FileName, fmCreate);
+    try {
+        std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmCreate));
+        std::unique_ptr<TBinaryWriter> Writer(new TBinaryWriter(Stream.get(), TEncoding::UTF8, false));
+
         //сохраняем в родном формате
-        unsigned Sign = X584;
-        Stream->Write(&Sign, 4);
+        unsigned int Sign = X584;
+        Writer->Write(Sign);
         for (int i = 0; i < MAX_ADDR; i++) {
             //сохраняем инструкцию
-            Stream->Write(&Code[i], 2);
+            Writer->Write(static_cast<unsigned short>(Code[i]));
             //сохраняем комментарий
-            AnsiStringT<1251> str = CodeListView->Items->Item[i]->SubItems->Strings[2];
-            unsigned char len = str.Length();
-            Stream->Write(&len, 1);
-            Stream->Write(str.c_str(), len);
+            unsigned Dummy;
+            UnicodeString control = FixControlComment(CodeListView->Items->Item[i]->SubItems->Strings[2]);
+            UnicodeString comment = CodeListView->Items->Item[i]->SubItems->Strings[3];
+            UnicodeString str = (control.Length() > 0 && !ParseInput(control, Dummy)) ? control : comment;
+
+            TBytes encodedStr = TEncoding::GetEncoding(1251)->GetBytes(str);
+            if (encodedStr.Length > 255)
+                encodedStr.Length = 255;
+
+            unsigned char len = encodedStr.Length;
+            Writer->Write(len);
+            Writer->Write(encodedStr);
         }
+
+        //сохраняем новые данные
+        Sign = V2P0;
+        Writer->Write(Sign);
+
+        for (int i = 0; i < MAX_ADDR; i++) {
+            Writer->Write(CodeListView->Items->Item[i]->SubItems->Strings[2]);
+            Writer->Write(CodeListView->Items->Item[i]->SubItems->Strings[3]);
+        }
+
         SetModifyFlag(false);
         OpenDialog->FileName = FileName;
     }
@@ -162,7 +225,6 @@ void TX584Form::SaveFile(UnicodeString FileName)
         MessageBoxW(Handle, (L"Ошибка сохранения файла " + FileName).c_str(),
             L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
     }
-    delete Stream;
 }
 //---------------------------------------------------------------------------
 
@@ -310,6 +372,85 @@ const UnicodeString FlagNames[12] = {L"ПАЛУ3", L"!СДЛ1", L"!СДП1", L"!
     L"РРР0", L"РРР3", L"A15", L"B15", L"ПАЛУ0", L"ПАЛУ1", L"ПАЛУ2"};
 const UnicodeString AltFlagNames[12] = {L"П", L"!СДЛ1", L"!СДП1", L"!СДЛ2", L"!СДП2",
     L"РРР0", L"РРР3", L"А15", L"В15", L"П0", L"П1", L"П2"};
+const UnicodeString EngFlagNames[12] = {L"CO3", L"!SL1", L"!SR1", L"!SL2", L"!SR2",
+    L"XWR0", L"XWR3", L"A15", L"B15", L"CO0", L"CO1", L"CO2"};
+const UnicodeString EngAltFlagNames[12] =  {L"C",  L"!SL1", L"!SR1", L"!SL2", L"!SR2",
+    L"XWR0", L"XWR3", L"A15", L"B15", L"C0", L"C1", L"C2"};
+
+UnicodeString TX584Form::FixControlComment(UnicodeString cmt)
+{
+    TReplaceFlags flags = TReplaceFlags() << rfReplaceAll << rfIgnoreCase;
+    UnicodeString result = cmt;
+
+    for (int i = 0; i < 12; i++) {
+        result = StringReplace(result, L" " + EngFlagNames[i] + L" ", L" " + FlagNames[i] + L" ", flags);
+        // нужно, чтобы "A15" и "B15" не были заменены на их эквиваленты с русскими А и В
+        if (EngAltFlagNames[i] != L"A15" && EngAltFlagNames[i] != L"B15") {
+            result = StringReplace(result, L" " + EngAltFlagNames[i] + L" ", L" " + AltFlagNames[i] + L" ", flags);
+        }
+    }
+
+    return result;
+}
+
+unsigned BinaryToUInt(UnicodeString str)
+{
+    unsigned Result = 0;
+    for (int i = 1; i <= str.Length(); i++) {
+        if (str[i] != L'0' && str[i] != L'1') {
+            throw EConvertError(L"Неправильный символ: ожидался 0 или 1");
+        }
+        Result = (Result << 1) | (str[i] - L'0');
+    }
+
+    return Result;
+}
+
+bool TX584Form::ParseInput(UnicodeString str, unsigned &Number)
+{
+    int pos = 1;
+    UnicodeString token = NextWord(str, pos);
+    if (token != L"INPUT" && token != L"ВВОД") {
+        return false;
+    }
+
+    TRegEx Binary16RegEx(L" *([01]{16})", TRegExOptions());
+    TRegEx Binary4x4RegEx(L" *([01]{4}) ([01]{4}) ([01]{4}) ([01]{4})", TRegExOptions());
+
+    if (Binary16RegEx.IsMatch(str, pos)) {
+        // 16 двоичных цифр без разделителей
+        TMatch Match = Binary16RegEx.Match(str, pos);
+        UnicodeString Value = Match.Groups[1].Value;
+        Number = BinaryToUInt(Value);
+        pos += Match.Length;
+    } else if (Binary4x4RegEx.IsMatch(str, pos)) {
+        // 4 двоичных тетрады с разделителями
+        TMatch Match = Binary4x4RegEx.Match(str, pos);
+        Number = 0;
+        // группы нумеруются с 0 по (Match.Groups.Count - 1) включительно
+        // нулевая группа содержит всю совпавшую подстроку целиком
+        // остальные группы соответствуют круглым скобкам в регулярном выражении
+        for (int i = 1; i < Match.Groups.Count; i++) {
+            UnicodeString Nibble = Match.Groups[i].Value;
+            Number = (Number << 4) | BinaryToUInt(Nibble);
+        }
+        pos += Match.Length;
+    } else {
+        // 16-битное десятичное или шестнадцатиричное число
+        UnicodeString NumberString = AnsiLowerCase(NextWord(str, pos));
+        int SignedNumber;
+        if (!TryStrToInt(NumberString, SignedNumber)) {
+            return false;
+        }
+        if (SignedNumber < -32768 || SignedNumber > 65535) {
+            return false;
+        }
+
+        Number = (SignedNumber + 65536) & 65535;
+    }
+
+    return NextWord(str, pos) == L"";
+}
 
 bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
 {
@@ -320,7 +461,7 @@ bool TX584Form::ParseComment(UnicodeString str, int &Instruction)
         token = NextWord(str, pos);
         int flag = 0;
         for (int i = 0; i < 12; i++)
-            if (token == FlagNames[i] || token == AltFlagNames[i]) {
+            if (token == FlagNames[i] || token == AltFlagNames[i] || token == EngFlagNames[i] || token == EngAltFlagNames[i]) {
                 flag = F_CO << i;
                 break;
             }
@@ -448,14 +589,17 @@ void TX584Form::Run(int Mode)
                 find = true;
                 if (CPU.FindOperand(i, OP_IN, Code[Instruction])) {
                     ShowState();
-                    InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
-                    InputForm->RMaskEditChange(this);
-                    if (InputForm->ShowModal() == mrOk)
-                        DI = InputForm->Value;
-                    else
-                        //останавливаем выполнение
-                        goto Stop;
+                    OldInstruction = Instruction;
+                    if (!ParseInput(CodeListView->Items->Item[Instruction]->SubItems->Strings[2], DI)) {
+                        InputForm->RMaskEdit->Text = L"0000 0000 0000 0000";
+                        InputForm->RMaskEditChange(this);
+                        if (InputForm->ShowModal() == mrOk)
+                            DI = InputForm->Value;
+                        else
+                            //останавливаем выполнение
+                            goto Stop;
                     }
+                }
                 break;
             }
         //нашли инструкцию - выполняем
@@ -497,6 +641,7 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
         Item->Caption = L"";
         //добавляем колонки
         Item->SubItems->Add(UnicodeString().sprintf(L"%03d.", i));
+        Item->SubItems->Add(L"");
         Item->SubItems->Add(L"");
         Item->SubItems->Add(L"");
     }
@@ -583,16 +728,13 @@ void __fastcall TX584Form::CodeListViewCustomDrawItem(
         (Code[Item->Index] & ATTR_BREAKPOINT ? 3 : 2) : (Code[Item->Index] & ATTR_BREAKPOINT ? 1 : 0), true);
     //рисуем фон
     Rect.Left += LeftImageList->Width;
-    if ((SelCount > 0 && Item->Index >= CodeListView->ItemFocused->Index &&
-                         Item->Index < CodeListView->ItemFocused->Index + SelCount) ||
-        (SelCount < 0 && Item->Index >= CodeListView->ItemFocused->Index + SelCount &&
-                         Item->Index <= CodeListView->ItemFocused->Index)) {
-        //выделяем стандартным цветом
-        CodeListView->Canvas->Brush->Color = SEL_COLOR;
-        CodeListView->Canvas->FillRect(Rect);
-    } else {
+    if (!Item->Selected) {
         //нечетные строки - цветные, четные - белые
         CodeListView->Canvas->Brush->Color = Item->Index & 0x01 ? ROW_COLOR : clWhite;
+        CodeListView->Canvas->FillRect(Rect);
+    }
+    else {
+        CodeListView->Canvas->Brush->Color = SEL_COLOR;
         CodeListView->Canvas->FillRect(Rect);
     }
     //отображаем флажки
@@ -603,30 +745,59 @@ void __fastcall TX584Form::CodeListViewCustomDrawItem(
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TX584Form::CodeListViewAdvancedCustomDrawItem(TCustomListView *Sender,
+          TListItem *Item, TCustomDrawState State, TCustomDrawStage Stage,
+          bool &DefaultDraw)
+{
+    DefaultDraw = false;
+    TRect Rectangle = Item->DisplayRect(drBounds);
+    TRect TextRectangle;
+
+    for (int i = 1; i < CodeListView->Columns->Count; i++) {
+        TTextFormat format = TTextFormat();
+
+        Rectangle.Left += CodeListView->Columns->Items[i-1]->Width;
+        Rectangle.Right = Rectangle.Left + CodeListView->Columns->Items[i]->Width;
+        TextRectangle = Rectangle;
+
+        switch (CodeListView->Columns->Items[i]->Alignment) {
+        case taLeftJustify:
+            format = format << tfLeft;
+            TextRectangle.Left += 7;
+            TextRectangle.Right -= 7;
+            break;
+        case taRightJustify:
+            format = format << tfRight;
+            TextRectangle.Left += 7;
+            TextRectangle.Right -= 7;
+            break;
+        case taCenter:
+            format = format << tfCenter;
+            break;
+        }
+        format = format << tfVerticalCenter;
+        format = format << tfSingleLine;
+        format = format << tfEndEllipsis;
+        format = format << tfNoPrefix;
+
+        UnicodeString str = Item->SubItems->Strings[i-1];
+        CodeListView->Canvas->TextRect(TextRectangle, str, format);
+    }
+}
+//---------------------------------------------------------------------------
 void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
     //определяем выделенный ряд
-    int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / LeftImageList->Height;
-    if (Row >= MAX_ADDR)
-        Row = MAX_ADDR - 1;
-    bool WasSelected = CodeListView->ItemFocused->Index == Row;
-    TListItem *Item = CodeListView->Items->Item[Row];
-    //проверяем, не зажата ли клавиша Shift
-    if (Shift.Contains(ssShift)) {
-        //выделяем элементы до предыдущего выделения
-        SelCount = Row - CodeListView->ItemFocused->Index;
-        if (SelCount >= 0)
-            SelCount++;
-        CodeListView->Repaint();
+    int Row = CodeListView->ItemFocused->Index;
+    TListItem *Item = CodeListView->ItemFocused;
+    bool WasSelected = (PreviousSelected == Row);
+    //проверяем, не зажата ли клавиша Shift или Ctrl
+    if (Shift.Contains(ssShift)||Shift.Contains(ssCtrl)) {
         return;
     }
-    if (SelCount != 1) {
-        SelCount = 1;
-        CodeListView->Repaint();
-    }
+
     CodeListView->ItemIndex = Row;
-    CodeListView->ItemFocused = Item;
     TRect Rect = Item->DisplayRect(drBounds);
     //проверяем, не поставили ли точку останова
     if (X - Rect.Left < LeftImageList->Width) {
@@ -655,28 +826,33 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
     } else {
         Rect.Left += CodeListView->Columns->Items[0]->Width + CodeListView->Columns->Items[1]->Width +
             CodeListView->Columns->Items[2]->Width;
-        if (WasSelected && X > Rect.Left) {
-            //щелкнули в области колонки комментариев - запускаем таймер редактирования
+        Rect.Right = Rect.Left + CodeListView->Columns->Items[3]->Width;
+        if (WasSelected && X >= Rect.Left && X <= Rect.Right) {
+            //щелкнули в области колонки управляющих команд - запускаем таймер редактирования
             EditRow = Row;
+            EditColumn = 2;
             EditPoint.x = CodeListView->Left + Rect.Left + 8;
             EditPoint.y = CodeListView->Top + Rect.Top + 2;
             //перезапускаем таймер
             ClickTimer->Enabled = false;
             ClickTimer->Enabled = true;
         }
+        else {
+            Rect.Left = Rect.Right;
+            Rect.Right = Rect.Left + CodeListView->Columns->Items[4]->Width;
+            if (WasSelected && X >= Rect.Left && X <= Rect.Right) {
+                //щелкнули в области колонки комментариев - запускаем таймер редактирования
+                EditRow = Row;
+                EditColumn = 3;
+                EditPoint.x = CodeListView->Left + Rect.Left + 8;
+                EditPoint.y = CodeListView->Top + Rect.Top + 2;
+                //перезапускаем таймер
+                ClickTimer->Enabled = false;
+                ClickTimer->Enabled = true;
+            }
+        }
     }
-}
-//---------------------------------------------------------------------------
-
-void TX584Form::GetSelection(int &SelStart, int &SelEnd)
-{
-    if (SelCount > 0) {
-        SelStart = CodeListView->ItemFocused->Index;
-        SelEnd = SelStart + SelCount;
-    } else {
-        SelStart = CodeListView->ItemFocused->Index + SelCount;
-        SelEnd = SelStart + (1 - SelCount);
-    }
+    PreviousSelected = Row;
 }
 //---------------------------------------------------------------------------
 
@@ -711,54 +887,6 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
         InsertItemClick(this);
         Key = 0;
         break;
-    case VK_UP:
-        if (GetKeyState(VK_SHIFT) & 0x8000) {
-            int index = CodeListView->ItemFocused->Index + (SelCount < 0 ? SelCount : SelCount - 1);
-            //перерисовываем элемент
-            if (index) {
-                if (--SelCount >= 1) {
-                    DrawItem(index);
-                } else {
-                    if (SelCount == 0)
-                        SelCount = -1;
-                    DrawItem(index - 1);
-                }
-            }
-            Key = 0;    
-        } else
-            if (SelCount != 1) {
-                SelCount = 1;
-                CodeListView->Repaint();
-            }
-        break;
-    case VK_DOWN:
-        if (GetKeyState(VK_SHIFT) & 0x8000) {
-            int index = CodeListView->ItemFocused->Index + (SelCount < 0 ? SelCount : SelCount - 1);
-            if (index != MAX_ADDR - 1) {
-                if (++SelCount > 1) {
-                    DrawItem(index + 1);
-                } else {
-                    if (SelCount == 0)
-                        SelCount = 1;
-                    DrawItem(index);
-                }
-            }
-            Key = 0;
-        } else
-            if (SelCount != 1) {
-                SelCount = 1;
-                CodeListView->Repaint();
-            }
-        break;
-    case VK_PRIOR:
-    case VK_NEXT:
-    case VK_HOME:
-    case VK_END:
-        if (SelCount != 1) {
-            SelCount = 1;
-            CodeListView->Repaint();
-        }
-        break;
     }
 }
 //---------------------------------------------------------------------------
@@ -773,14 +901,16 @@ void __fastcall TX584Form::ClickTimerTimer(TObject *Sender)
         LastItemLeft = CodeListView->TopItem->Left;
         InputEdit->Left = EditPoint.x;
         InputEdit->Top = EditPoint.y + (LeftImageList->Height - InputEdit->Height) / 2;
-        int w1 = CodeListView->Canvas->TextWidth(CodeListView->Items->Item[EditRow]->SubItems->Strings[2]) + 8;
-        if (w1 < 64)
-            w1 = 64;
-        int w2 = CodeListView->Left + CodeListView->Width - GetSystemMetrics(SM_CXVSCROLL) - InputEdit->Left - 2;
+        int DPI = GetDpiForWindow(Handle);
+        int DefaultWidth = MulDiv(96, DPI, DEFAULT_DPI);
+        int w1 = CodeListView->Canvas->TextWidth(CodeListView->Items->Item[EditRow]->SubItems->Strings[EditColumn]) + 8;
+        if (w1 < DefaultWidth)
+            w1 = DefaultWidth;
+        int w2 = CodeListView->Left + CodeListView->Width - GetSystemMetricsForDpi(SM_CXVSCROLL, DPI) - InputEdit->Left - 2;
         if (w2 < InputEdit->Constraints->MinWidth)
             return;
         InputEdit->Width = w1 < w2 ? w1 : w2;
-        InputEdit->Text = CodeListView->Items->Item[EditRow]->SubItems->Strings[2];
+        InputEdit->Text = CodeListView->Items->Item[EditRow]->SubItems->Strings[EditColumn];
         InputEdit->Visible = true;
         InputEdit->SetFocus();
     }
@@ -791,7 +921,16 @@ void __fastcall TX584Form::InputEditExit(TObject *Sender)
 {
     //завершаем редактирование и перерисовываем строку
     if (InputEdit->Visible) {
-        CodeListView->Items->Item[EditRow]->SubItems->Strings[2] = InputEdit->Text;
+        int Dummy;
+        unsigned Dummy2;
+        if (EditColumn == 2 && InputEdit->Text.Length() && !ParseComment(InputEdit->Text, Dummy) && !ParseInput(InputEdit->Text, Dummy2)) {
+            // отматываем на последнюю позицию редактирования, нельзя, чтобы поле ввода ушло от нужного столбца
+            CodeListView->Scroll(CodeListView->TopItem->Left - LastItemLeft, LastTopItem->Top - CodeListView->TopItem->Top);
+            MessageBoxW(Handle, L"Введен неверный управляющий оператор",
+                L"Ошибка", MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL);
+        } else {
+            CodeListView->Items->Item[EditRow]->SubItems->Strings[EditColumn] = InputEdit->Text;
+        }
         InputEdit->Visible = false;
         CodeListView->SetFocus();
     }
@@ -836,13 +975,12 @@ void __fastcall TX584Form::CodeListViewDragOver(TObject *Sender,
         Accept = TreeView->Selected->Count == 0;
         if (Accept) {
             //выделяем элемент, над которым перемещается указатель мыши
-            int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / LeftImageList->Height;
+            int RowHeight = CodeListView->TopItem->DisplayRect(drBounds).Height();
+            int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / RowHeight;
             if (Row >= MAX_ADDR)
                 Row = MAX_ADDR - 1;
-            if (SelCount != 1) {
-                SelCount = 1;
-                CodeListView->Repaint();
-            }
+            ClearSelection();
+
             CodeListView->ItemIndex = Row;
             TListItem *Item = CodeListView->Items->Item[Row];
             CodeListView->ItemFocused = Item;
@@ -891,15 +1029,10 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
 
 void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
 {
+    CodeListView->SetFocus();
     TTreeNode *Node = CodeTreeView->Selected;
     if (!Node->Count) {
         int pos = CodeListView->ItemFocused->Index;
-        // если выделено несколько элементов, берём самый верхний
-        if (SelCount != 1) {
-            int SelEnd;
-            GetSelection(pos, SelEnd);
-            SelCount = 1;
-        }
         if (InsertItem->Checked)
             //сдвигаем весь код на одну позицию вправо
             for (int i = MAX_ADDR - 1; i > pos; i--) {
@@ -908,6 +1041,8 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
                     CodeListView->Items->Item[i - 1]->SubItems->Strings[1];
                 CodeListView->Items->Item[i]->SubItems->Strings[2] =
                     CodeListView->Items->Item[i - 1]->SubItems->Strings[2];
+                CodeListView->Items->Item[i]->SubItems->Strings[3] =
+                    CodeListView->Items->Item[i - 1]->SubItems->Strings[3];
             }
         //форматируем и добавляем инструкцию
         Code[pos] = (unsigned)Node->Data;
@@ -915,8 +1050,11 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
         CPU.Format(Code[pos], str);
         CodeListView->Items->Item[pos]->SubItems->Strings[1] = str;
         CodeListView->Items->Item[pos]->SubItems->Strings[2] = L"";
+        CodeListView->Items->Item[pos]->SubItems->Strings[3] = L"";
         if (++pos >= MAX_ADDR)
             pos = MAX_ADDR - 1;
+        ClearSelection();
+        CodeListView->ItemFocused->Selected = false;
         CodeListView->ItemIndex = pos;
         CodeListView->ItemFocused = CodeListView->Items->Item[pos];
         CodeListView->Repaint();
@@ -988,6 +1126,12 @@ void __fastcall TX584Form::FilterResButtonClick(TObject *Sender)
 
 void __fastcall TX584Form::RegMaskEditKeyPress(TObject *Sender, char &Key)
 {
+    // обработка нажатия Enter
+    if (Key == '\r') {
+        Key = 0;
+        RegMaskEditDblClick(Sender);
+        return;
+    }
     //фильтруем ненужные цифры
     if (Key >= '2' && Key <= '9')
         Key = 0;
@@ -1042,6 +1186,7 @@ void __fastcall TX584Form::NewItemClick(TObject *Sender)
         Code[i] = NOP;
         CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
         CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
+        CodeListView->Items->Item[i]->SubItems->Strings[3] = L"";
     }
     //сбрасываем состояние регистров
     ResetItemClick(this);
@@ -1126,24 +1271,42 @@ void __fastcall TX584Form::CutItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+std::vector<TListItem*> TX584Form::GetSelectedItems()
+{
+    std::vector<TListItem*> result;
+    TItemStates selected = TItemStates() << isSelected;
+
+    for (TListItem *Item = CodeListView->Selected; Item;
+        Item = CodeListView->GetNextItem(Item, sdBelow, selected)) {
+        result.push_back(Item);
+    }
+
+    return result;
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::CopySelectedItems()
+{
+    std::vector<TListItem *> Selected = GetSelectedItems();
+
+    for (size_t i = 0; i < Selected.size(); i++) {
+        TListItem *Item = Selected[i];
+        int Index = Item->Index;
+
+        MIClipboard[i] = Code[Index];
+        CFClipboard[i] = Item->SubItems->Strings[2];
+        CMClipboard[i] = Item->SubItems->Strings[3];
+    }
+
+    ClipboardSize = Selected.size();
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         //сохраняем инструкции в буфере обмена
-        int index = CodeListView->ItemFocused->Index;
-        if (SelCount > 0) {
-            ClipboardSize = SelCount;
-            for (int i = 0; i < ClipboardSize; i++) {
-                MIClipboard[i] = Code[index + i];
-                CMClipboard[i] = CodeListView->Items->Item[index + i]->SubItems->Strings[2];
-            }
-        } else {
-            ClipboardSize = 1 - SelCount;
-            for (int i = 0; i < ClipboardSize; i++) {
-                MIClipboard[i] = Code[index + SelCount + i];
-                CMClipboard[i] = CodeListView->Items->Item[index + SelCount + i]->SubItems->Strings[2];
-            }
-        }
+        CopySelectedItems();
         PutIntoClipboard();
     } else
         PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
@@ -1165,7 +1328,10 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
                     CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[1];
                 CodeListView->Items->Item[i]->SubItems->Strings[2] =
                     CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[2];
+                CodeListView->Items->Item[i]->SubItems->Strings[3] =
+                    CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[3];
             }
+        ClearSelection();
         //на освободившееся место помещаем инструкции из буфера обмена
         for (int i = 0; i < ClipboardSize; i++)
             if (index + i < MAX_ADDR) {
@@ -1173,11 +1339,11 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
                 wchar_t str[64];
                 CPU.Format(Code[index + i], str);
                 CodeListView->Items->Item[index + i]->SubItems->Strings[1] = str;
-                CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CMClipboard[i];
+                CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CFClipboard[i];
+                CodeListView->Items->Item[index + i]->SubItems->Strings[3] = CMClipboard[i];
+                CodeListView->Items->Item[index + i]->Selected = true;
             }
-        SelCount = ClipboardSize;
-        if (index + SelCount > MAX_ADDR)
-            SelCount = MAX_ADDR - index;
+
         CodeListView->Repaint();
         SetModifyFlag(true);
     } else
@@ -1185,40 +1351,70 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::ClearSelectedItems()
+{
+    std::vector<TListItem *> Selected = GetSelectedItems();
+
+    for (size_t i = 0; i < Selected.size(); i++) {
+        TListItem *Item = Selected[i];
+        int Index = Item->Index;
+
+        Code[Index] = NOP;
+        Item->SubItems->Strings[1] = NOP_TEXT;
+        Item->SubItems->Strings[2] = L"";
+        Item->SubItems->Strings[3] = L"";
+    }
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::RemoveSelectedItems()
+{
+    int OldIndex, NewIndex;
+
+    for (OldIndex = 0, NewIndex = 0; OldIndex < MAX_ADDR; OldIndex++) {
+        if (!CodeListView->Items->Item[OldIndex]->Selected) {
+            Code[NewIndex] = Code[OldIndex];
+
+            TListItem *OldItem = CodeListView->Items->Item[OldIndex];
+            TListItem *NewItem = CodeListView->Items->Item[NewIndex];
+            NewItem->SubItems->Strings[1] = OldItem->SubItems->Strings[1];
+            NewItem->SubItems->Strings[2] = OldItem->SubItems->Strings[2];
+            NewItem->SubItems->Strings[3] = OldItem->SubItems->Strings[3];
+            NewIndex++;
+        }
+    }
+
+    for (; NewIndex < MAX_ADDR; NewIndex++) {
+        Code[NewIndex] = NOP;
+        CodeListView->Items->Item[NewIndex]->SubItems->Strings[1] = NOP_TEXT;
+        CodeListView->Items->Item[NewIndex]->SubItems->Strings[2] = L"";
+        CodeListView->Items->Item[NewIndex]->SubItems->Strings[3] = L"";
+    }
+}
+//---------------------------------------------------------------------------
+
+void TX584Form::ClearSelection()
+{
+    TListItem *FocusedItem = CodeListView->ItemFocused;
+
+    for (int i = 0; i < CodeListView->Items->Count; i++) {
+        CodeListView->Items->Item[i]->Selected = false;
+    }
+
+    if (FocusedItem) {
+        FocusedItem->Selected = true;
+    }
+}
+//---------------------------------------------------------------------------
 void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
-            int SelStart, SelEnd, SelLength;
-            GetSelection(SelStart, SelEnd);
-            SelLength = SelEnd - SelStart;
-            //сдвигаем все инструкции на SelLength позиций влево
-            for (int i = SelStart; i < MAX_ADDR; i++)
-                if (i + SelLength < MAX_ADDR) {
-                    Code[i] = Code[i + SelLength];
-                    CodeListView->Items->Item[i]->SubItems->Strings[1] =
-                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[1];
-                    CodeListView->Items->Item[i]->SubItems->Strings[2] =
-                        CodeListView->Items->Item[i + SelLength]->SubItems->Strings[2];
-                } else {
-                    //очищаем инструкции
-                    Code[i] = NOP;
-                    CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                    CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
-                }
+            RemoveSelectedItems();
             //снимаем выделение
-            SelCount = 1;
-            CodeListView->ItemIndex = SelStart;
-            CodeListView->ItemFocused = CodeListView->Items->Item[SelStart];
+            ClearSelection();
         } else {
-            int SelStart, SelEnd;
-            GetSelection(SelStart, SelEnd);
-            //очищаем выделенные инструкции
-            for (int i = SelStart; i < SelEnd; i++) {
-                Code[i] = NOP;
-                CodeListView->Items->Item[i]->SubItems->Strings[1] = NOP_TEXT;
-                CodeListView->Items->Item[i]->SubItems->Strings[2] = L"";
-            }
+            ClearSelectedItems();
         }
         CodeListView->Repaint();
         SetModifyFlag(true);
@@ -1250,7 +1446,7 @@ void __fastcall TX584Form::StepItemClick(TObject *Sender)
 void __fastcall TX584Form::RunToCursorItemClick(TObject *Sender)
 {
     InputEditExit(this);
-    Run(-CodeListView->ItemIndex);
+    Run(-CodeListView->ItemFocused->Index);
 }
 //---------------------------------------------------------------------------
 
@@ -1276,9 +1472,10 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
         dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked = i >= 1 && i <= 4;
     //перерисовываем редактор кода
     Instruction = 0;
+    ClearSelection();
     CodeListView->ItemIndex = 0;
-    SelCount = 1;
     CodeListView->ItemFocused = CodeListView->Items->Item[0];
+    CodeListView->ItemFocused->Selected = true;
     CodeListView->Repaint();
     Terminated = true;
 }
@@ -1308,6 +1505,7 @@ void TX584Form::PutIntoClipboard()
     Writer->Write(ClipboardSize);
     for (int i = 0; i < ClipboardSize; i++) {
         Writer->Write(MIClipboard[i]);
+        Writer->Write(CFClipboard[i]);
         Writer->Write(CMClipboard[i]);
     }
 
@@ -1351,6 +1549,7 @@ void TX584Form::GetFromClipboard()
     ClipboardSize = Reader->ReadInt32();
     for (int i = 0; i < ClipboardSize; i++) {
         MIClipboard[i] = Reader->ReadUInt32();
+        CFClipboard[i] = Reader->ReadString();
         CMClipboard[i] = Reader->ReadString();
     }
 }
