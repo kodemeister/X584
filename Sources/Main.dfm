@@ -14,6 +14,7 @@ object X584Form: TX584Form
   Font.Style = []
   Menu = MainMenu
   Position = poScreenCenter
+  OnAfterMonitorDpiChanged = FormAfterMonitorDpiChanged
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
