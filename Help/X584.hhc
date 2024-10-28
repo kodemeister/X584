@@ -50,51 +50,51 @@
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &ecirc;&iacute;&icirc;&iuml;&icirc;&ecirc;">
-			<param name="Local" value="Program\buttons.htm">
+			<param name="Local" value="Program\program.htm#buttons">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Icirc;&ecirc;&iacute;&icirc; &ntilde;&egrave;&ntilde;&ograve;&aring;&igrave;&ucirc; &igrave;&egrave;&ecirc;&eth;&icirc;&ecirc;&icirc;&igrave;&agrave;&iacute;&auml; &Ouml;&Iuml;&Yacute; &Ecirc;584&Acirc;&Igrave;1">
-			<param name="Local" value="Program\microcommands.htm">
+			<param name="Local" value="Program\program.htm#microcommands">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &ccedil;&iacute;&agrave;&divide;&aring;&iacute;&egrave;&eacute; &eth;&aring;&atilde;&egrave;&ntilde;&ograve;&eth;&icirc;&acirc; &Ouml;&Iuml;&Yacute; &Ecirc;584&Acirc;&Igrave;1">
-			<param name="Local" value="Program\registers.htm">
+			<param name="Local" value="Program\program.htm#registers">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&aring;&eth;&aring;&ecirc;&euml;&thorn;&divide;&agrave;&ograve;&aring;&euml;&uuml;, &icirc;&ograve;&acirc;&aring;&divide;&agrave;&thorn;&ugrave;&egrave;&eacute; &ccedil;&agrave; &Acirc;&otilde;&Iuml;&Agrave;&Euml;&Oacute;">
-			<param name="Local" value="Program\carryin.htm">
+			<param name="Local" value="Program\program.htm#carryin">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &ccedil;&iacute;&agrave;&divide;&aring;&iacute;&egrave;&eacute; &oslash;&egrave;&iacute; &Ouml;&Iuml;&Yacute; &Ecirc;584&Acirc;&Igrave;1">
-			<param name="Local" value="Program\buses.htm">
+			<param name="Local" value="Program\program.htm#buses">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &ccedil;&iacute;&agrave;&divide;&aring;&iacute;&egrave;&eacute; &acirc;&ucirc;&acirc;&icirc;&auml;&icirc;&acirc; &Ouml;&Iuml;&Yacute; &Ecirc;584&Acirc;&Igrave;1">
-			<param name="Local" value="Program\outputs.htm">
+			<param name="Local" value="Program\program.htm#outputs">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Icirc;&ecirc;&iacute;&icirc; &eth;&aring;&auml;&agrave;&ecirc;&ograve;&egrave;&eth;&icirc;&acirc;&agrave;&iacute;&egrave;&yuml; &igrave;&egrave;&ecirc;&eth;&icirc;&ecirc;&icirc;&auml;&agrave; &iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&ucirc;">
-			<param name="Local" value="Program\codeedit.htm">
+			<param name="Local" value="Program\program.htm#codeedit">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &auml;&euml;&yuml; &ograve;&icirc;&divide;&aring;&ecirc; &icirc;&ntilde;&ograve;&agrave;&iacute;&icirc;&acirc;&agrave; &egrave; &ecirc;&oacute;&eth;&ntilde;&icirc;&eth;&agrave; &acirc;&ucirc;&iuml;&icirc;&euml;&iacute;&aring;&iacute;&egrave;&yuml; &igrave;&egrave;&ecirc;&eth;&icirc;&iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&ucirc;">
-			<param name="Local" value="Program\state_panel.htm">
+			<param name="Local" value="Program\program.htm#state_panel">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &ntilde;&icirc;&ntilde;&ograve;&icirc;&yuml;&iacute;&egrave;&yuml;">
-			<param name="Local" value="Program\statusbar.htm">
+			<param name="Local" value="Program\program.htm#statusbar">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml; &ocirc;&egrave;&euml;&uuml;&ograve;&eth;&agrave; &igrave;&egrave;&ecirc;&eth;&icirc;&ecirc;&icirc;&igrave;&agrave;&iacute;&auml; &Ouml;&Iuml;&Yacute; &Ecirc;584&Acirc;&Igrave;1">
-			<param name="Local" value="Program\filter.htm">
+			<param name="Local" value="Program\program.htm#filter">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Icirc;&ecirc;&iacute;&icirc; &icirc;&iuml;&egrave;&ntilde;&agrave;&iacute;&egrave;&yuml; &igrave;&egrave;&ecirc;&eth;&icirc;&ecirc;&icirc;&igrave;&agrave;&iacute;&auml;&ucirc;">
-			<param name="Local" value="Program\description.htm">
+			<param name="Local" value="Program\program.htm#description">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Iuml;&agrave;&iacute;&aring;&euml;&uuml;, &icirc;&ograve;&icirc;&aacute;&eth;&agrave;&aelig;&agrave;&thorn;&ugrave;&agrave;&yuml; &ntilde;&icirc;&ntilde;&ograve;&icirc;&yuml;&iacute;&egrave;&yuml; &ecirc;&euml;&agrave;&acirc;&egrave;&agrave;&ograve;&oacute;&eth;&ucirc;">
-			<param name="Local" value="Program\keyboard.htm">
+			<param name="Local" value="Program\program.htm#keyboard">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
@@ -125,6 +125,10 @@
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Ecirc;&agrave;&ecirc; &icirc;&eth;&atilde;&agrave;&iacute;&egrave;&ccedil;&icirc;&acirc;&agrave;&ograve;&uuml; &oacute;&ntilde;&euml;&icirc;&acirc;&iacute;&ucirc;&eacute; &egrave; &aacute;&aring;&ccedil;&oacute;&ntilde;&euml;&icirc;&acirc;&iacute;&ucirc;&eacute; &iuml;&aring;&eth;&aring;&otilde;&icirc;&auml;">
 			<param name="Local" value="Using\index.htm#goto">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="&Ecirc;&agrave;&ecirc; &ccedil;&agrave;&auml;&agrave;&ograve;&uuml; &ccedil;&iacute;&agrave;&divide;&aring;&iacute;&egrave;&aring; &Oslash;&Egrave;&Iacute;&acirc;&otilde; &acirc;&icirc; &acirc;&eth;&aring;&igrave;&yuml; &acirc;&ucirc;&iuml;&icirc;&euml;&iacute;&aring;&iacute;&egrave;&yuml; &iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&ucirc; ">
+			<param name="Local" value="Using\index.htm#input">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
