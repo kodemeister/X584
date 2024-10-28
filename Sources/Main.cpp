@@ -657,6 +657,9 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
     // проверяем буфер обмена при отображении формы
     TWMNoParams x = {WM_CLIPBOARDUPDATE};
     OnClipboardUpdate(x);
+
+    int DPI = GetDpiForWindow(Handle);
+    FormAfterMonitorDpiChanged(this, DEFAULT_DPI, DPI);
 }
 //---------------------------------------------------------------------------
 
