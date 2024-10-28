@@ -677,7 +677,7 @@ void __fastcall TX584Form::FormResize(TObject *Sender)
 void __fastcall TX584Form::FormAfterMonitorDpiChanged(TObject *Sender, int OldDPI,
           int NewDPI)
 {
-    int Width = MulDiv(60, NewDPI, DEFAULT_DPI);
+    int Width = MulDiv(58, NewDPI, DEFAULT_DPI);
     CodeListView->Columns->Items[0]->MinWidth = Width;
     CodeListView->Columns->Items[0]->MaxWidth = Width;
     CodeListView->Columns->Items[0]->Width = Width;
