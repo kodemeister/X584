@@ -14,6 +14,7 @@ object X584Form: TX584Form
   Font.Style = []
   Menu = MainMenu
   Position = poScreenCenter
+  OnAfterMonitorDpiChanged = FormAfterMonitorDpiChanged
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -21,20 +22,20 @@ object X584Form: TX584Form
   OnResize = FormResize
   DesignSize = (
     1179
-    710)
+    715)
   TextHeight = 15
   object CodeListView: TListView
     Left = 3
     Top = 32
     Width = 622
-    Height = 650
+    Height = 655
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
       item
         Caption = #1042#1093#1055#1040#1051#1059
-        MaxWidth = 60
-        MinWidth = 60
-        Width = 60
+        MaxWidth = 58
+        MinWidth = 58
+        Width = 58
       end
       item
         Alignment = taCenter

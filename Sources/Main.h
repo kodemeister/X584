@@ -176,6 +176,7 @@ __published:	// IDE-managed Components
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormDestroy(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
+    void __fastcall FormAfterMonitorDpiChanged(TObject *Sender, int OldDPI, int NewDPI);
     void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
     void __fastcall ApplicationEventsHint(TObject *Sender);
     void __fastcall ApplicationEventsIdle(TObject *Sender, bool &Done);

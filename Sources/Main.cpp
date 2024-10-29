@@ -657,6 +657,9 @@ void __fastcall TX584Form::FormCreate(TObject *Sender)
     // проверяем буфер обмена при отображении формы
     TWMNoParams x = {WM_CLIPBOARDUPDATE};
     OnClipboardUpdate(x);
+
+    int DPI = GetDpiForWindow(Handle);
+    FormAfterMonitorDpiChanged(this, DEFAULT_DPI, DPI);
 }
 //---------------------------------------------------------------------------
 
@@ -671,7 +674,15 @@ void __fastcall TX584Form::FormResize(TObject *Sender)
     StatusBar->Panels->Items[0]->Width = StatusBar->Width - 5 * StatusBar->Panels->Items[1]->Width;
 }
 //---------------------------------------------------------------------------
-
+void __fastcall TX584Form::FormAfterMonitorDpiChanged(TObject *Sender, int OldDPI,
+          int NewDPI)
+{
+    int Width = MulDiv(58, NewDPI, DEFAULT_DPI);
+    CodeListView->Columns->Items[0]->MinWidth = Width;
+    CodeListView->Columns->Items[0]->MaxWidth = Width;
+    CodeListView->Columns->Items[0]->Width = Width;
+}
+//---------------------------------------------------------------------------
 void __fastcall TX584Form::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
     if (Modified)
