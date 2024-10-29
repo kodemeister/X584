@@ -22,13 +22,13 @@ object X584Form: TX584Form
   OnResize = FormResize
   DesignSize = (
     1179
-    715)
+    710)
   TextHeight = 15
   object CodeListView: TListView
     Left = 3
     Top = 32
     Width = 622
-    Height = 655
+    Height = 650
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
       item
