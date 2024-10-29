@@ -96,8 +96,8 @@
         <ILINK_LibraryPath>Sources\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_MinorVer>33</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=A simulator of K584VM1 processor;FileVersion=1.33.0.0;InternalName=X584;LegalCopyright=(c) X584 developers, 2005-2024;LegalTrademarks=;OriginalFilename=X584.exe;ProgramID=;ProductName=X584;ProductVersion=1.33.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_MajorVer>2</VerInfo_MajorVer>
+        <VerInfo_Keys>CompanyName=;FileDescription=A simulator of K584VM1 processor;FileVersion=2.0.0.0;InternalName=X584;LegalCopyright=(c) X584 developers, 2005-2024;LegalTrademarks=;OriginalFilename=X584.exe;ProgramID=;ProductName=X584;ProductVersion=2.0.0.0;Comments=</VerInfo_Keys>
         <PostBuildEvent><![CDATA["$(PROJECTDIR)\Help\hhc.bat" "$(PROJECTDIR)\Help\X584.hhp"
 move /Y "$(PROJECTDIR)\Help\X584.chm" "$(OUTPUTDIR)"
 $(PostBuildEvent)]]></PostBuildEvent>
