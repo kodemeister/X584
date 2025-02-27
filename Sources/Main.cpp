@@ -201,8 +201,8 @@ void TX584Form::SaveFile(UnicodeString FileName)
             UnicodeString str = (control.Length() > 0 && !ParseInput(control, Dummy)) ? control : comment;
 
             TBytes encodedStr = TEncoding::GetEncoding(1251)->GetBytes(str);
-            if (encodedStr.Length > 255)
-                encodedStr.Length = 255;
+            if (encodedStr.Length > 128)
+                encodedStr.Length = 128;
 
             unsigned char len = encodedStr.Length;
             Writer->Write(len);
