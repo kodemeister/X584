@@ -173,6 +173,11 @@ __published:	// IDE-managed Components
     TVirtualImageList *EmptyImageList;
     TVirtualImageList *ButtonsImageList;
     TVirtualImageList *TreeImageList;
+    TPopupMenu *ContextMenu;
+    TMenuItem *CtxMenuCut;
+    TMenuItem *CtxMenuCopy;
+    TMenuItem *CtxMenuPaste;
+    TMenuItem *CtxMenuDelete;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormDestroy(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);
