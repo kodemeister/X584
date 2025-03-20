@@ -65,6 +65,8 @@ unsigned ReCode[54] = {
 void TX584Form::LoadFile(UnicodeString FileName)
 {
     try {
+        CodeListView->ItemFocused = CodeListView->Items->Item[0];
+        ClearSelection();
         std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmOpenRead));
         UnicodeString ext = AnsiUpperCase(ExtractFileExt(FileName));
 
