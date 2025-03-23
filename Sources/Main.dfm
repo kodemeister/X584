@@ -63,6 +63,7 @@ object X584Form: TX584Form
       end>
     HideSelection = False
     MultiSelect = True
+    PopupMenu = ContextMenu
     SmallImages = EmptyImageList
     TabOrder = 0
     ViewStyle = vsReport
@@ -333,7 +334,7 @@ object X584Form: TX584Form
     object OutLabel: TLabel
       Left = 16
       Top = 26
-      Width = 33
+      Width = 32
       Height = 15
       Caption = #1064#1042#1099#1093
       OnMouseDown = ControlsMouseDown
@@ -998,6 +999,7 @@ object X584Form: TX584Form
         Hint = #1050#1086#1087#1080#1088#1086#1074#1072#1090#1100' '#1074#1099#1076#1077#1083#1077#1085#1085#1099#1081' '#1092#1088#1072#1075#1084#1077#1085#1090
         ImageIndex = 6
         ImageName = 'copy'
+        ShortCut = 16451
         OnClick = CopyItemClick
       end
       object PasteItem: TMenuItem
@@ -2090,5 +2092,38 @@ object X584Form: TX584Form
     ImageCollection = ImageCollection
     Left = 144
     Top = 64
+  end
+  object ContextMenu: TPopupMenu
+    Images = ButtonsImageList
+    Left = 240
+    Top = 64
+    object CtxMenuCut: TMenuItem
+      Caption = '&'#1042#1099#1088#1077#1079#1072#1090#1100
+      ImageIndex = 5
+      ImageName = 'cut'
+      ShortCut = 16472
+      OnClick = CutItemClick
+    end
+    object CtxMenuCopy: TMenuItem
+      Caption = '&'#1050#1086#1087#1080#1088#1086#1074#1072#1090#1100
+      ImageIndex = 6
+      ImageName = 'copy'
+      ShortCut = 16451
+      OnClick = CopyItemClick
+    end
+    object CtxMenuPaste: TMenuItem
+      Caption = #1042#1089#1090'&'#1072#1074#1080#1090#1100
+      Enabled = False
+      ImageIndex = 7
+      ImageName = 'paste'
+      ShortCut = 16470
+      OnClick = PasteItemClick
+    end
+    object CtxMenuDelete: TMenuItem
+      Caption = '&'#1059#1076#1072#1083#1080#1090#1100
+      ImageIndex = 8
+      ImageName = 'delete'
+      OnClick = DeleteItemClick
+    end
   end
 end

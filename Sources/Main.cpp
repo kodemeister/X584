@@ -1323,6 +1323,7 @@ void __fastcall TX584Form::CopyItemClick(TObject *Sender)
         PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
     PasteItem->Enabled = true;
     PasteToolButton->Enabled = true;
+    CtxMenuPaste->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
@@ -1571,5 +1572,6 @@ void TX584Form::OnClipboardUpdate(TWMNoParams &x)
     bool ClipboardHasData = Clipboard()->HasFormat(ClipboardFormat);
     PasteItem->Enabled = ClipboardHasData;
     PasteToolButton->Enabled = ClipboardHasData;
+    CtxMenuPaste->Enabled = ClipboardHasData;
 }
 //---------------------------------------------------------------------------
