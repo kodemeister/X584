@@ -1183,6 +1183,8 @@ void __fastcall TX584Form::RegMaskEditDblClick(TObject *Sender)
 
 void __fastcall TX584Form::NewItemClick(TObject *Sender)
 {
+    CodeListView->ItemFocused = CodeListView->Items->Item[0];
+    ClearSelection();
     InputEditExit(this);
     //сохраняем предыдущий файл
     if (Modified)
