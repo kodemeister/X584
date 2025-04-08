@@ -65,6 +65,8 @@ unsigned ReCode[54] = {
 void TX584Form::LoadFile(UnicodeString FileName)
 {
     try {
+        CodeListView->ItemFocused = CodeListView->Items->Item[0];
+        ClearSelection();
         std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmOpenRead));
         UnicodeString ext = AnsiUpperCase(ExtractFileExt(FileName));
 
@@ -1181,6 +1183,8 @@ void __fastcall TX584Form::RegMaskEditDblClick(TObject *Sender)
 
 void __fastcall TX584Form::NewItemClick(TObject *Sender)
 {
+    CodeListView->ItemFocused = CodeListView->Items->Item[0];
+    ClearSelection();
     InputEditExit(this);
     //сохраняем предыдущий файл
     if (Modified)
