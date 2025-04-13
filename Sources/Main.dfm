@@ -61,8 +61,10 @@ object X584Form: TX584Form
         MinWidth = 100
         Width = 160
       end>
+    DoubleBuffered = True
     HideSelection = False
     MultiSelect = True
+    ParentDoubleBuffered = False
     PopupMenu = ContextMenu
     SmallImages = EmptyImageList
     TabOrder = 0
