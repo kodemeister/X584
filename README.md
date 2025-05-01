@@ -13,7 +13,7 @@ X584 is a graphical simulator of Soviet-era [K584VM1](https://ru.wikipedia.org/w
 * Support for full 9-bit microinstruction set.
 * Displaying and editing current microprocessor state.
 * Integrated debugger with support for step-by-step execution and breakpoints.
-* Conditional execution via special comment syntax.
+* Conditional execution via control flow statements.
 
 ## Building from source
 
