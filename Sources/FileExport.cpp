@@ -88,11 +88,14 @@ void __fastcall TExportThread::Execute()
             range->ParagraphFormat->Alignment = j ? WdParagraphAlignment::wdAlignParagraphLeft : WdParagraphAlignment::wdAlignParagraphCenter;
             range->InsertAfter(StringToOleStr(X584Form->CodeListView->Items->Item[i]->SubItems->Strings[j]));
         }
-    //показываем документ и завершаем работу
-    X584Form->WordApplication->set_Visible(true);
+    //сохраняем документ и завершаем работу
+    X584Form->WordDocument->SaveAs(TVariant(X584Form->WordSaveDialog->FileName));
+    X584Form->WordDocument->Close(EmptyParam(), EmptyParam(), EmptyParam());
     X584Form->WordDocument->Disconnect();
     X584Form->WordApplication->Disconnect();
+
     X584Form->WordItem->Enabled = true;
     X584Form->WordToolButton->Enabled = true;
+
     CoUninitialize();
 }
