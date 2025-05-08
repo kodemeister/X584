@@ -15,13 +15,32 @@ X584 is a graphical simulator of Soviet-era [K584VM1](https://ru.wikipedia.org/w
 * Integrated debugger with support for step-by-step execution and breakpoints.
 * Conditional execution via control flow statements.
 
-## Building from source
+## Building from Source
 
-1. Install RAD Studio 12 or newer.
+### Prerequisites
+
+1. Install RAD Studio 12.
 2. Install Microsoft HTML Help Workshop.
 > [!NOTE]
 > It looks like Microsoft removed HTML Help Workshop from their website. You can still download it from the [web archive](https://web.archive.org/web/20200918004813/https://download.microsoft.com/download/0/A/9/0A939EF6-E31C-430F-A3DF-DFAE7960D564/htmlhelp.exe) or install it via Chocolatey.
-3. Add installation directory of HTML Help Workshop (typically `C:\Program Files (x86)\HTML Help Workshop`) to your `PATH` environment variable.
-4. Open `X584.cbproj` in RAD Studio, select `Windows 32-bit` platform and build the project.
+3. Add the installation directory of HTML Help Workshop (typically `C:\Program Files (x86)\HTML Help Workshop`) to your `PATH` environment variable.
 
-The compiled executable and CHM help file will be located under `Win32\Debug` or `Win32\Release` directory.
+### Building Microsoft Office 2000 Components
+
+First, you need to compile the Microsoft Office 2000 components from source using modern Clang-enhanced C++ compilers. This is necessary because the existing Microsoft Office 2000 components provided with RAD Studio only support the legacy 32-bit `BCC32` compiler.
+
+1. Open `Dependencies\Office2K\Office2K.cbproj` in RAD Studio.
+2. In the main menu, select `Component > Install Packages...`. Uncheck the package `Embarcadero C++Builder Office 2000 Servers Package`, then click `Save`.
+3. In the `Projects` window, select the `Windows 32-bit` target platform and the `Release` build configuration.
+4. Right-click on `Office2K.bpl` and select `Install` from the context menu.
+5. If you also want to build the 64-bit version of X584, select the `Windows 64-bit` or `Windows 64-bit (Modern)` target platform and the desired build configuration. Right-click on `Office2K.bpl` and select `Build` from the context menu.
+
+The compiled packages will be installed to the shared directory `C:\Users\Public\Documents\Embarcadero\Studio\23.0`.
+
+### Building X584
+
+1. Open `X584.cbproj` in RAD Studio.
+2. RAD Studio may display an error message indicating that it cannot load either the `Office2K` or `bcboffice2k290` package due to a conflict between them. Click `Yes` to continue.
+3. In the `Projects` window, select the desired target platform and build configuration, then build the project.
+
+The compiled executable and CHM help file will be located in the `<platform>\<configuration>` directory, e.g., `Win32\Debug`.
