@@ -1,15 +1,15 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{1D66486D-C64D-4101-B4F1-61E31CDF3491}</ProjectGuid>
+        <ProjectGuid>{C800D744-15D8-4E28-8FED-01BD968D8364}</ProjectGuid>
         <ProjectVersion>20.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
-        <MainSource>X584.cpp</MainSource>
-        <AppType>Application</AppType>
+        <MainSource>Office2K.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <ProjectName Condition="'$(ProjectName)'==''">X584</ProjectName>
+        <ProjectName Condition="'$(ProjectName)'==''">Office2K</ProjectName>
         <TargetedPlatforms>1048579</TargetedPlatforms>
+        <AppType>Package</AppType>
         <CC_Suffix Condition="'$(CC_Suffix)'==''">c</CC_Suffix>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -41,18 +41,6 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
-        <Cfg_1_Win64>true</Cfg_1_Win64>
-        <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64x' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64x)'!=''">
-        <Cfg_1_Win64x>true</Cfg_1_Win64x>
-        <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
@@ -64,75 +52,54 @@
         <Cfg_2>true</Cfg_2>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
-        <Cfg_2_Win64>true</Cfg_2_Win64>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64x' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64x)'!=''">
-        <Cfg_2_Win64x>true</Cfg_2_Win64x>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+        <UsePackages>true</UsePackages>
         <IntermediateOutputDir>.\$(Platform)\$(Config)</IntermediateOutputDir>
-        <FinalOutputDir>.\$(Platform)\$(Config)</FinalOutputDir>
         <BCC_wpar>false</BCC_wpar>
         <BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
         <BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\release\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
-        <ProjectType>CppVCLApplication</ProjectType>
+        <ProjectType>CppPackage</ProjectType>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
-        <AllPackageLibs>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</AllPackageLibs>
-        <_TCHARMapping>wchar_t</_TCHARMapping>
+        <ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
+        <ILINK_GenerateLibFile>true</ILINK_GenerateLibFile>
+        <_TCHARMapping>char</_TCHARMapping>
         <Multithreaded>true</Multithreaded>
-        <Icon_MainIcon>Graphics\Icon.ico</Icon_MainIcon>
-        <UWP_CppLogo44>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png</UWP_CppLogo44>
-        <UWP_CppLogo150>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_150.png</UWP_CppLogo150>
-        <SanitizedProjectName>X584</SanitizedProjectName>
-        <IncludePath>Sources\;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>Sources\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_MajorVer>2</VerInfo_MajorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=A simulator of K584VM1 processor;FileVersion=2.1.0.0;InternalName=X584;LegalCopyright=(c) X584 developers, 2005-2024;LegalTrademarks=;OriginalFilename=X584.exe;ProgramID=;ProductName=X584;ProductVersion=2.1.0.0;Comments=</VerInfo_Keys>
-        <PostBuildEvent><![CDATA["$(PROJECTDIR)\Help\hhc.bat" "$(PROJECTDIR)\Help\X584.hhp"
-move /Y "$(PROJECTDIR)\Help\X584.chm" "$(OUTPUTDIR)"
-$(PostBuildEvent)]]></PostBuildEvent>
+        <SanitizedProjectName>Office2K</SanitizedProjectName>
+        <IncludePath>$(BDS)\source\ComServers\Office2K\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>$(BDS)\source\ComServers\Office2K\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <TLIB_PageSize>256</TLIB_PageSize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <PackageImports>adortl;appanalytics;bcbie;bcbsmp;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindcompvclsmp;bindcompvclwinx;bindengine;CloudService;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;emsclient;emsclientfiredac;emsedge;emshosting;emsserverresource;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACCommonODBC;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMongoDBDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;inetstn;Office2K;RESTBackendComponents;RESTComponents;rtl;Skia;soapmidas;soaprtl;soapserver;tethering;vcl;vclactnband;vcldb;vcldsnap;vcledge;vclFireDAC;vclie;vclimg;VCLRESTComponents;VclSmp;vcltouch;vclwinx;vclx;xmlrtl;$(PackageImports)</PackageImports>
-        <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>C:\Users\Public\Documents\Embarcadero\Studio\23.0\Dcp;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <PackageImports>adortl;appanalytics;bcbie;bcbsmp;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindcompvclsmp;bindcompvclwinx;bindengine;CloudService;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;emsclient;emsclientfiredac;emsedge;emshosting;emsserverresource;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACCommonODBC;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMongoDBDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;inetstn;RESTBackendComponents;RESTComponents;rtl;Skia;soapmidas;soaprtl;soapserver;tethering;vcl;vclactnband;vcldb;vcldsnap;vcledge;vclFireDAC;vclie;vclimg;VCLRESTComponents;VclSmp;vcltouch;vclwinx;vclx;xmlrtl;$(PackageImports)</PackageImports>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <BT_BuildType>Debug</BT_BuildType>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <BCC_PCHName_Clang>X584PCH.h</BCC_PCHName_Clang>
-        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
-        <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <BCC_PCHName_Clang>Office2KPCH.h</BCC_PCHName_Clang>
+        <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <PackageImports>adortl;appanalytics;bcbie;bcbsmp;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindcompvclsmp;bindcompvclwinx;bindengine;CloudService;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;emsclient;emsclientfiredac;emsedge;emshosting;emsserverresource;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACCommonODBC;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMongoDBDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;inetstn;RESTBackendComponents;RESTComponents;rtl;Skia;soapmidas;soaprtl;soapserver;tethering;vcl;vclactnband;vcldb;vcldsnap;vcledge;vclFireDAC;vclie;vclimg;VCLRESTComponents;VclSmp;vcltouch;vclwinx;vclx;xmlrtl;$(PackageImports)</PackageImports>
-        <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>C:\Users\Public\Documents\Embarcadero\Studio\23.0\Dcp\$(Platform)\$(Config);$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
         <BT_BuildType>Debug</BT_BuildType>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <BCC_PCHName_Clang>X584PCH.h</BCC_PCHName_Clang>
-        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <BCC_PCHName_Clang>Office2KPCH.h</BCC_PCHName_Clang>
+        <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64x)'!=''">
         <PackageImports>adortl;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindcompvclsmp;bindcompvclwinx;bindengine;CloudService;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;emsclient;emsclientfiredac;emsedge;emshosting;emsserverresource;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACCommonODBC;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMongoDBDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;inetstn;RESTBackendComponents;RESTComponents;rtl;Skia;soapmidas;soaprtl;soapserver;tethering;vcl;vclactnband;vcldb;vcldsnap;vcledge;vclFireDAC;vclie;vclimg;VCLRESTComponents;VclSmp;vcltouch;vclwinx;vclx;xmlrtl;$(PackageImports)</PackageImports>
-        <ILINK_LibraryPath>C:\Users\Public\Documents\Embarcadero\Studio\23.0\Dcp\$(Platform)\$(Config);$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
         <BT_BuildType>Debug</BT_BuildType>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <BCC_EnableBatchCompilation>true</BCC_EnableBatchCompilation>
-        <BCC_PCHName_Clang>X584PCH.h</BCC_PCHName_Clang>
-        <AppDPIAwarenessMode>none</AppDPIAwarenessMode>
+        <BCC_PCHName_Clang>Office2KPCH.h</BCC_PCHName_Clang>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
@@ -157,71 +124,101 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <ILINK_LibraryPath>$(BDSLIB)\$(PLATFORM)$(CC_SUFFIX)\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</LinkPackageStatics>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</LinkPackageStatics>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_1_Win64x)'!=''">
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</LinkPackageStatics>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</LinkPackageStatics>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</LinkPackageStatics>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_2_Win64x)'!=''">
-        <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <LinkPackageStatics>rtl.lib;vcl.lib;vclwinx.lib;vclimg.lib;bindengine.lib;Office2K.lib</LinkPackageStatics>
+        <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
     </PropertyGroup>
     <ItemGroup>
-        <CppCompile Include="Sources\About.cpp">
-            <Form>AboutForm</Form>
-            <FormType>dfm</FormType>
-            <DependentOn>Sources\About.h</DependentOn>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\access_2k.cpp">
             <BuildOrder>3</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Sources\FileExport.cpp">
-            <DependentOn>Sources\FileExport.h</DependentOn>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\access_2k_srvr.cpp">
             <BuildOrder>4</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Sources\Input.cpp">
-            <Form>InputForm</Form>
-            <FormType>dfm</FormType>
-            <DependentOn>Sources\Input.h</DependentOn>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\adodb_2k.cpp">
             <BuildOrder>5</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Sources\K584core.cpp">
-            <DependentOn>Sources\K584core.h</DependentOn>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\adodb_2k_srvr.cpp">
             <BuildOrder>6</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Sources\Main.cpp">
-            <Form>X584Form</Form>
-            <FormType>dfm</FormType>
-            <DependentOn>Sources\Main.h</DependentOn>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\bcboffice2k.cpp">
             <BuildOrder>7</BuildOrder>
         </CppCompile>
-        <CppCompile Include="X584.cpp">
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\dao_2k.cpp">
+            <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\dao_2k_srvr.cpp">
+            <BuildOrder>9</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\excel_2k.cpp">
+            <BuildOrder>10</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\excel_2k_srvr.cpp">
+            <BuildOrder>11</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\graph_2k.cpp">
+            <BuildOrder>12</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\graph_2k_srvr.cpp">
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\MSProject_2k.cpp">
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\MSProject_2k_srvr.cpp">
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\office_2k.cpp">
+            <BuildOrder>16</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\office_2k_srvr.cpp">
+            <BuildOrder>17</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\outlook_2k.cpp">
+            <BuildOrder>18</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\outlook_2k_srvr.cpp">
+            <BuildOrder>19</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\powerpoint_2k.cpp">
+            <BuildOrder>20</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\powerpoint_2k_srvr.cpp">
+            <BuildOrder>21</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\vbide_2k.cpp">
+            <BuildOrder>22</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\vbide_2k_srvr.cpp">
+            <BuildOrder>23</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\word_2k.cpp">
+            <BuildOrder>24</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="C:\Program Files (x86)\Embarcadero\Studio\23.0\source\ComServers\Office2K\word_2k_srvr.cpp">
+            <BuildOrder>25</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Office2K.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
-        <PCHCompile Include="X584PCH.h">
-            <BuildOrder>1</BuildOrder>
+        <PCHCompile Include="Office2KPCH.h">
+            <BuildOrder>2</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
-        <FormResources Include="Sources\Main.dfm"/>
-        <FormResources Include="Sources\About.dfm"/>
-        <FormResources Include="Sources\Input.dfm"/>
+        <PackageImport Include="rtl.bpi">
+            <BuildOrder>1</BuildOrder>
+        </PackageImport>
+        <PackageImport Include="vcl.bpi">
+            <BuildOrder>26</BuildOrder>
+        </PackageImport>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -236,7 +233,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
-        <Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+        <Borland.ProjectType>CppPackage</Borland.ProjectType>
         <BorlandProject>
             <CPlusPlusBuilder.Personality>
                 <ProjectProperties>
@@ -246,7 +243,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <ProjectProperties Name="IndexFiles">False</ProjectProperties>
                 </ProjectProperties>
                 <Source>
-                    <Source Name="MainSource">X584.cpp</Source>
+                    <Source Name="MainSource">Office2K.cpp</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k290.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
@@ -256,12 +253,27 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 </Excluded_Packages>
             </CPlusPlusBuilder.Personality>
             <Deployment Version="5">
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx32\libcgcrtl.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx32\libcgstl.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -306,30 +318,20 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\Win32\Debug\X584.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\23.0\BPL\Office2K.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>X584.exe</RemoteName>
+                        <RemoteName>Office2K.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\Win32\Debug\X584.tds" Configuration="Debug" Class="DebugSymbols">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\23.0\BPL\Office2K.tds" Configuration="Debug" Class="DebugSymbols">
                     <Platform Name="Win32">
-                        <RemoteName>X584.tds</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName=".\Win64x\Debug\X584.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win64x">
-                        <RemoteName>X584.exe</RemoteName>
+                        <RemoteName>Office2K.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win32">
@@ -733,7 +735,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win32">
@@ -742,17 +743,14 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 </DeployClass>
                 <DeployClass Name="DependencyFramework">
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.framework</Extensions>
                     </Platform>
                     <Platform Name="OSX64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.framework</Extensions>
                     </Platform>
                     <Platform Name="OSXARM64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.framework</Extensions>
                     </Platform>
@@ -761,30 +759,15 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="DependencyModule">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSX64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSXARM64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
@@ -807,17 +790,14 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSX64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
                     <Platform Name="OSXARM64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                         <Extensions>.dylib</Extensions>
                     </Platform>
@@ -843,15 +823,12 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Operation>0</Operation>
                     </Platform>
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\Resources\StartUp\</RemoteDir>
                         <Operation>0</Operation>
                     </Platform>
                     <Platform Name="OSX64">
-                        <RemoteDir>Contents\Resources\StartUp\</RemoteDir>
                         <Operation>0</Operation>
                     </Platform>
                     <Platform Name="OSXARM64">
-                        <RemoteDir>Contents\Resources\StartUp\</RemoteDir>
                         <Operation>0</Operation>
                     </Platform>
                     <Platform Name="Win32">
@@ -866,44 +843,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectOSXDebug">
-                    <Platform Name="OSX64">
-                        <RemoteDir>..\$(PROJECTNAME).app.dSYM\Contents\Resources\DWARF</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSXARM64">
-                        <RemoteDir>..\$(PROJECTNAME).app.dSYM\Contents\Resources\DWARF</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSX64">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSXARM64">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectOSXInfoPList">
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSX64">
-                        <RemoteDir>Contents</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSXARM64">
-                        <RemoteDir>Contents</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
+                <DeployClass Name="ProjectOSXDebug"/>
+                <DeployClass Name="ProjectOSXEntitlements"/>
+                <DeployClass Name="ProjectOSXInfoPList"/>
                 <DeployClass Name="ProjectOSXResource">
                     <Platform Name="OSX32">
                         <RemoteDir>Contents\Resources</RemoteDir>
@@ -940,15 +882,12 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="OSX64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="OSXARM64">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win32">
@@ -986,41 +925,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="ProjectiOSEntitlements">
-                    <Platform Name="iOSDevice32">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSInfoPList">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSLaunchScreen">
-                    <Platform Name="iOSDevice64">
-                        <RemoteDir>..\$(PROJECTNAME).launchscreen</RemoteDir>
-                        <Operation>64</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimARM64">
-                        <RemoteDir>..\$(PROJECTNAME).launchscreen</RemoteDir>
-                        <Operation>64</Operation>
-                    </Platform>
-                </DeployClass>
+                <DeployClass Name="ProjectiOSEntitlements"/>
+                <DeployClass Name="ProjectiOSInfoPList"/>
+                <DeployClass Name="ProjectiOSLaunchScreen"/>
                 <DeployClass Name="ProjectiOSResource">
                     <Platform Name="iOSDevice32">
                         <Operation>1</Operation>
@@ -1266,9 +1173,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="iOSSimARM64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="OSX64" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="OSXARM64" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="OSX64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="OSXARM64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win64x" Name="$(PROJECTNAME)"/>
@@ -1284,148 +1191,4 @@ $(PostBuildEvent)]]></PostBuildEvent>
     <Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win32'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='X584.cpp'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\FileExport.h'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\Input.h'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\K584core.h'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\Main.h'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='X584PCH.h'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\FileExport.cpp'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\About.h'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\About.cpp'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\Input.cpp'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\Main.cpp'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(FileToCompile)'=='Sources\K584core.cpp'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64x'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64x'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>&quot;$(PROJECTDIR)\Help\hhc.bat&quot; &quot;$(PROJECTDIR)\Help\X584.hhp&quot;&amp;&amp;move /Y &quot;$(PROJECTDIR)\Help\X584.chm&quot; &quot;$(OUTPUTDIR)&quot;</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
 </Project>

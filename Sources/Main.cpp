@@ -298,7 +298,7 @@ void TX584Form::BuildTree(int OpFilter, int ResFilter)
         //создаем корневой узел
         TTreeNode *Node = CodeTreeView->Items->Add(NULL, str);
         op |= CPU.FindOperand(i, OP_CARRY, op) ? ATTR_CUSED : 0;
-        Node->Data = (void *)op;
+        Node->Data = reinterpret_cast<void *>(op);
         if (iSet[i].Type == TYPE_ALU) {
             Node->ImageIndex = 0;
             Node->SelectedIndex = 0;
@@ -308,7 +308,7 @@ void TX584Form::BuildTree(int OpFilter, int ResFilter)
                 op |= CPU.FindOperand(i, OP_CARRY, op) ? ATTR_CUSED : 0;
                 CPU.Format(op, str, true, false, false);
                 TTreeNode *Child = CodeTreeView->Items->AddChild(Node, str);
-                Child->Data = (void *)op;
+                Child->Data = reinterpret_cast<void *>(op);
                 Child->ImageIndex = 0;
                 Child->SelectedIndex = 0;
                 //если среди операндов - РОНы, продолжаем детализацию
@@ -320,7 +320,7 @@ void TX584Form::BuildTree(int OpFilter, int ResFilter)
                         op |= CPU.FindOperand(i, OP_CARRY, op) ? ATTR_CUSED : 0;
                         CPU.Format(op, str, true, true, false);
                         TTreeNode *Item = CodeTreeView->Items->AddChild(Child, str);
-                        Item->Data = (void *)op;
+                        Item->Data = reinterpret_cast<void *>(op);
                         Item->ImageIndex = 2;
                         Item->SelectedIndex = 2;
                     }
@@ -337,7 +337,7 @@ void TX584Form::BuildTree(int OpFilter, int ResFilter)
                     op |= CPU.FindOperand(i, OP_CARRY, op) ? ATTR_CUSED : 0;
                     CPU.Format(op, str, true, true, false);
                     TTreeNode *Item = CodeTreeView->Items->AddChild(Node, str);
-                    Item->Data = (void *)op;
+                    Item->Data = reinterpret_cast<void *>(op);
                     Item->ImageIndex = 2;
                     Item->SelectedIndex = 2;
                 }
@@ -1017,7 +1017,7 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
       TTreeNode *Node)
 {
     //выводим код микроинструкции
-    unsigned val = (unsigned)Node->Data & ~ATTR_CUSED;
+    unsigned val = reinterpret_cast<size_t>(Node->Data) & ~ATTR_CUSED;
     DescMemo->Lines->Clear();
     if (!Node->Count) {
         UnicodeString str = L"Код микроинструкции: ";
@@ -1029,7 +1029,7 @@ void __fastcall TX584Form::CodeTreeViewChange(TObject *Sender,
     TTreeNode *Root = Node;
     for (int i = 0; i < Node->Level; i++)
         Root = Root->Parent;
-    val = (unsigned)Root->Data & ~ATTR_CUSED;    
+    val = reinterpret_cast<size_t>(Root->Data) & ~ATTR_CUSED;
     //ищем сопоставленный раздел справки
     for (int i = 0; i < INSTR_COUNT; i++)
         if (val == iSet[i].BitValue) {
@@ -1058,7 +1058,7 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
                     CodeListView->Items->Item[i - 1]->SubItems->Strings[3];
             }
         //форматируем и добавляем инструкцию
-        Code[pos] = (unsigned)Node->Data;
+        Code[pos] = reinterpret_cast<size_t>(Node->Data);
         wchar_t str[64];
         CPU.Format(Code[pos], str);
         CodeListView->Items->Item[pos]->SubItems->Strings[1] = str;
@@ -1554,7 +1554,7 @@ void TX584Form::GetFromClipboard()
     size_t ClipboardBufferSize = GlobalSize(hClipboardBuffer);
 
     std::unique_ptr<TMemoryStream> Buffer(new TMemoryStream());
-    Buffer->Write(ClipboardBuffer, ClipboardBufferSize);
+    Buffer->Write(ClipboardBuffer, static_cast<TNativeCount>(ClipboardBufferSize));
     Buffer->Seek(0ull, soBeginning);
 
     GlobalUnlock(hClipboardBuffer);
