@@ -178,6 +178,7 @@ __published:	// IDE-managed Components
     TMenuItem *CtxMenuCopy;
     TMenuItem *CtxMenuPaste;
     TMenuItem *CtxMenuDelete;
+    TSaveDialog *WordSaveDialog;
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall FormDestroy(TObject *Sender);
     void __fastcall FormResize(TObject *Sender);

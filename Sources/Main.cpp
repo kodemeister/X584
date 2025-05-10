@@ -1256,6 +1256,10 @@ void __fastcall TX584Form::SaveAsItemClick(TObject *Sender)
 void __fastcall TX584Form::WordItemClick(TObject *Sender)
 {
     try {
+        if (!WordSaveDialog->Execute()) {
+            return;
+        }
+
         TExportThread *Export = new TExportThread(true);
         Export->FreeOnTerminate = true;
         Export->Start();

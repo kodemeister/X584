@@ -2128,4 +2128,13 @@ object X584Form: TX584Form
       OnClick = DeleteItemClick
     end
   end
+  object WordSaveDialog: TSaveDialog
+    DefaultExt = '.docx'
+    Filter = 
+      #1044#1086#1082#1091#1084#1077#1085#1090' Microsoft Word 2007|*.docx|'#1044#1086#1082#1091#1084#1077#1085#1090' Microsoft Word 97-2' +
+      '003|*.doc'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Left = 16
+    Top = 224
+  end
 end
