@@ -1488,10 +1488,10 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
         dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked = i >= 1 && i <= 4;
     //перерисовываем редактор кода
     Instruction = 0;
-    ClearSelection();
-    CodeListView->ItemIndex = 0;
-    CodeListView->ItemFocused = CodeListView->Items->Item[0];
-    CodeListView->ItemFocused->Selected = true;
+    CodeListView->ItemFocused = NULL;
+    CodeListView->Selected = NULL;
+    CodeListView->Selected = CodeListView->Items->Item[0];
+    PreviousSelected = 0;
     CodeListView->Repaint();
     Terminated = true;
 }
