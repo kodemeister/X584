@@ -889,10 +889,6 @@ void __fastcall TX584Form::CodeListViewKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
     switch (Key) {
-    case VK_DELETE:
-        DeleteItemClick(this);
-        Key = 0;
-        break;
     case VK_INSERT:
         InsertItemClick(this);
         Key = 0;
@@ -1435,7 +1431,8 @@ void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
         DeleteSelectedItems();
         CodeListView->Repaint();
         SetModifyFlag(true);
-    }
+    } else
+        PostMessageW(ActiveControl->Handle, WM_CLEAR, 0, 0);
 }
 //---------------------------------------------------------------------------
 

@@ -1018,6 +1018,7 @@ object X584Form: TX584Form
         Hint = #1059#1076#1072#1083#1080#1090#1100' '#1074#1099#1076#1077#1083#1077#1085#1085#1099#1081' '#1092#1088#1072#1075#1084#1077#1085#1090
         ImageIndex = 8
         ImageName = 'delete'
+        ShortCut = 46
         OnClick = DeleteItemClick
       end
       object Item3: TMenuItem
@@ -2125,6 +2126,7 @@ object X584Form: TX584Form
       Caption = '&'#1059#1076#1072#1083#1080#1090#1100
       ImageIndex = 8
       ImageName = 'delete'
+      ShortCut = 46
       OnClick = DeleteItemClick
     end
   end
