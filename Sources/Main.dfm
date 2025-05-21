@@ -886,7 +886,7 @@ object X584Form: TX584Form
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 691
+    Top = 701
     Width = 1179
     Height = 19
     Panels = <
