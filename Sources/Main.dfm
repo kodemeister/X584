@@ -2,7 +2,7 @@ object X584Form: TX584Form
   Left = 191
   Top = 110
   Caption = 'X584'
-  ClientHeight = 710
+  ClientHeight = 720
   ClientWidth = 1179
   Color = clBtnFace
   Constraints.MinHeight = 680
@@ -22,13 +22,13 @@ object X584Form: TX584Form
   OnResize = FormResize
   DesignSize = (
     1179
-    710)
+    720)
   TextHeight = 15
   object CodeListView: TListView
     Left = 3
     Top = 32
     Width = 622
-    Height = 650
+    Height = 660
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
       item
@@ -601,7 +601,7 @@ object X584Form: TX584Form
     Left = 633
     Top = 562
     Width = 312
-    Height = 120
+    Height = 130
     Anchors = [akRight, akBottom]
     Caption = #1054#1087#1080#1089#1072#1085#1080#1077' '#1084#1080#1082#1088#1086#1082#1086#1084#1072#1085#1076#1099
     Enabled = False
@@ -611,7 +611,7 @@ object X584Form: TX584Form
       Left = 9
       Top = 24
       Width = 294
-      Height = 80
+      Height = 90
       ReadOnly = True
       TabOrder = 0
     end
