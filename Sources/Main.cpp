@@ -1402,14 +1402,13 @@ void __fastcall TX584Form::CutItemClick(TObject *Sender)
 void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
-        //сохраняем инструкции в буфере обмена
         CopySelectedItems();
         PutIntoClipboard();
+        PasteItem->Enabled = true;
+        PasteToolButton->Enabled = true;
+        CtxMenuPaste->Enabled = true;
     } else
         PostMessageW(ActiveControl->Handle, WM_COPY, 0, 0);
-    PasteItem->Enabled = true;
-    PasteToolButton->Enabled = true;
-    CtxMenuPaste->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
