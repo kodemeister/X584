@@ -107,6 +107,13 @@ K584::K584(int _BitsCount)
     }
 }
 
+void K584::Reset()
+{
+    memset(Reg, 0, sizeof(Reg));
+    WR = XWR = 0;
+    BufDA = BufXWR = 0;
+}
+
 void K584::FormatOp(unsigned Op, wchar_t *A, wchar_t *B, wchar_t *Str)
 {
     if (Op & 0x08)
