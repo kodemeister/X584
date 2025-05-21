@@ -241,8 +241,7 @@ private:	// User declarations
     void SetSelectedItems(int FirstItem, int ItemCount);
     void CopySelectedItems();
     void PasteSelectedItems();
-    void ClearSelectedItems();
-    void RemoveSelectedItems();
+    void DeleteSelectedItems();
     int PreviousSelected;
 
     TListItem *LastTopItem;
