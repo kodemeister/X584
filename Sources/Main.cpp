@@ -1326,6 +1326,38 @@ void TX584Form::CopySelectedItems()
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::PasteSelectedItems()
+{
+    int index = CodeListView->ItemFocused->Index;
+    if (InsertItem->Checked) {
+        //сдвигаем все инструкции на ClipboardSize позиций вправо
+        for (int i = MAX_ADDR - 1; i >= index + ClipboardSize; i--) {
+            Code[i] = Code[i - ClipboardSize];
+            CodeListView->Items->Item[i]->SubItems->Strings[1] =
+                CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[1];
+            CodeListView->Items->Item[i]->SubItems->Strings[2] =
+                CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[2];
+            CodeListView->Items->Item[i]->SubItems->Strings[3] =
+                CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[3];
+        }
+    }
+
+    //на освободившееся место помещаем инструкции из буфера обмена
+    for (int i = 0; i < ClipboardSize; i++) {
+        if (index + i < MAX_ADDR) {
+            Code[index + i] = MIClipboard[i];
+            wchar_t str[64];
+            CPU.Format(Code[index + i], str);
+            CodeListView->Items->Item[index + i]->SubItems->Strings[1] = str;
+            CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CFClipboard[i];
+            CodeListView->Items->Item[index + i]->SubItems->Strings[3] = CMClipboard[i];
+        }
+    }
+
+    SetSelectedItems(index, ClipboardSize);
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TX584Form::CopyItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
@@ -1344,31 +1376,7 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         GetFromClipboard();
-        int index = CodeListView->ItemFocused->Index;
-        if (InsertItem->Checked)
-            //сдвигаем все инструкции на ClipboardSize позиций вправо
-            for (int i = MAX_ADDR - 1; i >= index + ClipboardSize; i--) {
-                Code[i] = Code[i - ClipboardSize];
-                CodeListView->Items->Item[i]->SubItems->Strings[1] =
-                    CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[1];
-                CodeListView->Items->Item[i]->SubItems->Strings[2] =
-                    CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[2];
-                CodeListView->Items->Item[i]->SubItems->Strings[3] =
-                    CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[3];
-            }
-
-        //на освободившееся место помещаем инструкции из буфера обмена
-        for (int i = 0; i < ClipboardSize; i++)
-            if (index + i < MAX_ADDR) {
-                Code[index + i] = MIClipboard[i];
-                wchar_t str[64];
-                CPU.Format(Code[index + i], str);
-                CodeListView->Items->Item[index + i]->SubItems->Strings[1] = str;
-                CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CFClipboard[i];
-                CodeListView->Items->Item[index + i]->SubItems->Strings[3] = CMClipboard[i];
-            }
-
-        SetSelectedItems(index, ClipboardSize);
+        PasteSelectedItems();
         CodeListView->Repaint();
         SetModifyFlag(true);
     } else

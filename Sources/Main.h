@@ -240,6 +240,7 @@ private:	// User declarations
     std::vector<TListItem*> GetSelectedItems();
     void SetSelectedItems(int FirstItem, int ItemCount);
     void CopySelectedItems();
+    void PasteSelectedItems();
     void ClearSelectedItems();
     void RemoveSelectedItems();
     int PreviousSelected;
