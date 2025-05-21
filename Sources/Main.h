@@ -238,10 +238,10 @@ __published:	// IDE-managed Components
 private:	// User declarations
     // Для обработки выбора элемента
     std::vector<TListItem*> GetSelectedItems();
+    void SetSelectedItems(int FirstItem, int ItemCount);
     void CopySelectedItems();
     void ClearSelectedItems();
     void RemoveSelectedItems();
-    void ClearSelection();
     int PreviousSelected;
 
     TListItem *LastTopItem;

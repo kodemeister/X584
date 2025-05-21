@@ -65,8 +65,6 @@ unsigned ReCode[54] = {
 void TX584Form::LoadFile(UnicodeString FileName)
 {
     try {
-        CodeListView->ItemFocused = CodeListView->Items->Item[0];
-        ClearSelection();
         std::unique_ptr<TFileStream> Stream(new TFileStream(FileName, fmOpenRead));
         UnicodeString ext = AnsiUpperCase(ExtractFileExt(FileName));
 
@@ -810,7 +808,6 @@ void __fastcall TX584Form::CodeListViewMouseDown(TObject *Sender,
         return;
     }
 
-    CodeListView->ItemIndex = Row;
     TRect Rect = Item->DisplayRect(drBounds);
     //проверяем, не поставили ли точку останова
     if (X - Rect.Left < LeftImageList->Width) {
@@ -992,11 +989,7 @@ void __fastcall TX584Form::CodeListViewDragOver(TObject *Sender,
             int Row = CodeListView->TopItem->Index + (Y - CodeListView->TopItem->Position.y) / RowHeight;
             if (Row >= MAX_ADDR)
                 Row = MAX_ADDR - 1;
-            ClearSelection();
-
-            CodeListView->ItemIndex = Row;
-            TListItem *Item = CodeListView->Items->Item[Row];
-            CodeListView->ItemFocused = Item;
+            SetSelectedItems(Row, 1);
         }
     }
 }
@@ -1066,10 +1059,7 @@ void __fastcall TX584Form::CodeTreeViewDblClick(TObject *Sender)
         CodeListView->Items->Item[pos]->SubItems->Strings[3] = L"";
         if (++pos >= MAX_ADDR)
             pos = MAX_ADDR - 1;
-        ClearSelection();
-        CodeListView->ItemFocused->Selected = false;
-        CodeListView->ItemIndex = pos;
-        CodeListView->ItemFocused = CodeListView->Items->Item[pos];
+        SetSelectedItems(pos, 1);
         CodeListView->Repaint();
         SetModifyFlag(true);
     }
@@ -1183,8 +1173,6 @@ void __fastcall TX584Form::RegMaskEditDblClick(TObject *Sender)
 
 void __fastcall TX584Form::NewItemClick(TObject *Sender)
 {
-    CodeListView->ItemFocused = CodeListView->Items->Item[0];
-    ClearSelection();
     InputEditExit(this);
     //сохраняем предыдущий файл
     if (Modified)
@@ -1304,6 +1292,23 @@ std::vector<TListItem*> TX584Form::GetSelectedItems()
 }
 //---------------------------------------------------------------------------
 
+void TX584Form::SetSelectedItems(int FirstItem, int ItemCount)
+{
+    std::vector<TListItem *> Selected = GetSelectedItems();
+
+    for (size_t i = 0; i < Selected.size(); i++)
+        Selected[i]->Selected = false;
+
+    for (int i = FirstItem; i < FirstItem + ItemCount; i++)
+        if (i < MAX_ADDR)
+            CodeListView->Items->Item[i]->Selected = true;
+
+    CodeListView->ItemFocused = CodeListView->Items->Item[FirstItem];
+    CodeListView->ItemIndex = FirstItem;
+    PreviousSelected = FirstItem;
+}
+//---------------------------------------------------------------------------
+
 void TX584Form::CopySelectedItems()
 {
     std::vector<TListItem *> Selected = GetSelectedItems();
@@ -1351,7 +1356,7 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
                 CodeListView->Items->Item[i]->SubItems->Strings[3] =
                     CodeListView->Items->Item[i - ClipboardSize]->SubItems->Strings[3];
             }
-        ClearSelection();
+
         //на освободившееся место помещаем инструкции из буфера обмена
         for (int i = 0; i < ClipboardSize; i++)
             if (index + i < MAX_ADDR) {
@@ -1361,9 +1366,9 @@ void __fastcall TX584Form::PasteItemClick(TObject *Sender)
                 CodeListView->Items->Item[index + i]->SubItems->Strings[1] = str;
                 CodeListView->Items->Item[index + i]->SubItems->Strings[2] = CFClipboard[i];
                 CodeListView->Items->Item[index + i]->SubItems->Strings[3] = CMClipboard[i];
-                CodeListView->Items->Item[index + i]->Selected = true;
             }
 
+        SetSelectedItems(index, ClipboardSize);
         CodeListView->Repaint();
         SetModifyFlag(true);
     } else
@@ -1410,29 +1415,16 @@ void TX584Form::RemoveSelectedItems()
         CodeListView->Items->Item[NewIndex]->SubItems->Strings[2] = L"";
         CodeListView->Items->Item[NewIndex]->SubItems->Strings[3] = L"";
     }
+
+    SetSelectedItems(CodeListView->ItemFocused->Index, 1);
 }
 //---------------------------------------------------------------------------
 
-void TX584Form::ClearSelection()
-{
-    TListItem *FocusedItem = CodeListView->ItemFocused;
-
-    for (int i = 0; i < CodeListView->Items->Count; i++) {
-        CodeListView->Items->Item[i]->Selected = false;
-    }
-
-    if (FocusedItem) {
-        FocusedItem->Selected = true;
-    }
-}
-//---------------------------------------------------------------------------
 void __fastcall TX584Form::DeleteItemClick(TObject *Sender)
 {
     if (ActiveControl == CodeListView && !InputEdit->Visible) {
         if (InsertItem->Checked) {
             RemoveSelectedItems();
-            //снимаем выделение
-            ClearSelection();
         } else {
             ClearSelectedItems();
         }
@@ -1492,9 +1484,7 @@ void __fastcall TX584Form::ResetItemClick(TObject *Sender)
         dynamic_cast<TCheckBox *>(FindComponent(L"OutFlags" + IntToStr(i)))->Checked = i >= 1 && i <= 4;
     //перерисовываем редактор кода
     Instruction = 0;
-    CodeListView->ItemFocused = CodeListView->Items->Item[0];
-    ClearSelection();
-    PreviousSelected = 0;
+    SetSelectedItems(0, 1);
     CodeListView->Repaint();
     Terminated = true;
 }
