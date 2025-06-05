@@ -10,12 +10,22 @@
 #define MyAppAssocExt ".x584"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 
+#if X584_PLATFORM == "Win64"
+#define Suffix "x64-old"
+#define IsX64
+#elif X584_PLATFORM == "Win64x"
+#define Suffix "x64"
+#define IsX64
+#else
+#define Suffix "x86"
+#endif
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{D19ECA61-C776-4C26-88EB-3FF32106FF69}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+AppVersion={#X584_VERSION}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -29,13 +39,15 @@ LicenseFile=gpl-3.0.rtf
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputBaseFilename=x584-{#MyAppVersion}-x86_64
+OutputBaseFilename=x584-{#MyAppVersion}-{#Suffix}
 SolidCompression=yes
 WizardStyle=modern
+#ifdef IsX64
 ; Only allow the installer to run on x64-compatible systems,
 ; and enable 64-bit install mode.
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
+#endif
 
 [Languages]
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
@@ -44,8 +56,8 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\Win64\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Win64\Release\X584.chm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\{#X584_PLATFORM}\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\{#X584_PLATFORM}\Release\X584.chm"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Samples\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
