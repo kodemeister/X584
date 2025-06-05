@@ -23,6 +23,7 @@
 #pragma hdrstop
 
 #include "About.h"
+#include "Version.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -31,6 +32,7 @@ TAboutForm *AboutForm;
 __fastcall TAboutForm::TAboutForm(TComponent* Owner)
     : TForm(Owner)
 {
+    VersionLabel->Text = UnicodeString(L"X584 версия ") + UnicodeString(X584_VERSION);
 }
 //---------------------------------------------------------------------------
 
