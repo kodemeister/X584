@@ -1,6 +1,6 @@
 @echo off
 
-set PATH=C:\Program Files (x86)\Inno Setup 6
+set PATH=%PROGRAMFILES(x86)%\Inno Setup 6;%PATH%
 
 if exist "..\Win32\Release\X584.exe" (
 	echo Building installer for X584 x86 version...
