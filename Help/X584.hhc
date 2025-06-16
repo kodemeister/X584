@@ -112,7 +112,7 @@
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Ecirc;&agrave;&ecirc; &iuml;&eth;&icirc;&acirc;&icirc;&auml;&egrave;&ograve;&uuml; &icirc;&ograve;&euml;&agrave;&auml;&ecirc;&oacute; &iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&ucirc;">
-			<param name="Local" value="Using\index.htm">
+			<param name="Local" value="Using\index.htm#debug">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Ecirc;&agrave;&ecirc; &iuml;&eth;&agrave;&acirc;&egrave;&ograve;&uuml; &ecirc;&icirc;&auml; &igrave;&egrave;&ecirc;&eth;&icirc;&iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&ucirc;">
@@ -128,7 +128,7 @@
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Ecirc;&agrave;&ecirc; &icirc;&eth;&atilde;&agrave;&iacute;&egrave;&ccedil;&icirc;&acirc;&agrave;&ograve;&uuml; &oacute;&ntilde;&euml;&icirc;&acirc;&iacute;&ucirc;&eacute; &egrave; &aacute;&aring;&ccedil;&oacute;&ntilde;&euml;&icirc;&acirc;&iacute;&ucirc;&eacute; &iuml;&aring;&eth;&aring;&otilde;&icirc;&auml;">
-			<param name="Local" value="Using\index.htm">
+			<param name="Local" value="Using\index.htm#goto">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="&Ecirc;&agrave;&ecirc; &ccedil;&agrave;&auml;&agrave;&ograve;&uuml; &ccedil;&iacute;&agrave;&divide;&aring;&iacute;&egrave;&aring; &Oslash;&Egrave;&Iacute;&acirc;&otilde; &acirc;&icirc; &acirc;&eth;&aring;&igrave;&yuml; &acirc;&ucirc;&iuml;&icirc;&euml;&iacute;&aring;&iacute;&egrave;&yuml; &iuml;&eth;&icirc;&atilde;&eth;&agrave;&igrave;&igrave;&ucirc; ">
@@ -184,11 +184,11 @@
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="&Ecirc;&icirc;&igrave;&agrave;&iacute;&auml;&agrave; &laquo;&Acirc;&ntilde;&ograve;&agrave;&acirc;&egrave;&ograve;&uuml;&raquo;">
-				<param name="Local" value="Using\commands.htm">
+				<param name="Local" value="Using\commands.htm#paste">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="&Ecirc;&icirc;&igrave;&agrave;&iacute;&auml;&agrave; &laquo;&Oacute;&auml;&agrave;&euml;&egrave;&ograve;&uuml;&raquo;">
-				<param name="Local" value="Using\commands.htm">
+				<param name="Local" value="Using\commands.htm#delete">
 				</OBJECT>
 		</UL>
 		<LI> <OBJECT type="text/sitemap">
@@ -206,15 +206,15 @@
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="&Ecirc;&icirc;&igrave;&agrave;&iacute;&auml;&agrave; &laquo;&Iuml;&oacute;&ntilde;&ecirc; &auml;&icirc; &ecirc;&oacute;&eth;&ntilde;&icirc;&eth;&agrave;&raquo;">
-				<param name="Local" value="Using\commands.htm">
+				<param name="Local" value="Using\commands.htm#run_to_cursor">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="&Ecirc;&icirc;&igrave;&agrave;&iacute;&auml;&agrave; &laquo;&Iuml;&agrave;&oacute;&ccedil;&agrave;&raquo;">
-				<param name="Local" value="Using\commands.htm">
+				<param name="Local" value="Using\commands.htm#break">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="&Ecirc;&icirc;&igrave;&agrave;&iacute;&auml;&agrave; &laquo;&Ntilde;&aacute;&eth;&icirc;&ntilde;&raquo;">
-				<param name="Local" value="Using\commands.htm">
+				<param name="Local" value="Using\commands.htm#reset">
 				</OBJECT>
 		</UL>
 		<LI> <OBJECT type="text/sitemap">
