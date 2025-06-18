@@ -97,6 +97,7 @@ public:
     unsigned Reg[8];                // РОНы
     unsigned WR, XWR;               // рабочий регистр и расширитель
     K584(int _BitsCount);
+    void Reset();
     bool Format(unsigned MI, char *Str, bool FormatALU = true, bool FormatReg = true, bool ShowCarry = true);
     bool FindOperand(int Index, int Type, unsigned MI);
     bool Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigned InFlags, unsigned &OutFlags);

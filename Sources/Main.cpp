@@ -1246,6 +1246,7 @@ void __fastcall TX584Form::BreakItemClick(TObject *Sender)
 void __fastcall TX584Form::ResetItemClick(TObject *Sender)
 {
     InputEditExit(this);
+    CPU.Reset();
     //очищаем регистры
     for (int i = 0; i < 12; i++) {
         TMaskEdit *MaskEdit = dynamic_cast<TMaskEdit *>(FindComponent("RMaskEdit" + IntToStr(i)));
