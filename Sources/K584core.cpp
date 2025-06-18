@@ -234,7 +234,7 @@ unsigned K584::ExecuteOp(unsigned Op, unsigned A, unsigned B, unsigned InFlags, 
     return 0;
 }
 
-void K584::Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags, int OldWRSign)
+void K584::Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags, unsigned OldWRSign)
 {
     OutFlags |= F_INVSL1 | F_INVSR1 | F_INVSL2 | F_INVSR2;
     Result &= BitMask;
@@ -414,7 +414,7 @@ bool K584::FindOperand(int Index, int Type, unsigned MI)
 bool K584::Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigned InFlags, unsigned &OutFlags)
 {
     unsigned Carry = (InFlags & F_CI) != 0;
-    int OldWRSign = 0;
+    unsigned OldWRSign = 0;
     //ищем микроинструкцию в базе данных
     for (int i = 0; i < INSTR_COUNT; i++)
         if ((MI & iSet[i].BitMask) == iSet[i].BitValue) {
@@ -497,3 +497,4 @@ bool K584::Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigne
         }
     return false;
 }
+
