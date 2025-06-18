@@ -234,7 +234,7 @@ unsigned K584::ExecuteOp(unsigned Op, unsigned A, unsigned B, unsigned InFlags, 
     return 0;
 }
 
-void K584::Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags)
+void K584::Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags, int OldWRSign)
 {
     OutFlags |= F_INVSL1 | F_INVSR1 | F_INVSL2 | F_INVSR2;
     Result &= BitMask;
@@ -257,14 +257,14 @@ void K584::Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, 
     case TYPE_SAR:
         bit = Result & 0x01;
         OutFlags ^= bit ? F_INVSR1 : 0;
-        Result = Result >> 1 | sign;
+        Result = Result >> 1 | OldWRSign;
         if (ResType == OP_WRXWR) {
             OutFlags ^= (XWR & 0x01 ? F_INVSR2 : 0) | (bit ? F_INVSL2 : 0);
             XWR >>= 1;
             if (InFlags & F_P0)
                 XWR |= bit << BitsCount - 1;
             else {
-                XWR |= sign;
+                XWR |= OldWRSign;
                 XWR = XWR & ~(1 << BitsCount - 2) | (bit << BitsCount - 2);
             }
         }
@@ -414,6 +414,7 @@ bool K584::FindOperand(int Index, int Type, unsigned MI)
 bool K584::Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigned InFlags, unsigned &OutFlags)
 {
     unsigned Carry = (InFlags & F_CI) != 0;
+    int OldWRSign = 0;
     //ищем микроинструкцию в базе данных
     for (int i = 0; i < INSTR_COUNT; i++)
         if ((MI & iSet[i].BitMask) == iSet[i].BitValue) {
@@ -471,10 +472,12 @@ bool K584::Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigne
                 *result = ExecuteOp(MI >> 5, Ops[0], Ops[1], InFlags, OutFlags);
                 break;
             default:
+                // берём старый знак РР
+                OldWRSign = WR & (1 << BitsCount - 1);
                 //суммируем операнды
                 *result = Adc(Ops[0], Ops[1], Ops[2], OutFlags);
                 //производим нужный сдвиг
-                Shift(iSet[i].Type, iSet[i].Result, *result, InFlags, OutFlags);
+                Shift(iSet[i].Type, iSet[i].Result, *result, InFlags, OutFlags, OldWRSign);
             }
             *result &= BitMask;
             //инкрементируем программный счетчик
