@@ -25,7 +25,7 @@ text-align: center;
 <BODY>
 
 <h2>Система микрокоманд</h2>
-  <p>Управление БИС ЦПЭ осуществляется 9-разрядными кодами микрокоманд, содержащими три поля: 4-разрядное поле OP, задающее арифметические или логические функции АЛУ,  определенные  согласно табл. 2; 2-разрядное поле D, служащее для расши­рения числа возможных микрокоманд; 3-разрядное поле S, определяющее  номер используемого РОНа со­гласно табл. 3.</p>
+  <p>Управление БИС ЦПЭ осуществляется 9-разрядными кодами микрокоманд, содержащими три поля: 4-разрядное поле OP, задающее арифметические или логические функции АЛУ,  определенные  согласно табл. 2; 2-разрядное поле D, служащее для расширения числа возможных микрокоманд; 3-разрядное поле S, определяющее  номер используемого РОНа согласно табл. 3.</p>
 
 <p><i><b><a name="table2">Таблица 2. Кодировка поля управления АЛУ БИС К584ВМ1</a></b></i></p>
   <table>
@@ -77,7 +77,7 @@ text-align: center;
         <p>1111</p>
       </td>
       <td>
-        <p><img alt="A and B" src="a_and_b.png"></p>
+        <p><i>A</i>&nbsp;<span style="font-family: symbol;">&#xD9;</span>&nbsp;<i>B</i></p>
       </td>
     </tr>
     <tr>
@@ -97,7 +97,7 @@ text-align: center;
         <p>B - A - 1</p>
       </td>
       <td>
-        <p><img alt="A xor B" src="a_xor_b.png"></p>
+        <p><i>A</i>&nbsp;<span style="font-family: symbol;">&#xC5;</span>&nbsp;<i>B</i></p>
       </td>
     </tr>
     <tr>
@@ -117,7 +117,7 @@ text-align: center;
         <p>A - B - 1</p>
       </td>
       <td>
-        <p><img alt="!(A xor B)" src="a_nxor_b.png"></p>
+        <p><span style="border-top: 1px solid black;"><i>A</i>&nbsp;<span style="font-family: symbol;">&#xC5;</span>&nbsp;<i>B</i></span></p>
       </td>
     </tr>
     <tr>
@@ -137,7 +137,7 @@ text-align: center;
         <p>A + B</p>
       </td>
       <td>
-        <p><img alt="!A and B" src="not_a_and_b.png"></p>
+        <p><i style="text-decoration: overline;">A</i>&nbsp;<span style="font-family: symbol;">&#xD9;</span>&nbsp;<i>B</i></p>
       </td>
     </tr>
     <tr>
@@ -157,7 +157,7 @@ text-align: center;
         <p>B</p>
       </td>
       <td>
-        <p><img src="a_and_not_b.png" alt="A and !B"></p>
+        <p><i>A</i>&nbsp;<span style="font-family: symbol;">&#xD9;</span>&nbsp;<i style="text-decoration: overline;">B</i></p>
       </td>
     </tr>
     <tr>
@@ -177,7 +177,7 @@ text-align: center;
         <p>!B</p>
       </td>
       <td>
-        <p><img src="a_or_not_b.png" alt="A or !B"></p>
+        <p><i>A</i>&nbsp;<span style="font-family: symbol;">&#xDA;</span>&nbsp;<i style="text-decoration: overline;">B</i></p>
       </td>
     </tr>
     <tr>
@@ -197,7 +197,7 @@ text-align: center;
         <p>A</p>
       </td>
       <td>
-        <p><img src="not_a_or_b.png" alt="!A or B"></p>
+        <p><i style="text-decoration: overline;">A</i>&nbsp;<span style="font-family: symbol;">&#xDA;</span>&nbsp;<i>B</i></p>
       </td>
     </tr>
     <tr>
@@ -217,7 +217,7 @@ text-align: center;
         <p>!A</p>
       </td>
       <td>
-        <p><img src="a_or_b.png" alt="A or B"></p>
+        <p><i>A</i>&nbsp;<span style="font-family: symbol;">&#xDA;</span>&nbsp;<i>B</i></p>
       </td>
     </tr>
     <tr>
@@ -995,7 +995,7 @@ text-align: center;
 <hr>
 <p>н - арифметическая или логическая операция над операндами A и B, зависит от поля ****  см. <a href="#table2">таб. 2</a>;</p>
   <p>**** - означает код операции в соответствии с <a href="#table2">таблицей 2</a>;</p>
-  <p>РОН - двоичный номер регистра общего назначения см. <a href="#table3">таб. 3</a>;</p>
+  <p>РОН - двоичный номер регистра общего назначения (см. <a href="#table3">таб. 3</a>);</p>
   <p>САП - сдвиг арифметический правый;</p>
   <p>САЛ - сдвиг арифметический левый;</p>
   <p>СЛП - сдвиг логический правый;</p>

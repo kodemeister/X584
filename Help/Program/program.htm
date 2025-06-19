@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Пользовательский интерфейс программы X584</Title>
+</HEAD>
+<BODY>
+
+<h2><a name="buttons">Панель кнопок</a></h2>
+<p align="center">
+<img alt="Панель кнопок" src="icon_panel.png">
+<br>
+<i><b>Рис. 5. Панель кнопок</b></i>
+</p>
+
+  <p>На рисунке указано:</p>
+  <p><strong>1. </strong> <strong><a href="../Using/commands.htm#new">Кнопка «Создать»</a></strong></p>
+  <p><strong>2. </strong> <strong><a href="../Using/commands.htm#open">Кнопка «Открыть»</a></strong></p>
+  <p><strong>3. </strong> <strong><a href="../Using/commands.htm#save">Кнопка «Сохранить»</a></strong></p>
+  <p><strong>4. </strong> <strong><a href="../Using/commands.htm#export">Кнопка «Экспорт в Microsoft Word»</a></strong></p>
+  <p><strong>5. </strong> <strong><a href="../Using/commands.htm#exit">Кнопка «Выход»</a></strong></p>
+  <p><strong>6. </strong> <strong><a href="../Using/commands.htm#cut">Кнопка «Вырезать»</a></strong></p>
+  <p><strong>7. </strong> <strong><a href="../Using/commands.htm#copy">Кнопка «Копировать»</a></strong></p>
+  <p><strong>8. </strong> <strong><a href="../Using/commands.htm#paste">Кнопка «Вставить»</a></strong></p>
+  <p><strong>9. </strong> <strong><a href="../Using/commands.htm#delete">Кнопка «Удалить»</a></strong></p>
+  <p><strong>10. </strong> <strong><a href="../Using/commands.htm#start">Кнопка «Пуск»</a></strong></p>
+  <p><strong>11. </strong> <strong><a href="../Using/commands.htm#step">Кнопка «Шаг»</a></strong></p>
+  <p><strong>12. </strong> <strong><a href="../Using/commands.htm#run_to_cursor">Кнопка «Пуск до курсора»</a></strong></p>
+  <p><strong>13. </strong> <strong><a href="../Using/commands.htm#break">Кнопка «Пауза»</a></strong></p>
+  <p><strong>14. </strong> <strong><a href="../Using/commands.htm#reset">Кнопка «Сброс»</a></strong></p>
+  <p><strong>15. </strong> <strong><a href="../Using/commands.htm#help">Кнопка «Справка»</a></strong></p>
+  <p><strong>16. </strong> <strong><a href="../Using/commands.htm#about">Кнопка «О программе»</a></strong></p>
+
+<h2><a name="microcommands">Окно системы микрокоманд ЦПЭ К584ВМ1</a></h2>
+<p>Система микрокоманд ЦПЭ К584ВМ1 (<a href="../K584/microcommands.htm#table4">таб. 4</a>) представлена в программе X584 в виде дерева для наглядности и простоты поиска.</p>
+<p><img src="../tip.png">Чтобы уменьшить размеры дерева, нужно воспользоваться <a href="../Using/index.htm#filter">фильтрацией</a>.</p>
+
+<h2><a name="registers">Панель значений регистров ЦПЭ К584ВМ1</a></h2>
+
+<p>Предназначена для ввода бинарных значений соответствующих регистров и наблюдения за их изменением.</p>
+<p><img src="../info.bmp">Для более подробной информации смотрите ссылку: <a href="../Using/index.htm#values">как редактировать значения регистров, шин, входов ЦПЭ К584ВМ1</a>.</p>
+
+<h2><a name="carryin">Переключатель, отвечающий за ВхПАЛУ</a></h2>
+<p>Если в мнемокоде инструкции содержится аргумент «П», то не забывайте, что его значение задается при помощи <strong>переключателя</strong>, отвечающего за ВхПАЛУ, который расположен в <strong><a href="program.htm#codeedit">окне редактирования кода микропрограммы</a></strong>,  где галочка соответствует П = 1, отсутствие галочки П = 0.</p>
+
+<h2><a name="buses">Панель значений шин ЦПЭ К584ВМ1</a></h2>
+<p>Предназначена для наблюдения значений шины выхода и адреса.</p>
+<p><img src="../warning.bmp">Вход ШИНвх отсутствует на форме программы <a href="index.htm">X584</a>, значения данных запрашиваются <a href="#codeedit">при выполнении или отладке кода микропрограммы</a>, если ШИНвх присутствует в микрокоманде.</p>
+<p><img src="../info.bmp">Для более подробной информации смотрите ссылку: <a href="../Using/index.htm#values">как редактировать значения регистров, шин, входов ЦПЭ К584ВМ1</a>.</p>
+
+<h2><a name="outputs">Панель значений выводов ЦПЭ К584ВМ1</a></h2>
+ <p>Предназначена для наблюдения состояния выводов ЦПЭ.</p>
+ <p><img src="../info.bmp">Для более подробной информации смотрите ссылку <strong><a href="../K584/pin_description.htm">описание выводов ЦПЭ К584ВМ1</a></strong><strong>.</strong></p>
+
+<h2><a name="codeedit">Окно редактирования микрокода программы</a></h2>
+ <p>Окно представлено<strong>: <a href="program.htm#state_panel">панелью для точек останова и курсора выполнения проекта</a>, <a href="#carryin">переключателями,  отвечающими за ВхПАЛУ</a> (галочка соответствует значению 1, отсутствие галочки - 0), </strong> полями (Адр., Мнемокод инструкции, Комментарий).</p>
+  <p><img src="../info.bmp">Поле Адр. соответствует адресу строки программы. Мнемокод инструкции создается при помощи <strong><a href="#microcommands">панели системы микрокоманд ЦПЭ К584ВМ1</a>.</strong> Комментарий может содержать <strong>условный и безусловный переход</strong>, либо обычное пояснение к выполняемому действию микропрограммы.</p>
+
+<h2><a name="state_panel">Панель для точек останова и курсора выполнения микропрограммы</a></h2>
+<p>Панель может находиться в четырех состояниях:</p>
+<ol>
+<li><img src="nothing.png"> Исходное состояние, при котором происходит стандартная проверка функциональности кода микропрограммы.</li>
+<li><img src="break.png">Состояние, характеризующее точку останова, т.е. в данном месте программа при выполнении микропрограммы должна остановиться.</li>
+<li><img src="current.png">Состояние, показывающее, что на данном этапе происходит выполнение микропрограммы.</li>
+<li><img src="at_break.png">Состояние, показывающее, что выполнение микропрограммы достигло точки останова, и ждет дальнейших действий.</li>
+</ol>
+
+<h2><a name="statusbar">Панель состояния</a></h2>
+<p>Предназначена для вывода комментариев при наведении мыши на кнопки, различные панели или окна программы <b>X584</b>.</p>
+
+<h2><a name="filter">Панель фильтра микрокоманд ЦПЭ К584ВМ1</a></h2>
+
+  <p>Предназначена для фильтрации «дерева»  расположенного <strong>в <a href="program.htm#microcommands">окне системы микрокоманд  ЦПЭ К584ВМ1</a></strong>.</p>
+
+  <p><img src="../info.bmp">Для более подробной информации смотрите ссылку <strong><a href="../Using/index.htm#filter">как проводить фильтрацию системы микрокоманд</a>.</strong></p>
+
+ <h2><a name="description">Окно описания микрокоманды</a></h2>
+  <p>Окно, содержащее код и описание мнемокода инструкции при выделении курсором определенной строчки в <strong><a href="#codeedit">окне редактирования кода микропрограммы</a></strong> или при выделении инструкции в <strong><a href="#microcommands">окне системы микроинструкций ЦПЭ</a></strong>.</p>
+
+<h2><a name="keyboard">Панель, отображающая состояния клавиатуры</a></h2>
+  <p>На этой панели отображается состояние клавиатуры, где CAP соответствует включенной клавише Caps Lock, NUM - Num Lock, SCRL - Scroll Lock, INS - Insert.</p>
+  <p><img src="../warning.bmp">Важно и существенно состояние клавиши Insert, так как при активном состоянии этой клавиши программа находится в режиме вставки микроинструкций при редактировании кода микропрограммы.</p>
+
+
+</BODY>
+</HTML>
