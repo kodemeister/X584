@@ -92,11 +92,12 @@ private:
     void FormatOp(unsigned Op, char *A, char *B, char *Str);
     unsigned Adc(unsigned op1, unsigned op2, unsigned Carry, unsigned &OutFlags);
     unsigned ExecuteOp(unsigned Op, unsigned A, unsigned B, unsigned InFlags, unsigned &OutFlags);
-    void Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags);
+    void Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags, unsigned OldWRSign=0);
 public:
     unsigned Reg[8];                // РОНы
     unsigned WR, XWR;               // рабочий регистр и расширитель
     K584(int _BitsCount);
+    void Reset();
     bool Format(unsigned MI, char *Str, bool FormatALU = true, bool FormatReg = true, bool ShowCarry = true);
     bool FindOperand(int Index, int Type, unsigned MI);
     bool Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigned InFlags, unsigned &OutFlags);
