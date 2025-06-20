@@ -20,9 +20,9 @@ X584 is a graphical simulator of Soviet-era [K584VM1](https://ru.wikipedia.org/w
 
 ## Installation
 
-Download the latest release of X584 from the [Releases](https://github.com/kodemeister/X584/releases) page, unpack it to any folder and run `X584.exe`.
+Download the latest release of X584 from the [Releases](https://github.com/kodemeister/X584/releases) page, unpack it to any folder, and run `X584.exe`.
 
-## Building from source
+## Building from Source
 
 1. Install C++ Builder 6.
 2. Install Microsoft HTML Help Workshop.
