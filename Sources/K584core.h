@@ -92,7 +92,7 @@ private:
     void FormatOp(unsigned Op, wchar_t *A, wchar_t *B, wchar_t *Str);
     unsigned Adc(unsigned op1, unsigned op2, unsigned Carry, unsigned &OutFlags);
     unsigned ExecuteOp(unsigned Op, unsigned A, unsigned B, unsigned InFlags, unsigned &OutFlags);
-    void Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags);
+    void Shift(InstrType Op, int ResType, unsigned &Result, unsigned InFlags, unsigned &OutFlags, unsigned OldWRSign=0);
 public:
     unsigned Reg[8];                // РОНы
     unsigned WR, XWR;               // рабочий регистр и расширитель
