@@ -18,6 +18,10 @@ X584 is a graphical simulator of Soviet-era [K584VM1](https://ru.wikipedia.org/w
 * Integrated debugger with support for step-by-step execution and breakpoints.
 * Conditional execution via special comment syntax.
 
+## Installation
+
+Download the latest release of X584 from the [Releases](https://github.com/kodemeister/X584/releases) page, unpack it to any folder and run `X584.exe`.
+
 ## Building from source
 
 1. Install C++ Builder 6.
