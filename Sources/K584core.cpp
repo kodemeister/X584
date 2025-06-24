@@ -478,7 +478,7 @@ bool K584::Execute(unsigned MI, unsigned DI, unsigned &DO, unsigned &DA, unsigne
                 break;
             default:
                 // берём старый знак РР
-                OldWRSign = WR & (1 << BitsCount - 1);
+                OldWRSign = WR & (1 << (BitsCount - 1));
                 //суммируем операнды
                 *result = Adc(Ops[0], Ops[1], Ops[2], OutFlags);
                 //производим нужный сдвиг

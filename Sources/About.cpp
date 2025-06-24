@@ -32,7 +32,7 @@ TAboutForm *AboutForm;
 __fastcall TAboutForm::TAboutForm(TComponent* Owner)
     : TForm(Owner)
 {
-    VersionLabel->Text = UnicodeString(L"X584 версия ") + UnicodeString(X584_VERSION);
+    VersionLabel->Caption = L"X584 версия " + UnicodeString(X584_VERSION);
 }
 //---------------------------------------------------------------------------
 
