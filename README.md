@@ -28,6 +28,8 @@ Download the latest release of X584 from the [Releases](https://github.com/kodem
 > [!NOTE]
 > It looks like Microsoft removed HTML Help Workshop from their website. You can still download it from the [web archive](https://web.archive.org/web/20200918004813/https://download.microsoft.com/download/0/A/9/0A939EF6-E31C-430F-A3DF-DFAE7960D564/htmlhelp.exe) or install it via Chocolatey.
 3. Add the installation directory of HTML Help Workshop (typically `C:\Program Files (x86)\HTML Help Workshop`) to your `PATH` environment variable.
+4. Install Inno Setup 6.
+5. Add the installation directory of Inno Setup (typically `C:\Program Files (x86)\Inno Setup 6`) to your `PATH` environment variable.
 
 ### Building Microsoft Office 2000 Components
 
@@ -48,3 +50,10 @@ The compiled packages will be installed to the shared directory `C:\Users\Public
 3. In the `Projects` window, select the desired target platform and build configuration, then build the project.
 
 The compiled executable and CHM help file will be located in the `<platform>\<configuration>` directory, e.g., `Win32\Debug`.
+
+### Building the Installer
+
+1. Build the project for the desired target platform using the `Release` build configuration.
+2. Run the `Installer\Build.bat` script.
+
+The generated installer will be located in the `<platform>\Release` directory, e.g., `Win32\Release`.
