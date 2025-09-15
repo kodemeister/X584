@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 X584 developers
+ * Copyright (C) 2005-2025 X584 developers
  *
  * This file is part of X584.
  *
